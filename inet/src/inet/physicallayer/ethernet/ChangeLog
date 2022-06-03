@@ -1,0 +1,17 @@
+====== inet-4.x ======
+
+2021-05-18  ------ inet-4.2.5 released ------
+
+2021-05-06  ------ inet-4.2.4 released ------
+
+2021-04-22  ------ inet-4.2.3 released ------
+
+2021-01-07  ------ inet-4.2.2 released ------
+
+2020-10-27  ------ inet-4.2.1 released ------
+
+2020-01-08  ------ inet-4.2.0 released ------
+
+2019-06-17  Zoltan Bojthe
+
+	Full-duplex meta-info moved from EthernetPhyHeader to EthernetSignal.
