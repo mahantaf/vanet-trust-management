@@ -72,10 +72,8 @@ class TrustManager {
         void print();
         TrustNodeList *getTrustMap();
         TrustNodeList* addEntryTrustMap(string id, double trustFactor, double lastRepo);
-        double getTrustValue(Packet *pkt);
         TrustNodeList *getTrustNode(std::string sender);
-        void updateTrustValue(Packet *pkt);
-        void updateTrustValue(double newTrust, std::string sender);
+        void updateTrustValue(std::string sender, double directReputation, double lastRepo);
         
 };
 

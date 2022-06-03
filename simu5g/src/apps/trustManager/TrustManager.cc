@@ -39,30 +39,6 @@ TrustNodeList *TrustManager::getTrustNode(std::string sender){
     return tmp;
 }
 
-double TrustManager::getTrustValue(Packet *pkt) {
-    // L3Address src;
-    // L3AddressTagBase *addresses= pkt->findTag<L3AddressReq>();
-    // src = addresses->getSrcAddress();
-    const auto& hdr = pkt->peekAtFront<Ipv4Header>();
-    const Ipv4Address& src = hdr->getSrcAddress();
-
-    TrustNodeList *tmp = this->head;
-    while(tmp != nullptr) {
-        if(tmp->nodeId.compare(src.str()) == 0) {
-            break;
-        }
-        tmp = tmp->next;
-    }
-    if(tmp != nullptr) {
-        return tmp->directReputation;
-    }
-    /* This is not possible since we would have added the entry 
-       to the trustmap through updateTrustMap() before calling 
-       this function
-     */
-    return NO_TRUST;
-}
-
 TrustNodeList* TrustManager::addEntryTrustMap(string id, double directReputation, double lastRepo) {
     TrustNodeList *tmp = new TrustNodeList(id, directReputation, lastRepo);
     if(this->head == nullptr) {
@@ -79,28 +55,14 @@ TrustNodeList* TrustManager::addEntryTrustMap(string id, double directReputation
     return this->head;
 }
 
-void TrustManager::updateTrustValue(Packet *pkt) {
-    // L3Address src, dst;
-    // L3AddressTagBase *addresses= pkt->findTag<L3AddressReq>();
-    // src = addresses->getSrcAddress();
-    const auto& hdr = pkt->peekAtFront<Ipv4Header>();
-    const Ipv4Address& src = hdr->getSrcAddress();
-
-    TrustNodeList *tmp = this->head;
-    while(tmp != nullptr) {
-        if(tmp->nodeId.compare(src.str()) == 0) {
-            break;
-        }
-        tmp = tmp->next;
-    }
-    if(tmp != nullptr) {
-        /* Dummy value decreasing for every packet received */
-        if(tmp->directReputation > TRUST_THRESHOLD) {
-            tmp->directReputation -= 10;
-        }
+void TrustManager::updateTrustValue(std::string sender, double directReputation, double lastRepo) {
+    auto tmp = this->getTrustNode(sender);
+    if(tmp == nullptr) {
+        this->addEntryTrustMap(sender, directReputation, lastRepo);
     }
     else {
-        this->head = addEntryTrustMap(src.str(), DEFAULT_TRUST, DEFAULT_TRUST);
+        tmp->directReputation = directReputation;
+        tmp->lastCalculatedReputation = lastRepo;
     }
 }
 
@@ -109,17 +71,6 @@ void TrustManager::updateTrustValue(Packet *pkt) {
 // }
 
 TrustManager *findVehicleInList(std::list<TrustManager*> &trustList, std::string nodeId) {
-    // TrustManager *tmp = new TrustManager(nodeId);
-    // auto itr = std::find(trustList.begin(), trustList.end(), tmp);
-    // delete tmp;
-    // if(itr == trustList.end()) {
-    //     return nullptr;
-    // }
-    // else {
-    //     return *itr;
-    // }
-
-
     auto tmpItr = trustList.begin();
     while(tmpItr != trustList.end()) {
         if((*tmpItr)->id.compare(nodeId) == 0) {

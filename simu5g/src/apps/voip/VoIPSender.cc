@@ -82,11 +82,26 @@ void VoIPSender::initialize(int stage)
     coordVal = 0;
 
     std::stringstream ss(evilVehicleID);
- 
     while (ss.good()) {
         std::string substr;
         getline(ss, substr, ',');
         evilVehicles.insert(substr);
+    }
+
+    std::stringstream ss(rsuID);
+    while (ss.good()) {
+        std::string substr;
+        getline(ss, substr, ',');
+        rsuSet.insert(substr);
+    }
+
+    cModule *tmp = getParentModule()->getSubmodule("mobility");
+    veins::VeinsInetMobility *mobilityT = check_and_cast<veins::VeinsInetMobility *>(temp);
+    auto availableCars = mobilityT->getManager()->getManagedHosts();
+    for(auto it = availableCars.begin(); it != availableCars.end(); it++) {
+        std::string carId = it->second->getFullName();
+        auto carMobility = check_and_cast<veins::VeinsInetMobility *>(it->second->getSubmodule("mobility"));
+        this->mobilityMap[carId] = carMobility;
     }
 }
 
@@ -183,42 +198,83 @@ void VoIPSender::selectPeriodTime()
     }
 }
 
+bool isRSU(std::string id, std::unordered_set<std::string> rsuSet) {
+    return (rsuSet.find(id) == rsuSet.end())?false:true;
+}
+
+//Choose the closest RSU to send the VoIP packet to while moving
+std::string getDestination(std::unordered_set<std::string> rsuSet, std::string carID, std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap) {
+    std::string closestRSU;
+    double minDist = DBL_MAX;
+    for(const auto& itr: rsuSet) {
+        double dist = mobilityMap[itr]->getCurrentPosition().sqrdist(mobilityMap[carID]->getCurrentPosition());
+        if(dist < minDist) {
+            minDist = dist;
+            closestRSU = itr;
+        }
+    }
+
+    return closestRSU;
+}
+
 void VoIPSender::sendVoIPPacket()
 {
     if (destAddress_.isUnspecified())
         destAddress_ = L3AddressResolver().resolve(par("destAddress"));
 
     std::string senderID = this->ue->getFullName();
-
-    TrustData content;
-
-    Coord event_loc(0, 0, 0);
-
-    //Generate an event location which is randomly far away in the
-    //car's "sensor's reachability"
-    Coord curr_loc = this->mobility->getCurrentPosition();
-    auto crng = getEnvir()->getRNG(0);
-    auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
-    Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z + uniformDistVar);
-
-    //simulate malicious vehicle advertising incorrect current velocity
-    if(evilVehicles.find(senderID) != evilVehicles.end()) {
-        // Coord evilVehicleLoc = this->randomLocGenerator();
-        Coord evilVehicleLoc = Coord(10000, 10000, 10000);
-        content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                    evilVehicleLoc, Coord(10000, 10000, 10000), senderID);
-    }
-    else {
-        content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                    newEvLoc, this->mobility->getCurrentVelocity(), senderID);        
-    }
-    MemoryOutputStream stream;
-    content.serializeTrustData(stream);
     omnetpp::cpp_string pktContent;
-    std::vector<uint8_t> serialized_data;
-    stream.copyData(serialized_data);
-    for(size_t i = 0; i < serialized_data.size(); i++) {
-        pktContent += serialized_data[i];
+
+    //send trust data if i am not RSU
+    if(!isRSU(senderID, this->rsuSet)) {
+        TrustData content;
+
+        Coord event_loc(0, 0, 0);
+
+        //Generate an event location which is randomly far away in the
+        //car's "sensor's reachability"
+        Coord curr_loc = this->mobility->getCurrentPosition();
+        auto crng = getEnvir()->getRNG(0);
+        auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
+        Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z + uniformDistVar);
+
+        //simulate malicious vehicle advertising incorrect current velocity
+        if(evilVehicles.find(senderID) != evilVehicles.end()) {
+            // Coord evilVehicleLoc = this->randomLocGenerator();
+            Coord evilVehicleLoc = Coord(10000, 10000, 10000);
+            content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
+                        evilVehicleLoc, Coord(10000, 10000, 10000), senderID);
+        }
+        else {
+            content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
+                        newEvLoc, this->mobility->getCurrentVelocity(), senderID);        
+        }
+        MemoryOutputStream stream;
+        content.serializeTrustData(stream);
+        std::vector<uint8_t> serialized_data;
+        stream.copyData(serialized_data);
+        for(size_t i = 0; i < serialized_data.size(); i++) {
+            pktContent += serialized_data[i];
+        }
+
+        std::string dest = getDestination(this->rsuSet, senderID, this->mobilityMap);
+        destAddress_ = L3AddressResolver().resolve(dest.c_str());
+    }
+    //If I am RSU, send reputation lists, for now hardcoded to send to a specific receiving RSU
+    else {
+        if(!senderID.compare("car[0]")) {
+            destAddress_ = L3AddressResolver().resolve("car[1]");
+
+            //Note: the app[0] is as configured in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
+            auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[0]");
+
+            //get reputation list of car[0] from the voipreceiver module
+        }
+        else if(!senderID.compare("car[1]")) {
+            destAddress_ = L3AddressResolver().resolve("car[0]");
+
+            //get reputation list of car[1] from the voipreceiver module
+        }
     }
 
     Packet* packet = new inet::Packet("VoIP");

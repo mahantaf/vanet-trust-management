@@ -283,6 +283,10 @@ void VoIPReceiver::handleMessage(cMessage *msg)
     MemoryInputStream stream(serializedTrustData, B(hdr->getSerializedMessage().length()));
     trustMsgContent->deserializeTrustData(stream);
 
+    std::cout << "================================================\n";
+    std::cout << "VoIP data sent by " << trustMsgContent->getSenderID() << "\n";
+    std::cout << "================================================\n";
+
     //Do trust management
     if(!doTrustManagement(messagesReceived, trustListAllVehicles, trustMsgContent, selfID, this)) {
         trusted = false;
