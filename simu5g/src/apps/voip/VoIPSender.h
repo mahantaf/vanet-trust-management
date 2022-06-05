@@ -20,11 +20,14 @@
 #include "apps/voip/VoipPacket_m.h"
 #include "inet/mobility/contract/IMobility.h"
 #include <unordered_set>
+#include <unordered_map>
+
+#include "veins_inet/VeinsInetMobility.h"
 
 //Note: Don't add spaces after comma when adding more cars
 //      to the list
 #define evilVehicleID "car[2],car[3]"
-#define rsuID "car[0], car[1]"
+
 
 class VoIPSender : public omnetpp::cSimpleModule
 {
@@ -71,7 +74,7 @@ class VoIPSender : public omnetpp::cSimpleModule
     int coordVal;
     std::unordered_set<std::string> evilVehicles;
     std::unordered_set<std::string> rsuSet;
-    std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap;
+    std::unordered_map<std::string, veins::VeinsInetMobility *> mobilityMap;
 
     void initTraffic();
     void talkspurt(omnetpp::simtime_t dur);

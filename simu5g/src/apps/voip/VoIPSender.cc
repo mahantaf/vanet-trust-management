@@ -12,8 +12,12 @@
 #include <cmath>
 #include <inet/common/TimeTag_m.h>
 #include "apps/voip/VoIPSender.h"
+#include "apps/voip/VoIPReceiver.h"
+#include "apps/voip/ReputationListSerializer.h"
 
 #include "common/TrustData.h"
+
+std::string rsuIDs = "car[0],car[1]";
 
 #define round(x) floor((x) + 0.5)
 
@@ -88,15 +92,15 @@ void VoIPSender::initialize(int stage)
         evilVehicles.insert(substr);
     }
 
-    std::stringstream ss(rsuID);
-    while (ss.good()) {
+    std::stringstream ss2(rsuIDs);
+    while (ss2.good()) {
         std::string substr;
-        getline(ss, substr, ',');
+        getline(ss2, substr, ',');
         rsuSet.insert(substr);
     }
 
     cModule *tmp = getParentModule()->getSubmodule("mobility");
-    veins::VeinsInetMobility *mobilityT = check_and_cast<veins::VeinsInetMobility *>(temp);
+    veins::VeinsInetMobility *mobilityT = check_and_cast<veins::VeinsInetMobility *>(tmp);
     auto availableCars = mobilityT->getManager()->getManagedHosts();
     for(auto it = availableCars.begin(); it != availableCars.end(); it++) {
         std::string carId = it->second->getFullName();
@@ -198,7 +202,7 @@ void VoIPSender::selectPeriodTime()
     }
 }
 
-bool isRSU(std::string id, std::unordered_set<std::string> rsuSet) {
+static bool isRSU(std::string id, std::unordered_set<std::string> rsuSet) {
     return (rsuSet.find(id) == rsuSet.end())?false:true;
 }
 
@@ -217,6 +221,17 @@ std::string getDestination(std::unordered_set<std::string> rsuSet, std::string c
     return closestRSU;
 }
 
+TrustManager *getRSUTrustManager(std::list<TrustManager*> &trustList, std::string nodeId) {
+    auto tmpItr = trustList.begin();
+    while(tmpItr != trustList.end()) {
+        if((*tmpItr)->id.compare(nodeId) == 0) {
+            return *tmpItr;
+        }
+        tmpItr++;
+    }
+    return nullptr;
+}
+
 void VoIPSender::sendVoIPPacket()
 {
     if (destAddress_.isUnspecified())
@@ -224,6 +239,7 @@ void VoIPSender::sendVoIPPacket()
 
     std::string senderID = this->ue->getFullName();
     omnetpp::cpp_string pktContent;
+    MemoryOutputStream stream;
 
     //send trust data if i am not RSU
     if(!isRSU(senderID, this->rsuSet)) {
@@ -249,13 +265,8 @@ void VoIPSender::sendVoIPPacket()
             content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
                         newEvLoc, this->mobility->getCurrentVelocity(), senderID);        
         }
-        MemoryOutputStream stream;
+
         content.serializeTrustData(stream);
-        std::vector<uint8_t> serialized_data;
-        stream.copyData(serialized_data);
-        for(size_t i = 0; i < serialized_data.size(); i++) {
-            pktContent += serialized_data[i];
-        }
 
         std::string dest = getDestination(this->rsuSet, senderID, this->mobilityMap);
         destAddress_ = L3AddressResolver().resolve(dest.c_str());
@@ -265,17 +276,35 @@ void VoIPSender::sendVoIPPacket()
         if(!senderID.compare("car[0]")) {
             destAddress_ = L3AddressResolver().resolve("car[1]");
 
-            //Note: the app[0] is as configured in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
+            //Note: the app[0] is as configured(VoIPReceiver) in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
             auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[0]");
+            VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipreceiverModule);
 
             //get reputation list of car[0] from the voipreceiver module
+            // MemoryOutputStream stream;
+            TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
+            serializeReputationList(stream, rsuManager);
         }
         else if(!senderID.compare("car[1]")) {
             destAddress_ = L3AddressResolver().resolve("car[0]");
 
+            //Note: the app[2] is as configured(VoIPReceiver) in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
+            auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[2]");
+            VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipreceiverModule);
+
             //get reputation list of car[1] from the voipreceiver module
+            TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
+            serializeReputationList(stream, rsuManager);
         }
     }
+    std::vector<uint8_t> serialized_data;
+    stream.copyData(serialized_data);
+    for(size_t i = 0; i < serialized_data.size(); i++) {
+        pktContent += serialized_data[i];
+    }
+
+    omnetpp::cpp_string sender;
+    sender += senderID;
 
     Packet* packet = new inet::Packet("VoIP");
     auto voip = makeShared<VoipPacket>();
@@ -284,6 +313,7 @@ void VoIPSender::sendVoIPPacket()
     voip->setIDframe(iDframe_);
     voip->setPayloadTimestamp(simTime());
     voip->setChunkLength(B(size_));
+    voip->setSender(sender);
     voip->setSerializedMessage(pktContent);
     voip->addTag<CreationTimeTag>()->setCreationTime(simTime());
     packet->insertAtBack(voip);

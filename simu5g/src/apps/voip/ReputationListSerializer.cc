@@ -32,6 +32,8 @@ void serializeReputationList(MemoryOutputStream &stream, TrustManager *trustList
         string reputationStr = to_string(tmpNode->lastCalculatedReputation);
         stream.writeByte(reputationStr.length());
         stream.writeBytes(reinterpret_cast<const uint8_t*>(reputationStr.c_str()), B(reputationStr.length()));
+
+        stream.writeByte(tmpNode->timestamp);
     }
 }
 
@@ -58,8 +60,10 @@ void deserializeReputationList(MemoryInputStream &stream, TrustManager *trustLis
         std::string::size_type sz;
         double reputation = std::stod(reputationStr, &sz);
 
+        uint8_t lastUpdatedTimestamp = stream.readByte();
+
         //Setting the direct reputation and the last calculated reputation of the car to the
         //same value
-        trustList->updateTrustValue(nodeId, reputation, reputation);
+        trustList->updateTrustValue(nodeId, reputation, reputation, lastUpdatedTimestamp);
     }
 }

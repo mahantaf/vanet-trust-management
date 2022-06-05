@@ -33,7 +33,7 @@
 
 #define REMOTE_ATTESTATION_TIME 1
 
-#define evilVehicleID "car[2]"
+// #define evilVehicleID "car[2],car[3]"
 
 using namespace std;
 using namespace inet;
@@ -42,6 +42,7 @@ typedef struct trustNode {
     string nodeId;
     double directReputation;
     double lastCalculatedReputation;
+    uint8_t timestamp;
     struct trustNode *next;
 
     trustNode(string id, double directReputation, double lastRepo):nodeId(id), 
@@ -73,7 +74,7 @@ class TrustManager {
         TrustNodeList *getTrustMap();
         TrustNodeList* addEntryTrustMap(string id, double trustFactor, double lastRepo);
         TrustNodeList *getTrustNode(std::string sender);
-        void updateTrustValue(std::string sender, double directReputation, double lastRepo);
+        void updateTrustValue(std::string sender, double directReputation, double lastRepo, int lastUpdatedTimestamp);
         
 };
 

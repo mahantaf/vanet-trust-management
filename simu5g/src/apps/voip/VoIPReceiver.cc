@@ -10,8 +10,12 @@
 //
 
 #include "apps/voip/VoIPReceiver.h"
+#include <string>
 
 #include "inet/common/geometry/common/Coord.h"
+#include "ReputationListSerializer.h"
+
+std::string rsuID = "car[0],car[1]";
 
 Define_Module(VoIPReceiver);
 
@@ -74,6 +78,13 @@ void VoIPReceiver::initialize(int stage)
 
     numRecvd = 0;
     doingRemoteAttestation = false;
+
+    std::stringstream ss(rsuID);
+    while (ss.good()) {
+        std::string substr;
+        getline(ss, substr, ',');
+        rsuSet.insert(substr);
+    }
 }
 
 inet::Coord estimateEventLocation(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustManager *rsuManager,
@@ -120,7 +131,7 @@ void VoIPReceiver::doRemoteAttestation(bool &doingRemoteAttestation, std::string
     }
 }
 
-bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
+bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
                          TrustData *msg, std::string rsuID, VoIPReceiver *recvr_class) {
     // simtime_t startTime = simTime();
     string sender(msg->getSenderID());
@@ -226,6 +237,7 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
     }
     else {
         nodeTrust->lastCalculatedReputation = nodeTrust->directReputation;
+        nodeTrust->timestamp += 1;
     }
 
     //Printing to get data for graphs
@@ -243,6 +255,10 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
     }
 }
 
+static bool isRSU(std::string id, std::unordered_set<std::string> rsuSet) {
+    return (rsuSet.find(id) == rsuSet.end())?false:true;
+}
+
 void VoIPReceiver::handleMessage(cMessage *msg)
 {
     bool trusted = true;
@@ -258,6 +274,7 @@ void VoIPReceiver::handleMessage(cMessage *msg)
             auto senderTrustNode = rsuManager->getTrustNode(sender);
             senderTrustNode->directReputation = INITIAL_TRUST;
             senderTrustNode->lastCalculatedReputation = 0;
+            senderTrustNode->timestamp += 1;
             std::cout << "Remote attestation done at " << simTime()<< std::endl;
             delete remoteAttestationMsg;
         }
@@ -277,35 +294,51 @@ void VoIPReceiver::handleMessage(cMessage *msg)
 
     auto hdr = voipHeader->dup();
 
-    //Reconstruct msg data from the message
-    TrustData *trustMsgContent = new TrustData();
-    const uint8_t *serializedTrustData = (const unsigned char *)(hdr->getSerializedMessage().c_str());
-    MemoryInputStream stream(serializedTrustData, B(hdr->getSerializedMessage().length()));
-    trustMsgContent->deserializeTrustData(stream);
 
     std::cout << "================================================\n";
-    std::cout << "VoIP data sent by " << trustMsgContent->getSenderID() << "\n";
+    std::cout << "VoIP data received at " << selfID << "\n";
     std::cout << "================================================\n";
+    const uint8_t *serializedData = (const unsigned char *)(hdr->getSerializedMessage().c_str());
+    MemoryInputStream stream(serializedData, B(hdr->getSerializedMessage().length()));
 
-    //Do trust management
-    if(!doTrustManagement(messagesReceived, trustListAllVehicles, trustMsgContent, selfID, this)) {
-        trusted = false;
-    }
-    else {
-        //Add message to the latest messages received map
-        auto itr = messagesReceived.find(trustMsgContent->getSenderID());
-        if(itr == messagesReceived.end()) {
-            //Message from this sender already in map, just update with new message
-            messagesReceived[trustMsgContent->getSenderID()] = trustMsgContent;
+    //The message wwas not sent by an RSU, but by a normal car
+    //Hence, do normal trust management
+    if(!isRSU(hdr->getSender(), this->rsuSet)) {
+        //Reconstruct msg data from the message
+        TrustData *trustMsgContent = new TrustData();
+        trustMsgContent->deserializeTrustData(stream);
+        //Do trust management
+        if(!doTrustManagement(this->messagesReceived, this->trustListAllVehicles, trustMsgContent, selfID, this)) {
+            trusted = false;
         }
         else {
-            //Message from this sender not in map, add new message
-            auto toBeDeleted = itr->second;
-            itr->second = trustMsgContent;
-            delete toBeDeleted;
+            //Add message to the latest messages received map
+            auto itr = this->messagesReceived.find(trustMsgContent->getSenderID());
+            if(itr == this->messagesReceived.end()) {
+                //Message from this sender already in map, just update with new message
+                this->messagesReceived[trustMsgContent->getSenderID()] = trustMsgContent;
+            }
+            else {
+                //Message from this sender not in map, add new message
+                auto toBeDeleted = itr->second;
+                itr->second = trustMsgContent;
+                delete toBeDeleted;
+            }
         }
     }
-
+    //The message was sent by the RSU, hence it contains
+    //reputations list to be exchanged, update own reputation
+    //list from the message
+    else {
+        //we are not doing trust management for this message
+        //so we are not going to forward this message to other
+        //cars
+        trusted = false;
+        auto rsuTrustManager = findVehicleInList(trustListAllVehicles, selfID);
+        
+        //TODO: Add last updated time with each entry in the trust list
+        deserializeReputationList(stream, rsuTrustManager);
+    }
 
     if (mInit_)
     {

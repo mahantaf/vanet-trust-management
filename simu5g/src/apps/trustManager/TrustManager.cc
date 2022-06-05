@@ -55,14 +55,17 @@ TrustNodeList* TrustManager::addEntryTrustMap(string id, double directReputation
     return this->head;
 }
 
-void TrustManager::updateTrustValue(std::string sender, double directReputation, double lastRepo) {
+void TrustManager::updateTrustValue(std::string sender, double directReputation, double lastRepo, int lastUpdatedTimestamp) {
     auto tmp = this->getTrustNode(sender);
     if(tmp == nullptr) {
         this->addEntryTrustMap(sender, directReputation, lastRepo);
     }
     else {
-        tmp->directReputation = directReputation;
-        tmp->lastCalculatedReputation = lastRepo;
+        //Update only if this is a newer message
+        if(tmp->timestamp < lastUpdatedTimestamp) {
+            tmp->directReputation = directReputation;
+            tmp->lastCalculatedReputation = lastRepo;
+        }
     }
 }
 
@@ -178,71 +181,71 @@ void updateRecommendedReputationOfRecommender(std::list<TrustManager *> &trustLi
     // }
 }
 
-double getSimilarity(std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap,
-                                std::string k_car,
-                                std::string rsu_ID) {
-    inet::Coord sender_velocity = mobilityMap[rsu_ID]->getCurrentVelocity();
+// double getSimilarity(std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap,
+//                                 std::string k_car,
+//                                 std::string rsu_ID) {
+//     inet::Coord sender_velocity = mobilityMap[rsu_ID]->getCurrentVelocity();
 
-    //TODO: Change this to velocity of all other nodes in the simulation
-    inet::Coord curr_velocity;
+//     //TODO: Change this to velocity of all other nodes in the simulation
+//     inet::Coord curr_velocity;
     
-    if(!k_car.compare(evilVehicleID)) {
-        curr_velocity = Coord(1000, 1000, 1000);
-    }
-    else {
-        curr_velocity = mobilityMap[k_car]->getCurrentVelocity();
-    }
+//     if(!k_car.compare(evilVehicleID)) {
+//         curr_velocity = Coord(1000, 1000, 1000);
+//     }
+//     else {
+//         curr_velocity = mobilityMap[k_car]->getCurrentVelocity();
+//     }
 
-    int DIMS = 3;
-    double dist = curr_velocity.sqrdist(sender_velocity);
-    return DIMS/dist;
-}
+//     int DIMS = 3;
+//     double dist = curr_velocity.sqrdist(sender_velocity);
+//     return DIMS/dist;
+// }
 
-double getRecommendedReputation(std::list<TrustManager *> &trustList, TrustData *msg, std::string sender, 
-            std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap, std::string rsuID) {;
-    TrustManager *senderManager = findVehicleInList(trustList, sender);
+// double getRecommendedReputation(std::list<TrustManager *> &trustList, TrustData *msg, std::string sender, 
+//             std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap, std::string rsuID) {;
+//     TrustManager *senderManager = findVehicleInList(trustList, sender);
 
-    double numerator = 0.0;
-    double denominator = 0.0;
-    for(auto k: trustList) {
-        //Make sure we don't look at sender's ID(i) and rsuID(j)
-        if(k->id.compare(sender) != 0 && k->id.compare(rsuID) != 0) {
-            TrustNodeList *direct_reputation_i_k = senderManager->getTrustNode(k->id);
-            TrustNodeList *direct_reputation_k_j = k->getTrustNode(rsuID);
-            if(direct_reputation_i_k == nullptr) {
-                //trust list of node i does not have entry corresponding to k
-                //skip this i, k combination from the calculation for now and 
-                //do leave computation for next time
-                // std::cout << "Could not find reputation of k in i's list\n";
-                continue;
-            }
+//     double numerator = 0.0;
+//     double denominator = 0.0;
+//     for(auto k: trustList) {
+//         //Make sure we don't look at sender's ID(i) and rsuID(j)
+//         if(k->id.compare(sender) != 0 && k->id.compare(rsuID) != 0) {
+//             TrustNodeList *direct_reputation_i_k = senderManager->getTrustNode(k->id);
+//             TrustNodeList *direct_reputation_k_j = k->getTrustNode(rsuID);
+//             if(direct_reputation_i_k == nullptr) {
+//                 //trust list of node i does not have entry corresponding to k
+//                 //skip this i, k combination from the calculation for now and 
+//                 //do leave computation for next time
+//                 // std::cout << "Could not find reputation of k in i's list\n";
+//                 continue;
+//             }
 
-            if(direct_reputation_k_j == nullptr) {
-                //trust list of node k does not have entry corresponding to j
-                //skip this k, j combination from the calculation for now and 
-                //do leave computation for next time
-                // std::cout << "Could not find reputation of j in k's list\n";
-                continue;
-            }
+//             if(direct_reputation_k_j == nullptr) {
+//                 //trust list of node k does not have entry corresponding to j
+//                 //skip this k, j combination from the calculation for now and 
+//                 //do leave computation for next time
+//                 // std::cout << "Could not find reputation of j in k's list\n";
+//                 continue;
+//             }
 
-            double r_i_k = direct_reputation_i_k->lastCalculatedReputation;
-            double r_k_j = direct_reputation_k_j->lastCalculatedReputation;
-            // double similarity = msg->getSimilarity(mobilityMap, k->id);
-            double similarity = getSimilarity(mobilityMap, k->id, rsuID); // try changing it to 1
-            // numerator += similarity* r_i_k * r_k_j;
-            // denominator += similarity * r_i_k;
-            numerator += 1* r_i_k * r_k_j;
-            denominator += 1 * r_i_k;
-        }
-    }
-    if(denominator == 0.0) {
-        return 0.0;
-    }
-    //Dividing by 1 because dividing by the denominator does not make sense
-    //since that would give a recommended reputation of 1 even if similarity b/w
-    //sender and recommender is really really low
-    return numerator / denominator;
-}
+//             double r_i_k = direct_reputation_i_k->lastCalculatedReputation;
+//             double r_k_j = direct_reputation_k_j->lastCalculatedReputation;
+//             // double similarity = msg->getSimilarity(mobilityMap, k->id);
+//             double similarity = getSimilarity(mobilityMap, k->id, rsuID); // try changing it to 1
+//             // numerator += similarity* r_i_k * r_k_j;
+//             // denominator += similarity * r_i_k;
+//             numerator += 1* r_i_k * r_k_j;
+//             denominator += 1 * r_i_k;
+//         }
+//     }
+//     if(denominator == 0.0) {
+//         return 0.0;
+//     }
+//     //Dividing by 1 because dividing by the denominator does not make sense
+//     //since that would give a recommended reputation of 1 even if similarity b/w
+//     //sender and recommender is really really low
+//     return numerator / denominator;
+// }
 
 double getDirectReputation(TrustManager *list, std::string sender) {
     auto trustOfNode =  list->getTrustNode(sender);
