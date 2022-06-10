@@ -131,7 +131,7 @@ void VoIPReceiver::doRemoteAttestation(bool &doingRemoteAttestation, std::string
     }
 }
 
-bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
+bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
                          TrustData *msg, std::string rsuID, VoIPReceiver *recvr_class) {
     // simtime_t startTime = simTime();
     string sender(msg->getSenderID());
