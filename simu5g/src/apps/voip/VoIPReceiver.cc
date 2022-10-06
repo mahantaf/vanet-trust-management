@@ -11,6 +11,7 @@
 
 #include "apps/voip/VoIPReceiver.h"
 #include <string>
+#include <unordered_set>
 
 #include "inet/common/geometry/common/Coord.h"
 #include "ReputationListSerializer.h"
@@ -337,7 +338,7 @@ void VoIPReceiver::handleMessage(cMessage *msg)
         auto rsuTrustManager = findVehicleInList(trustListAllVehicles, selfID);
         
         //TODO: Add last updated time with each entry in the trust list
-        deserializeReputationList(stream, rsuTrustManager);
+        deserializeAndUpdateReputationList(stream, rsuTrustManager);
     }
 
     if (mInit_)

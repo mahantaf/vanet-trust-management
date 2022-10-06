@@ -11,6 +11,9 @@
  * *****************************************/
 
 void serializeReputationList(MemoryOutputStream &stream, TrustManager *trustList) {
+    if(trustList == nullptr) {
+        return;
+    }
     TrustNodeList* tmpNode = trustList->head;
     int numEntries = 0;
     while(tmpNode != nullptr) {
@@ -34,11 +37,12 @@ void serializeReputationList(MemoryOutputStream &stream, TrustManager *trustList
         stream.writeBytes(reinterpret_cast<const uint8_t*>(reputationStr.c_str()), B(reputationStr.length()));
 
         stream.writeByte(tmpNode->timestamp);
+        tmpNode = tmpNode->next;
     }
 }
 
 
-void deserializeReputationList(MemoryInputStream &stream, TrustManager *trustList) {
+void deserializeAndUpdateReputationList(MemoryInputStream &stream, TrustManager *trustList) {
     int numEntries = stream.readByte();
     std::vector<uint8_t> tmp;
 

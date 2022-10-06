@@ -10,6 +10,6 @@
 void serializeReputationList(MemoryOutputStream &stream, TrustManager *trustList);
 
 //Deserializes and updates the reputation values from the list into the provided trust list
-void deserializeReputationList(MemoryInputStream &stream, TrustManager *trustList);
+void deserializeAndUpdateReputationList(MemoryInputStream &stream, TrustManager *trustList);
 
 #endif

@@ -75,6 +75,7 @@ void VoIPSender::initialize(int stage)
 
     //Mobility information initialization
     ue = this->getParentModule();
+//    getParentModule()->getS
     cModule *temp = getParentModule()->getSubmodule("mobility");
     if(temp != NULL){
         mobility = check_and_cast<inet::IMobility*>(temp);
@@ -99,14 +100,6 @@ void VoIPSender::initialize(int stage)
         rsuSet.insert(substr);
     }
 
-    cModule *tmp = getParentModule()->getSubmodule("mobility");
-    veins::VeinsInetMobility *mobilityT = check_and_cast<veins::VeinsInetMobility *>(tmp);
-    auto availableCars = mobilityT->getManager()->getManagedHosts();
-    for(auto it = availableCars.begin(); it != availableCars.end(); it++) {
-        std::string carId = it->second->getFullName();
-        auto carMobility = check_and_cast<veins::VeinsInetMobility *>(it->second->getSubmodule("mobility"));
-        this->mobilityMap[carId] = carMobility;
-    }
 }
 
 void VoIPSender::handleMessage(cMessage *msg)
@@ -234,6 +227,23 @@ TrustManager *getRSUTrustManager(std::list<TrustManager*> &trustList, std::strin
 
 void VoIPSender::sendVoIPPacket()
 {
+    cModule *tmp = getParentModule()->getSubmodule("mobility");
+    veins::VeinsInetMobility *mobilityT = check_and_cast<veins::VeinsInetMobility *>(tmp);
+    auto availableCars = mobilityT->getManager()->getManagedHosts();
+    for(auto it = availableCars.begin(); it != availableCars.end(); it++) {
+        std::string carId = it->second->getFullName();
+        if(this->mobilityMap.find(carId) == this->mobilityMap.end()) {
+            auto carMobility = check_and_cast<veins::VeinsInetMobility *>(it->second->getSubmodule("mobility"));
+            this->mobilityMap[carId] = carMobility;
+        }
+    }
+//
+//    cout << "==================================\nPrinting submodules:" << endl;
+//    for (cModule::SubmoduleIterator it(tmp); !it.end(); ++it) {
+//        cout << "Module name: " << *(it) << endl;
+//    }
+//    cout << "==================================" << endl;
+
     if (destAddress_.isUnspecified())
         destAddress_ = L3AddressResolver().resolve(par("destAddress"));
 
@@ -275,26 +285,35 @@ void VoIPSender::sendVoIPPacket()
     else {
         if(!senderID.compare("car[0]")) {
             destAddress_ = L3AddressResolver().resolve("car[1]");
-
+            cModule *app0Module = this->getParentModule()->getSubmodule("app[0]");
             //Note: the app[0] is as configured(VoIPReceiver) in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
-            auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[0]");
-            VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipreceiverModule);
+//            auto voipReceiverModule = mobilityMap[senderID]->getSubmodule("app[0]");
+            auto voipReceiverModule = this->getParentModule()->getModuleByPath("Highway.car[0].app[0]");
+            // auto voipReceiverModule = getModuleByPath("Scenario.car[0]")->getSubmodule("app[0]");
+           VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipReceiverModule);
 
             //get reputation list of car[0] from the voipreceiver module
             // MemoryOutputStream stream;
-            TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
-            serializeReputationList(stream, rsuManager);
+           TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
+           if(rsuManager == nullptr) {
+               return;
+           }
+           serializeReputationList(stream, rsuManager);
         }
         else if(!senderID.compare("car[1]")) {
             destAddress_ = L3AddressResolver().resolve("car[0]");
 
             //Note: the app[2] is as configured(VoIPReceiver) in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
-            auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[2]");
-            VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipreceiverModule);
-
-            //get reputation list of car[1] from the voipreceiver module
-            TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
-            serializeReputationList(stream, rsuManager);
+//            auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[2]");
+            auto voipReceiverModule = this->getParentModule()->getModuleByPath("Highway.car[1].app[0]");
+           VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipReceiverModule);
+//
+//            //get reputation list of car[1] from the voipreceiver module
+           TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
+           if(rsuManager == nullptr) {
+               return;
+           }
+           serializeReputationList(stream, rsuManager);
         }
     }
     std::vector<uint8_t> serialized_data;
