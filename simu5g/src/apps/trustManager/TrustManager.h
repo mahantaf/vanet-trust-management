@@ -38,47 +38,14 @@ typedef struct trustNode {
 }TrustNodeList;
 
 class TrustManager {
-    // friend bool operator== ( const TrustManager &n1, const TrustManager &n2);
-    bool operator== (TrustManager const *r) const {
-        return this->id.compare(r->id) ==0;
-    }
-
     public:
-        string id;
-        TrustNodeList* head;
-        TrustManager *next;
-        TrustManager(string id):
-            id(id),
-            head(nullptr),
-            next(nullptr)
-        { };
+        vector<TrustNodeList*> trustNodes;
 
         void print();
-        TrustNodeList *getTrustMap();
         TrustNodeList* addEntryTrustMap(string id, double reputation);
-        double getTrustValue(Packet *pkt);
         TrustNodeList *getTrustNode(std::string sender);
-        void updateTrustValue(Packet *pkt);
-        void updateTrustValue(double newTrust, std::string sender);
-        
+        double getReputation(std::string sender);
 };
 
 
-struct TrustManagerComparer {
-    bool operator() (const TrustManager *l, const TrustManager *r) const {
-        return l->id.compare(r->id);
-    }
-};
-
-TrustManager *findVehicleInList(std::list<TrustManager*> &trustList, std::string nodeId);
-double getReputation(TrustManager *list, std::string sender);
-// bool doTrustManagement(std::vector<std::pair<std::string, TrustData *>> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
-//          TrustData *msg, inet::IMobility *mobility, bool rsuID);
-
-// /* Contains trust management information stored by all vehicles */
-// class TrustManagerAllVehicles {
-//     TrustManager *head;
-
-//     void addTrustManager(TrustManager *newVehicle);
-// };
 #endif // #ifndef _TRUST_MANAGER_H

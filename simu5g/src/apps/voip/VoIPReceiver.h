@@ -64,8 +64,10 @@ class VoIPReceiver : public omnetpp::cSimpleModule
     omnetpp::simsignal_t alertSendMsgSignal_;
     simtime_t sampling_time_for_self_msg;
     omnetpp::cMessage *selfSenderForReceivingDirectMsgs_;
-    std::list<TrustManager *> trustListAllVehicles;
+    TrustManager* trustListAllVehicles;
     std::unordered_map<std::string, TrustData *> messagesReceived;
+
+    //Adding statistics
 
     virtual void finish() override;
 
@@ -82,10 +84,10 @@ class VoIPReceiver : public omnetpp::cSimpleModule
     int numRecvd;
     bool doingRemoteAttestation;
     void emitAppropriateReputationSignal(std::string sender, int sigVal);
-    bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
-                         TrustData *msg, std::string rsuID, VoIPReceiver *recvr_class);
+    bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustData *msg, std::string rsuID,
+                            VoIPReceiver *recvr_class); 
 
-    void doRemoteAttestation(bool &doingRemoteAttestation, std::string sender, TrustManager* rsuTrustManager);
+    void doRemoteAttestation(bool &doingRemoteAttestation, std::string sender);
 };
 
 #endif
