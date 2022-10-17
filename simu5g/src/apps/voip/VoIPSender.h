@@ -21,9 +21,12 @@
 #include "inet/mobility/contract/IMobility.h"
 #include <unordered_set>
 
-//Note: Don't add spaces after comma when adding more cars
-//      to the list
-#define evilVehicleID "car[2],car[3]"
+/* =========================================================
+ * NOTE: Don't add spaces after comma when adding more cars
+ *       to the list
+ * =========================================================
+ */
+#define evilVehicleID "car[2]"
 
 class VoIPSender : public omnetpp::cSimpleModule
 {

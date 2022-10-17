@@ -62,8 +62,6 @@ class VoIPReceiver : public omnetpp::cSimpleModule
 
     RemoteAttestationMsg *remoteAttestationDoneMsg_;
     omnetpp::simsignal_t alertSendMsgSignal_;
-    simtime_t sampling_time_for_self_msg;
-    omnetpp::cMessage *selfSenderForReceivingDirectMsgs_;
     TrustManager* trustListAllVehicles;
     std::unordered_map<std::string, TrustData *> messagesReceived;
 

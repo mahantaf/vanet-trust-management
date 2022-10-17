@@ -19,8 +19,6 @@
 #define REPUTATION_DIFF_DELTA 0.05f
 #define REMOTE_ATTESTATION_TIME 1
 
-#define evilVehicleID "car[2]"
-
 using namespace std;
 using namespace inet;
 

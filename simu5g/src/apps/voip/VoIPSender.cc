@@ -183,6 +183,13 @@ void VoIPSender::selectPeriodTime()
     }
 }
 
+Coord randomLocGenerator() {
+    auto x = getEnvir()->getRNG(0);
+    auto uniformDistVar = (int)omnetpp::uniform(x, 0, 1000);
+    Coord newCoord(uniformDistVar, uniformDistVar, uniformDistVar);
+    return newCoord;
+}
+
 void VoIPSender::sendVoIPPacket()
 {
     if (destAddress_.isUnspecified())
@@ -196,17 +203,21 @@ void VoIPSender::sendVoIPPacket()
 
     //Generate an event location which is randomly far away in the
     //car's "sensor's reachability"
-    Coord curr_loc = this->mobility->getCurrentPosition();
+    // Coord curr_loc = this->mobility->getCurrentPosition();
+    Coord curr_loc = Coord(500, 500);
     auto crng = getEnvir()->getRNG(0);
     auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
-    Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z + uniformDistVar);
+
+    // Not adding random variable to z coordinate since there is no significance of z coordinate 
+    // when moving on street for now.
+    Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z);
 
     //simulate malicious vehicle advertising incorrect current velocity
     if(evilVehicles.find(senderID) != evilVehicles.end()) {
-        // Coord evilVehicleLoc = this->randomLocGenerator();
-        Coord evilVehicleLoc = Coord(10000, 10000, 10000);
+        // Coord evilVehicleLoc = randomLocGenerator();
+        Coord evilVehicleLoc = Coord(10000, 10000, 0);
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                    evilVehicleLoc, Coord(10000, 10000, 10000), senderID);
+                    evilVehicleLoc, Coord(10000, 10000, 0), senderID);
     }
     else {
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
