@@ -18,6 +18,7 @@
 #define round(x) floor((x) + 0.5)
 
 Define_Module(VoIPSender);
+using namespace std;
 using namespace inet;
 
 VoIPSender::VoIPSender()
@@ -88,14 +89,18 @@ void VoIPSender::initialize(int stage)
         getline(ss, substr, ',');
         evilVehicles.insert(substr);
     }
+
+    numMessages = 0;
+    firstMessage = true;
 }
 
 void VoIPSender::handleMessage(cMessage *msg)
 {
     if (msg->isSelfMessage())
     {
-        if (!strcmp(msg->getName(), "selfSender"))
+        if (!strcmp(msg->getName(), "selfSender")) {
             sendVoIPPacket();
+        }
         else if (!strcmp(msg->getName(), "selfSource"))
             selectPeriodTime();
         else
@@ -204,7 +209,11 @@ void VoIPSender::sendVoIPPacket()
     //Generate an event location which is randomly far away in the
     //car's "sensor's reachability"
     // Coord curr_loc = this->mobility->getCurrentPosition();
-    Coord curr_loc = Coord(500, 500);
+    // if(firstMessage) {
+        // firstMessage = false;
+        cout << senderID << ", Curr location: " << this->mobility->getCurrentPosition() << endl;
+    // }
+    Coord curr_loc = Coord(0, 0);
     auto crng = getEnvir()->getRNG(0);
     auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
 
@@ -217,7 +226,7 @@ void VoIPSender::sendVoIPPacket()
         // Coord evilVehicleLoc = randomLocGenerator();
         Coord evilVehicleLoc = Coord(10000, 10000, 0);
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                    evilVehicleLoc, Coord(10000, 10000, 0), senderID);
+                    evilVehicleLoc, Coord(1000, 1000, 0), senderID);
     }
     else {
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
@@ -244,7 +253,10 @@ void VoIPSender::sendVoIPPacket()
     packet->insertAtBack(voip);
     EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_-1 << "] - Sending frame[" << iDframe_ << "]\n";
 
-    socket.sendTo(packet, destAddress_, destPort_);
+    // if(this->mobility->getCurrentPosition().getY() >= 125 && this->mobility->getCurrentPosition().getY() <= 175) {
+        cout << "Sending message" << endl;
+        socket.sendTo(packet, destAddress_, destPort_);
+    // }
     --nframesTmp_;
     ++iDframe_;
 

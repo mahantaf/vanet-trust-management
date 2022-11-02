@@ -26,6 +26,35 @@
 
 #include "apps/voip/Remote_Attestation_m.h"
 
+#define ERROR_MARGIN 20
+#define PROBATION 1
+
+struct Point {
+    double x, y;     // coordinates
+    int cluster;     // no default cluster
+    double minDist;  // default infinite dist to nearest cluster
+    int nPoints;
+
+    Point() : 
+        x(0.0), 
+        y(0.0),
+        cluster(-1),
+        minDist(__DBL_MAX__),
+        nPoints(0) {}
+        
+    Point(double x, double y) : 
+        x(x), 
+        y(y),
+        cluster(-1),
+        minDist(__DBL_MAX__),
+        nPoints(0) {}
+
+    double distance(Point p) {
+        return (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y);
+    }
+};
+vector<Point> kMeansClustering(vector<Point>* points, int epochs, int k);
+
 class VoIPReceiver : public omnetpp::cSimpleModule
 {
     inet::UdpSocket socket;

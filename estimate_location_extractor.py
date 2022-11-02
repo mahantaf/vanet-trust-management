@@ -5,11 +5,10 @@ import pickle
 
 
 def extract_estimate_locations(directory, fileName):
-    estimate_locs, timestamps = [], []
+    estimate_locs, timestamps, kicked_out_cars = [], [], []
     with open(fileName, 'r') as f:
         estimateLocations = open(directory + "estimateLocations.csv", "w")
         lines = f.readlines()
-        # print(lines)
         for line in lines:
             line = line.strip()
             splitLine = line.split(',')
@@ -23,10 +22,16 @@ def extract_estimate_locations(directory, fileName):
                 del location[2]
                 estimate_locs.append(location)
                 timestamps.append(float(splitLine[0]))
-    return estimate_locs, timestamps
+            elif "KickedOut: " in line:
+                splitLine = line.split(':')[1]
+                splitLine = splitLine.split(',')
+                kicked_out_cars.append([splitLine[0], splitLine
+                [1]])
+
+    return estimate_locs, timestamps, kicked_out_cars
 
                 
-def plot_estimate_locations(estimate_locs, timestamps):
+def plot_estimate_locations(estimate_locs, timestamps, directory, kicked_out_cars):
     plot_label = 'Estimate locations with 1 evil cars_2'
     x, y = zip(*estimate_locs)
 
@@ -36,11 +41,14 @@ def plot_estimate_locations(estimate_locs, timestamps):
     ax.set_ylabel("X")
     ax.set_zlabel("Y")
     ax.plot(timestamps, x, y, label=plot_label)
+
+    # Scatter kicked out cars' times
+    ax.scatter([float(x[1]) for x in kicked_out_cars], [0 for x in kicked_out_cars], [0 for x in kicked_out_cars], marker='o')
     ax.legend()
 
     # Saving figure for future reference
-    plt.savefig('{}.pdf'.format(plot_label.replace(" ", '_')))
-    pickle.dump(fig, open('{}.fig.pickle'.format(plot_label.replace(" ", '_')), 'wb'))
+    plt.savefig('{}{}.pdf'.format(directory, plot_label.replace(" ", '_')))
+    pickle.dump(fig, open('{}{}.fig.pickle'.format(directory, plot_label.replace(" ", '_')), 'wb'))
 
     plt.show()
 
@@ -54,9 +62,9 @@ if __name__ == "__main__":
         fileName = sys.argv[2]
         directory = '/'.join(fileName.split('/')[:-1]) + "/"
 
-        (estimate_locs, times) = extract_estimate_locations(directory, fileName)
-
-        plot_estimate_locations(estimate_locs, times)
+        (estimate_locs, times, kicked_out_cars) = extract_estimate_locations(directory, fileName)
+        print(kicked_out_cars)
+        plot_estimate_locations(estimate_locs, times, directory, kicked_out_cars)
     elif sys.argv[1] == 'open':
         figName = sys.argv[2]
         print("Opening fig with name: " + figName)

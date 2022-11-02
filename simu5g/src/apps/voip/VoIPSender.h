@@ -66,6 +66,9 @@ class VoIPSender : public omnetpp::cSimpleModule
     int destPort_;
     inet::L3Address destAddress_;
 
+    int numMessages;
+    bool firstMessage;
+
     /* Mobility information(Addition by Nishchay)*/
     cModule* ue;
     inet::IMobility *mobility;
