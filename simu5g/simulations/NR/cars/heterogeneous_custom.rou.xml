@@ -1,6 +1,7 @@
 <routes>
   <!--Namespace(N=75, filecount=None, input='routes.txt', launch=False, output='singleIntersection.rou.xml', quarter=100)-->
   <vType id="car" accel="4.8" decel="4.5" sigma="1.0" length="0.1" minGap="0.5" maxSpeed="13.89" guiShape="passenger" />
+  <!-- <vType id="rsu" accel="0" decel="0" sigma="1.0" length="0.1" minGap="0.5" maxSpeed="13.89" guiShape="passenger" /> -->
   <route id="1" edges="1/0to1/1 1/1to1/2"/>
   <route id="2" edges="1/2to1/1 1/1to1/0"/>
   <route id="3" edges="2/1to1/1 1/1to0/1"/>
