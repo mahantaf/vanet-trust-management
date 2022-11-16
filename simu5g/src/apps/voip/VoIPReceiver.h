@@ -26,7 +26,8 @@
 
 #include "apps/voip/Remote_Attestation_m.h"
 
-#define ERROR_MARGIN 20
+//(20^2 since the distance calculation function returns dist^2 and it's easier to do it this way)
+#define ERROR_MARGIN 400 
 #define PROBATION 1
 
 struct Point {

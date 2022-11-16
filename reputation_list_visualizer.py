@@ -30,6 +30,7 @@ def extract_reputation_list(fileName):
                 if car_id not in message_times.keys():
                     message_times[car_id] = [(start_time, 0)]
                 message_times[car_id].append((time, message_times[car_id][-1][1] + 1))
+                print(str(car_id) + ", " + str(message_times[car_id][-1]))
     return reputations_with_time, message_times
 
 def plot_reputations(reputations_list, title):
@@ -39,7 +40,6 @@ def plot_reputations(reputations_list, title):
     for car in reputations_list.keys():
         x, y = zip(*reputations_list[car])
         label = "car " + str(car)
-        print(label)
         ax.plot(x, y, label=label)
 
     ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1),
@@ -61,7 +61,6 @@ def dual_reputation_and_message_plotter(reputations_list, message_times, title):
     for car in reputations_list.keys():
         x, y = zip(*reputations_list[car])
         label = "car " + str(car)
-        print(label)
         ax.plot(x, y, label=label)
 
     ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1),
@@ -73,7 +72,6 @@ def dual_reputation_and_message_plotter(reputations_list, message_times, title):
     for car in reputations_list.keys():
         x, y = zip(*message_times[car][1:])
         label = "car " + str(car)
-        print(label)
         ax2.plot(x, y, label=label, linestyle='dashed')
 
     plt.title(label=title)

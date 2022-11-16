@@ -204,8 +204,6 @@ void VoIPSender::sendVoIPPacket()
 
     TrustData content;
 
-    Coord event_loc(0, 0, 0);
-
     //Generate an event location which is randomly far away in the
     //car's "sensor's reachability"
     // Coord curr_loc = this->mobility->getCurrentPosition();
@@ -213,7 +211,7 @@ void VoIPSender::sendVoIPPacket()
         // firstMessage = false;
         cout << senderID << ", Curr location: " << this->mobility->getCurrentPosition() << endl;
     // }
-    Coord curr_loc = Coord(0, 0);
+    Coord curr_loc = Coord(230, 150);
     auto crng = getEnvir()->getRNG(0);
     auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
 
@@ -224,7 +222,7 @@ void VoIPSender::sendVoIPPacket()
     //simulate malicious vehicle advertising incorrect current velocity
     if(evilVehicles.find(senderID) != evilVehicles.end()) {
         // Coord evilVehicleLoc = randomLocGenerator();
-        Coord evilVehicleLoc = Coord(10000, 10000, 0);
+        Coord evilVehicleLoc = Coord(230, 250, 0);
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
                     evilVehicleLoc, Coord(1000, 1000, 0), senderID);
     }
@@ -253,10 +251,14 @@ void VoIPSender::sendVoIPPacket()
     packet->insertAtBack(voip);
     EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_-1 << "] - Sending frame[" << iDframe_ << "]\n";
 
-    // if(this->mobility->getCurrentPosition().getY() >= 125 && this->mobility->getCurrentPosition().getY() <= 175) {
+    #ifdef SENSOR_RANGE
+    if(this->mobility->getCurrentPosition().getY() >= 125 && this->mobility->getCurrentPosition().getY() <= 175) {
         cout << "Sending message" << endl;
+    #endif
         socket.sendTo(packet, destAddress_, destPort_);
-    // }
+    #ifdef SENSOR_RANGE
+    }
+    #endif
     --nframesTmp_;
     ++iDframe_;
 

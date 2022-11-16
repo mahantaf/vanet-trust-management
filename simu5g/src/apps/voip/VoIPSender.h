@@ -27,6 +27,8 @@
  * =========================================================
  */
 #define evilVehicleID "car[2]"
+// #define evilVehicleID ""
+#define SENSOR_RANGE 1
 
 class VoIPSender : public omnetpp::cSimpleModule
 {

@@ -81,20 +81,40 @@ void VoIPReceiver::initialize(int stage)
 
 inet::Coord estimateEventLocation(std::unordered_map<std::string, TrustData *> &messagesReceived, 
                                     TrustManager *rsuManager, TrustData *msg) {
-    if(rsuManager->trustNodes.empty()) {
+    // if(rsuManager->trustNodes.empty()) {
+    //     return msg->getEventLocation();
+    // }
+
+    // inet::Coord num = Coord(0,0,0);
+    // double deno = 0.0;
+    // for(auto trustNode: rsuManager->trustNodes) {
+    //     auto message = messagesReceived.find(trustNode->nodeId);
+    //     if(message != messagesReceived.end()) {
+    //         Coord newCoord = message->second->getEventLocation() * trustNode->reputation;
+    //         num += newCoord;
+    //         deno += trustNode->reputation;
+    //     }
+    // }
+
+    if(messagesReceived.empty()) {
         return msg->getEventLocation();
     }
 
     inet::Coord num = Coord(0,0,0);
     double deno = 0.0;
-    for(auto trustNode: rsuManager->trustNodes) {
-        auto message = messagesReceived.find(trustNode->nodeId);
-        if(message != messagesReceived.end()) {
-            Coord newCoord = message->second->getEventLocation() * trustNode->reputation;
+    for(auto message: messagesReceived) {
+        auto trustNode = rsuManager->getTrustNode(message.first);
+        if(trustNode != nullptr) {
+            Coord newCoord = message.second->getEventLocation() * trustNode->reputation;
             num += newCoord;
             deno += trustNode->reputation;
         }
     }
+    // Not possible but just doing to avoid any transient errors in the simulation
+    if(deno == 0) {
+        return msg->getEventLocation();
+    }
+
     return num/deno;
 }
 
@@ -189,6 +209,7 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
                     // cout << "Penalizing sender: " << sender <<" with reduction factor: " << reductionFactor << " since distance is " << dist << endl;
                 // }
                 trustNode->reputation = max(0.0, trustNode->reputation * reductionFactor);
+                cout << "Penalizing" << endl;
             }
             #ifdef PROBATION
             print_reputations(this->trustListAllVehicles, time);
@@ -196,6 +217,7 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
             return false;
             #endif
         } else {
+            cout << "Default trust initialize, OUTSIDE acceptable error margin" << endl;
             this->trustListAllVehicles->addEntryTrustMap(sender, DEFAULT_TRUST);
         }
     }
@@ -207,9 +229,11 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
             if(sender.compare(rsuID)) {
                 //modify entry in trust map
                 //Don't let reputation go above 1.0
+                cout << "Rewarding" << endl;
                 trustNode->reputation = min(trustNode->reputation * DIRECT_REPUTATION_REWARD, 1.0);
             }
         } else {
+            cout << "Default trust initialize, WITHIN acceptable error margin" << endl;
             this->trustListAllVehicles->addEntryTrustMap(sender, DEFAULT_TRUST);
         }
     }

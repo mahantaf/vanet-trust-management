@@ -56,7 +56,6 @@ def open_existing_fig(fig_label):
     figx = pickle.load(open(fig_label + '.fig.pickle', 'rb'))
     figx.show()
 
-
 if __name__ == "__main__":
     if sys.argv[1] == 'plot': 
         fileName = sys.argv[2]
