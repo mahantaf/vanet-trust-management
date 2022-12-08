@@ -19,6 +19,8 @@
 #include <inet/transportlayer/contract/udp/UdpSocket.h>
 #include "apps/voip/VoipPacket_m.h"
 #include "inet/mobility/contract/IMobility.h"
+#include "veins_inet/VeinsInetMobility.h"
+#include "veins/modules/mobility/traci/TraCICommandInterface.h"
 #include <unordered_set>
 
 /* =========================================================
@@ -26,9 +28,11 @@
  *       to the list
  * =========================================================
  */
-#define evilVehicleID "car[2]"
+#define evilVehicleID "car[10]"
 // #define evilVehicleID ""
 #define SENSOR_RANGE 1
+#define SENSOR_START 125
+#define SENSOR_END 175
 
 class VoIPSender : public omnetpp::cSimpleModule
 {
@@ -73,7 +77,7 @@ class VoIPSender : public omnetpp::cSimpleModule
 
     /* Mobility information(Addition by Nishchay)*/
     cModule* ue;
-    inet::IMobility *mobility;
+    veins::VeinsInetMobility *mobility;
     inet::Coord position;
     int coordVal;
     std::unordered_set<std::string> evilVehicles;

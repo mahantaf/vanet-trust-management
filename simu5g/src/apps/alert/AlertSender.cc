@@ -127,7 +127,8 @@ void AlertSender::sendAlertPacket()
 
     EV << "AlertSender::sendAlertPacket - Sending message [" << nextSno_ << "]\n";
 
-    socket.sendTo(packet, destAddress_, destPort_);
+    // Commented out to avoid HARQ process failure for current testing
+    // socket.sendTo(packet, destAddress_, destPort_);
     nextSno_++;
 
     emit(alertSentMsg_, (long)1);

@@ -74,7 +74,7 @@ void VoIPSender::initialize(int stage)
     ue = this->getParentModule();
     cModule *temp = getParentModule()->getSubmodule("mobility");
     if(temp != NULL){
-        mobility = check_and_cast<inet::IMobility*>(temp);
+        mobility = check_and_cast<veins::VeinsInetMobility*>(temp);
     }
     else {
         EV << "UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!" << endl;
@@ -210,6 +210,9 @@ void VoIPSender::sendVoIPPacket()
     // if(firstMessage) {
         // firstMessage = false;
         cout << senderID << ", Curr location: " << this->mobility->getCurrentPosition() << endl;
+        // TraCIMobility *mobility1 = TraCIMobilityAccess().get(getParentModule());
+        // traci = mobility1->getCommandInterface();
+        // traciVehicle = mobility1->getVehicleCommandInterface();
     // }
     Coord curr_loc = Coord(230, 150);
     auto crng = getEnvir()->getRNG(0);
@@ -252,7 +255,8 @@ void VoIPSender::sendVoIPPacket()
     EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_-1 << "] - Sending frame[" << iDframe_ << "]\n";
 
     #ifdef SENSOR_RANGE
-    if(this->mobility->getCurrentPosition().getY() >= 125 && this->mobility->getCurrentPosition().getY() <= 175) {
+    if(this->mobility->getCurrentPosition().getY() >= SENSOR_START && 
+        this->mobility->getCurrentPosition().getY() <= SENSOR_END) {
         cout << "Sending message" << endl;
     #endif
         socket.sendTo(packet, destAddress_, destPort_);

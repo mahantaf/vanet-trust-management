@@ -29,6 +29,9 @@
 //(20^2 since the distance calculation function returns dist^2 and it's easier to do it this way)
 #define ERROR_MARGIN 400 
 #define PROBATION 1
+#define MIN_NODES_FOR_REPUTATION_UPDATE 4
+#define ALGO2 1 // To enable reputation updating when collective data of MIN_NODES_FOR_REPUTATION_UPDATE nodes is there
+#define MAP_RANGE 800
 
 struct Point {
     double x, y;     // coordinates
