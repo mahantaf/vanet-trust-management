@@ -80,15 +80,7 @@ void VoIPSender::initialize(int stage)
         EV << "UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!" << endl;
         throw cRuntimeError("UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!");
     }
-    coordVal = 0;
-
-    std::stringstream ss(evilVehicleID);
- 
-    while (ss.good()) {
-        std::string substr;
-        getline(ss, substr, ',');
-        evilVehicles.insert(substr);
-    }
+    eventLocationGenerator = ConstantEventLocationGenerator(evilVehicleID);
 
     numMessages = 0;
     firstMessage = true;
@@ -204,32 +196,19 @@ void VoIPSender::sendVoIPPacket()
 
     TrustData content;
 
-    //Generate an event location which is randomly far away in the
-    //car's "sensor's reachability"
-    // Coord curr_loc = this->mobility->getCurrentPosition();
-    // if(firstMessage) {
-        // firstMessage = false;
-        cout << senderID << ", Curr location: " << this->mobility->getCurrentPosition() << endl;
-        // TraCIMobility *mobility1 = TraCIMobilityAccess().get(getParentModule());
-        // traci = mobility1->getCommandInterface();
-        // traciVehicle = mobility1->getVehicleCommandInterface();
-    // }
-    Coord curr_loc = Coord(230, 150);
-    auto crng = getEnvir()->getRNG(0);
-    auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
-
-    // Not adding random variable to z coordinate since there is no significance of z coordinate 
-    // when moving on street for now.
-    Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z);
-
     //simulate malicious vehicle advertising incorrect current velocity
-    if(evilVehicles.find(senderID) != evilVehicles.end()) {
-        // Coord evilVehicleLoc = randomLocGenerator();
-        Coord evilVehicleLoc = Coord(230, 250, 0);
+    if(eventLocationGenerator.isEvilVehicle(senderID)) {
+        Coord evilVehicleLoc = eventLocationGenerator.getEventLocation(senderID);
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
                     evilVehicleLoc, Coord(1000, 1000, 0), senderID);
     }
     else {
+        // Normal cars send correct event location +- sensor error margin which is
+        // a uniformly random distributed variable 
+        auto crng = getEnvir()->getRNG(0);
+        auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
+        Coord curr_loc = this->mobility->getCurrentPosition();
+        Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z);
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
                     newEvLoc, this->mobility->getCurrentVelocity(), senderID);        
     }
@@ -254,13 +233,13 @@ void VoIPSender::sendVoIPPacket()
     packet->insertAtBack(voip);
     EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_-1 << "] - Sending frame[" << iDframe_ << "]\n";
 
-    #ifdef SENSOR_RANGE
+    #ifdef ENABLE_SENSOR_RANGE
     if(this->mobility->getCurrentPosition().getY() >= SENSOR_START && 
         this->mobility->getCurrentPosition().getY() <= SENSOR_END) {
         cout << "Sending message" << endl;
     #endif
         socket.sendTo(packet, destAddress_, destPort_);
-    #ifdef SENSOR_RANGE
+    #ifdef ENABLE_SENSOR_RANGE
     }
     #endif
     --nframesTmp_;

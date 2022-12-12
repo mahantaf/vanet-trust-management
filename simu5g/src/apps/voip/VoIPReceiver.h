@@ -30,9 +30,10 @@
 #define ERROR_MARGIN 400 
 #define PROBATION 1
 #define MIN_NODES_FOR_REPUTATION_UPDATE 4
-#define ALGO2 1 // To enable reputation updating when collective data of MIN_NODES_FOR_REPUTATION_UPDATE nodes is there
+#define S_X_ALGO 1 // To enable reputation updating when collective data of MIN_NODES_FOR_REPUTATION_UPDATE nodes is there(Algorithm 2 in overleaf doc)
 #define MAP_RANGE 800
 
+// Point class for k-means clustering for clustering based location estimation
 struct Point {
     double x, y;     // coordinates
     int cluster;     // no default cluster

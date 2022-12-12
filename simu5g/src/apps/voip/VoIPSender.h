@@ -18,9 +18,11 @@
 #include <inet/networklayer/common/L3AddressResolver.h>
 #include <inet/transportlayer/contract/udp/UdpSocket.h>
 #include "apps/voip/VoipPacket_m.h"
+#include "apps/voip/ConstantEventLocationGenerator.h"
 #include "inet/mobility/contract/IMobility.h"
 #include "veins_inet/VeinsInetMobility.h"
 #include "veins/modules/mobility/traci/TraCICommandInterface.h"
+
 #include <unordered_set>
 
 /* =========================================================
@@ -28,9 +30,8 @@
  *       to the list
  * =========================================================
  */
-#define evilVehicleID "car[10]"
-// #define evilVehicleID ""
-#define SENSOR_RANGE 1
+#define evilVehicleID "car[2]"
+#define ENABLE_SENSOR_RANGE 1
 #define SENSOR_START 125
 #define SENSOR_END 175
 
@@ -78,9 +79,7 @@ class VoIPSender : public omnetpp::cSimpleModule
     /* Mobility information(Addition by Nishchay)*/
     cModule* ue;
     veins::VeinsInetMobility *mobility;
-    inet::Coord position;
-    int coordVal;
-    std::unordered_set<std::string> evilVehicles;
+    ConstantEventLocationGenerator eventLocationGenerator; 
 
     void initTraffic();
     void talkspurt(omnetpp::simtime_t dur);
