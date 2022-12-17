@@ -30,7 +30,7 @@
 #define ERROR_MARGIN 400 
 #define PROBATION 1
 #define MIN_NODES_FOR_REPUTATION_UPDATE 4
-#define S_X_ALGO 1 // To enable reputation updating when collective data of MIN_NODES_FOR_REPUTATION_UPDATE nodes is there(Algorithm 2 in overleaf doc)
+#define ALGO_3_2 1 // To enable reputation updating when collective data of MIN_NODES_FOR_REPUTATION_UPDATE nodes is there(Algorithm 2 in overleaf doc)
 #define MAP_RANGE 800
 
 // Point class for k-means clustering for clustering based location estimation
@@ -114,12 +114,11 @@ class VoIPReceiver : public omnetpp::cSimpleModule
   //Trust management
   public:
     int numRecvd;
-    bool doingRemoteAttestation;
     void emitAppropriateReputationSignal(std::string sender, int sigVal);
     bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustData *msg, std::string rsuID,
                             VoIPReceiver *recvr_class); 
 
-    void doRemoteAttestation(bool &doingRemoteAttestation, std::string sender);
+    void doRemoteAttestation(std::string sender);
 };
 
 #endif
