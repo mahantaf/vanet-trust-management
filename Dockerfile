@@ -33,14 +33,12 @@ RUN mkdir ~/temp && \
     cd ~ && \
     rm -rf temp/
 
+# Create ssh directory and scan github to add keys to known hosts
 RUN mkdir /root/.ssh/ &&\
     touch /root/.ssh/known_hosts &&\
     ssh-keyscan github.com >> /root/.ssh/known_hosts
 
-# Download source code from github
-# RUN mkdir $HOME/trial &&\
-#     cd $HOME/trial &&\
-    
+# Clone code from github    
 RUN --mount=type=ssh \
     git clone --progress --verbose git@github.com:nagrawal63/legendary-simu5g-broccoli.git $HOME/${GITHUB_REPO}
 
