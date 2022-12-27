@@ -5,7 +5,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 LABEL Description="Dockerised Simulation of Urban MObility(SUMO)"
 LABEL maintainer="Nishchay Agrawal <agrawal.nishchay5@gmail.com>"
-COPY startup.bash /opt/program
 SHELL ["/bin/bash", "-c"]
 
 #ENV SUMO_VERSION 0.31.0
@@ -92,5 +91,3 @@ RUN cd $HOME/ &&\
 #     unzip v1.1.0.zip &&\
 #     mv Simu5G-1.1.0/ simu5g/ &&\
 #     rm v1.1.0.zip
-
-CMD ["/bin/bash","/opt/program/startup.bash"]

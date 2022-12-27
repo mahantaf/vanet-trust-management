@@ -210,7 +210,7 @@ void VoIPSender::sendVoIPPacket()
     if(eventLocationGenerator.isEvilVehicle(senderID)) {
         Coord evilVehicleLoc = eventLocationGenerator.getEventLocation(senderID);
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                    evilVehicleLoc, Coord(1000, 1000, 0), senderID);
+                    evilVehicleLoc, Coord(230, 250, 0), senderID);
     }
     //If I am RSU, send reputation lists, for now hardcoded to send to a specific receiving RSU
     else {

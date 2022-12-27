@@ -304,10 +304,9 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
             if(sender.compare(rsuID)) {
                 // Calculate reduction factor 
                 // double reductionFactor = (1.0 - ((double)dist/INT32_MAX));
-                double reductionFactor = (1.0 - ((double)dist/2 * MAP_RANGE));
                 // double reductionFactor = 0.9;
+                double reductionFactor = (1.0 - ((double)dist/2 * MAP_RANGE));
                 trustNode->reputation = max(0.0, trustNode->reputation * reductionFactor);
-                cout << "Penalizing" << endl;
             }
             #ifdef PROBATION
             print_reputations(this->trustListAllVehicles, time);
@@ -318,7 +317,6 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
             //The RSU has highest reputation by default and no need to calculate the reputation of the RSU
             //again
             if(sender.compare(rsuID)) {
-                //modify entry in trust map
                 //Don't let reputation go above 1.0
                 trustNode->reputation = min(trustNode->reputation * DIRECT_REPUTATION_REWARD, 1.0);
             }
