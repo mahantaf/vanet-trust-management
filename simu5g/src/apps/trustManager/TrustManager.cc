@@ -28,6 +28,7 @@ TrustNodeList* TrustManager::addEntryTrustMap(string id, double reputation) {
     return tmp;
 }
 
+
 double TrustManager::getReputation(std::string sender) {
     auto trustOfNode =  this->getTrustNode(sender);
     if(!trustOfNode) {

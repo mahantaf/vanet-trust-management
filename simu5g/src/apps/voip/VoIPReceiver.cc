@@ -10,8 +10,13 @@
 //
 
 #include "apps/voip/VoIPReceiver.h"
+#include <string>
+#include <unordered_set>
 
 #include "inet/common/geometry/common/Coord.h"
+#include "ReputationListSerializer.h"
+
+std::string rsuID = "car[0],car[1]";
 
 Define_Module(VoIPReceiver);
 
@@ -335,6 +340,10 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
     }
 }
 
+static bool isRSU(std::string id, std::unordered_set<std::string> rsuSet) {
+    return (rsuSet.find(id) == rsuSet.end())?false:true;
+}
+
 void VoIPReceiver::handleMessage(cMessage *msg)
 {
     bool trusted = true;
@@ -368,11 +377,6 @@ void VoIPReceiver::handleMessage(cMessage *msg)
 
     auto hdr = voipHeader->dup();
 
-    //Reconstruct msg data from the message
-    TrustData *trustMsgContent = new TrustData();
-    const uint8_t *serializedTrustData = (const unsigned char *)(hdr->getSerializedMessage().c_str());
-    MemoryInputStream stream(serializedTrustData, B(hdr->getSerializedMessage().length()));
-    trustMsgContent->deserializeTrustData(stream);
 
     //Do trust management
     if(!doTrustManagement(messagesReceived, trustMsgContent, selfID, this)) {

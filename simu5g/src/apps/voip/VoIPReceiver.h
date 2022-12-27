@@ -14,6 +14,7 @@
 
 #include <list>
 #include <string.h>
+#include <unordered_set>
 
 #include <omnetpp.h>
 
@@ -113,6 +114,10 @@ class VoIPReceiver : public omnetpp::cSimpleModule
 
   //Trust management
   public:
+    std::list<TrustManager *> trustListAllVehicles;
+    std::unordered_map<std::string, TrustData *> messagesReceived;
+
+    std::unordered_set<std::string> rsuSet;
     int numRecvd;
     void emitAppropriateReputationSignal(std::string sender, int sigVal);
     bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustData *msg, std::string rsuID,

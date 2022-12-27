@@ -24,6 +24,9 @@
 #include "veins/modules/mobility/traci/TraCICommandInterface.h"
 
 #include <unordered_set>
+#include <unordered_map>
+
+#include "veins_inet/VeinsInetMobility.h"
 
 /* =========================================================
  * NOTE: Don't add spaces after comma when adding more cars
@@ -34,6 +37,7 @@
 #define ENABLE_SENSOR_RANGE 1
 #define SENSOR_START 125
 #define SENSOR_END 175
+
 
 class VoIPSender : public omnetpp::cSimpleModule
 {

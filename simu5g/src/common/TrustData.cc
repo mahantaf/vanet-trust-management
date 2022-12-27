@@ -40,11 +40,6 @@ void TrustData::serializeTrustData(MemoryOutputStream &stream)
     const std::string &node_velocity_str = this->node_velocity.str();
     stream.writeByte(node_velocity_str.length());
     stream.writeBytes(reinterpret_cast<const uint8_t*>(node_velocity_str.c_str()), B(node_velocity_str.length()));
-
-
-    std::vector<uint8_t> serialized_data;
-    stream.copyData(serialized_data);
-    // std::cout << "Serialized message with sender: " << this->senderID << " and velocity: " << node_velocity_str << std::endl;
 }
 
 void TrustData::deserializeTrustData(MemoryInputStream& stream) 

@@ -30,5 +30,6 @@ class VoipPacket extends inet::FieldsChunk {
     simtime_t playoutTime;
     simtime_t payloadTimestamp;
     unsigned int payloadSize;
+    omnetpp::cpp_string sender;
     omnetpp::cpp_string serializedMessage;
 }
