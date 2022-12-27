@@ -27,6 +27,40 @@
 
 #include "apps/voip/Remote_Attestation_m.h"
 
+//(20^2 since the distance calculation function returns dist^2 and it's easier to do it this way)
+#define ERROR_MARGIN 400 
+#define PROBATION 1
+#define MIN_NODES_FOR_REPUTATION_UPDATE 4
+#define ALGO_3_2 1 // To enable reputation updating when collective data of MIN_NODES_FOR_REPUTATION_UPDATE nodes is there(Algorithm 2 in overleaf doc)
+#define MAP_RANGE 800
+
+// Point class for k-means clustering for clustering based location estimation
+struct Point {
+    double x, y;     // coordinates
+    int cluster;     // no default cluster
+    double minDist;  // default infinite dist to nearest cluster
+    int nPoints;
+
+    Point() : 
+        x(0.0), 
+        y(0.0),
+        cluster(-1),
+        minDist(__DBL_MAX__),
+        nPoints(0) {}
+        
+    Point(double x, double y) : 
+        x(x), 
+        y(y),
+        cluster(-1),
+        minDist(__DBL_MAX__),
+        nPoints(0) {}
+
+    double distance(Point p) {
+        return (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y);
+    }
+};
+vector<Point> kMeansClustering(vector<Point>* points, int epochs, int k);
+
 class VoIPReceiver : public omnetpp::cSimpleModule
 {
     inet::UdpSocket socket;
@@ -63,8 +97,10 @@ class VoIPReceiver : public omnetpp::cSimpleModule
 
     RemoteAttestationMsg *remoteAttestationDoneMsg_;
     omnetpp::simsignal_t alertSendMsgSignal_;
-    simtime_t sampling_time_for_self_msg;
-    omnetpp::cMessage *selfSenderForReceivingDirectMsgs_;
+    TrustManager* trustListAllVehicles;
+    std::unordered_map<std::string, TrustData *> messagesReceived;
+
+    //Adding statistics
 
     virtual void finish() override;
 
@@ -83,12 +119,11 @@ class VoIPReceiver : public omnetpp::cSimpleModule
 
     std::unordered_set<std::string> rsuSet;
     int numRecvd;
-    bool doingRemoteAttestation;
     void emitAppropriateReputationSignal(std::string sender, int sigVal);
-    bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
-                         TrustData *msg, std::string rsuID, VoIPReceiver *recvr_class);
+    bool doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustData *msg, std::string rsuID,
+                            VoIPReceiver *recvr_class); 
 
-    void doRemoteAttestation(bool &doingRemoteAttestation, std::string sender, TrustManager* rsuTrustManager);
+    void doRemoteAttestation(std::string sender);
 };
 
 #endif

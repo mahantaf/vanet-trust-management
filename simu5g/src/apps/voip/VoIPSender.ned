@@ -26,8 +26,8 @@ simple VoIPSender like IApp
         double shape_sil = default(1.089);
         double scale_sil = default(0.899);
         bool is_talk = default(true);
-        double sampling_time @unit("s") = default(1s);
-        double startTime @unit("s") = default(0s);
+        double sampling_time @unit("s") = default(0.5s);
+        double startTime @unit("s") = default(5s);
         bool silences = default(true);
         int tos = default(-1); // if not -1, set the Type Of Service (IPv4) / Traffic Class (IPv6) field of sent packets to this value
         

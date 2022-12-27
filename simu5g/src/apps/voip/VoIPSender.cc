@@ -22,6 +22,7 @@ std::string rsuIDs = "car[0],car[1]";
 #define round(x) floor((x) + 0.5)
 
 Define_Module(VoIPSender);
+using namespace std;
 using namespace inet;
 
 VoIPSender::VoIPSender()
@@ -75,39 +76,27 @@ void VoIPSender::initialize(int stage)
 
     //Mobility information initialization
     ue = this->getParentModule();
-//    getParentModule()->getS
     cModule *temp = getParentModule()->getSubmodule("mobility");
     if(temp != NULL){
-        mobility = check_and_cast<inet::IMobility*>(temp);
+        mobility = check_and_cast<veins::VeinsInetMobility*>(temp);
     }
     else {
         EV << "UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!" << endl;
         throw cRuntimeError("UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!");
     }
-    coordVal = 0;
+    eventLocationGenerator = ConstantEventLocationGenerator(evilVehicleID);
 
-    std::stringstream ss(evilVehicleID);
-    while (ss.good()) {
-        std::string substr;
-        getline(ss, substr, ',');
-        evilVehicles.insert(substr);
-    }
-
-    std::stringstream ss2(rsuIDs);
-    while (ss2.good()) {
-        std::string substr;
-        getline(ss2, substr, ',');
-        rsuSet.insert(substr);
-    }
-
+    numMessages = 0;
+    firstMessage = true;
 }
 
 void VoIPSender::handleMessage(cMessage *msg)
 {
     if (msg->isSelfMessage())
     {
-        if (!strcmp(msg->getName(), "selfSender"))
+        if (!strcmp(msg->getName(), "selfSender")) {
             sendVoIPPacket();
+        }
         else if (!strcmp(msg->getName(), "selfSource"))
             selectPeriodTime();
         else
@@ -195,36 +184,6 @@ void VoIPSender::selectPeriodTime()
     }
 }
 
-static bool isRSU(std::string id, std::unordered_set<std::string> rsuSet) {
-    return (rsuSet.find(id) == rsuSet.end())?false:true;
-}
-
-//Choose the closest RSU to send the VoIP packet to while moving
-std::string getDestination(std::unordered_set<std::string> rsuSet, std::string carID, std::unordered_map<std::string, veins::VeinsInetMobility *> &mobilityMap) {
-    std::string closestRSU;
-    double minDist = DBL_MAX;
-    for(const auto& itr: rsuSet) {
-        double dist = mobilityMap[itr]->getCurrentPosition().sqrdist(mobilityMap[carID]->getCurrentPosition());
-        if(dist < minDist) {
-            minDist = dist;
-            closestRSU = itr;
-        }
-    }
-
-    return closestRSU;
-}
-
-TrustManager *getRSUTrustManager(std::list<TrustManager*> &trustList, std::string nodeId) {
-    auto tmpItr = trustList.begin();
-    while(tmpItr != trustList.end()) {
-        if((*tmpItr)->id.compare(nodeId) == 0) {
-            return *tmpItr;
-        }
-        tmpItr++;
-    }
-    return nullptr;
-}
-
 void VoIPSender::sendVoIPPacket()
 {
     cModule *tmp = getParentModule()->getSubmodule("mobility");
@@ -237,12 +196,6 @@ void VoIPSender::sendVoIPPacket()
             this->mobilityMap[carId] = carMobility;
         }
     }
-//
-//    cout << "==================================\nPrinting submodules:" << endl;
-//    for (cModule::SubmoduleIterator it(tmp); !it.end(); ++it) {
-//        cout << "Module name: " << *(it) << endl;
-//    }
-//    cout << "==================================" << endl;
 
     if (destAddress_.isUnspecified())
         destAddress_ = L3AddressResolver().resolve(par("destAddress"));
@@ -251,70 +204,24 @@ void VoIPSender::sendVoIPPacket()
     omnetpp::cpp_string pktContent;
     MemoryOutputStream stream;
 
-    //send trust data if i am not RSU
-    if(!isRSU(senderID, this->rsuSet)) {
-        TrustData content;
+    TrustData content;
 
-        Coord event_loc(0, 0, 0);
-
-        //Generate an event location which is randomly far away in the
-        //car's "sensor's reachability"
-        Coord curr_loc = this->mobility->getCurrentPosition();
-        auto crng = getEnvir()->getRNG(0);
-        auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
-        Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z + uniformDistVar);
-
-        //simulate malicious vehicle advertising incorrect current velocity
-        if(evilVehicles.find(senderID) != evilVehicles.end()) {
-            // Coord evilVehicleLoc = this->randomLocGenerator();
-            Coord evilVehicleLoc = Coord(10000, 10000, 10000);
-            content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                        evilVehicleLoc, Coord(10000, 10000, 10000), senderID);
-        }
-        else {
-            content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                        newEvLoc, this->mobility->getCurrentVelocity(), senderID);        
-        }
-
-        content.serializeTrustData(stream);
-
-        std::string dest = getDestination(this->rsuSet, senderID, this->mobilityMap);
-        destAddress_ = L3AddressResolver().resolve(dest.c_str());
+    //simulate malicious vehicle advertising incorrect current velocity
+    if(eventLocationGenerator.isEvilVehicle(senderID)) {
+        Coord evilVehicleLoc = eventLocationGenerator.getEventLocation(senderID);
+        content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
+                    evilVehicleLoc, Coord(1000, 1000, 0), senderID);
     }
     //If I am RSU, send reputation lists, for now hardcoded to send to a specific receiving RSU
     else {
-        if(!senderID.compare("car[0]")) {
-            destAddress_ = L3AddressResolver().resolve("car[1]");
-            cModule *app0Module = this->getParentModule()->getSubmodule("app[0]");
-            //Note: the app[0] is as configured(VoIPReceiver) in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
-//            auto voipReceiverModule = mobilityMap[senderID]->getSubmodule("app[0]");
-            auto voipReceiverModule = this->getParentModule()->getModuleByPath("Highway.car[0].app[0]");
-            // auto voipReceiverModule = getModuleByPath("Scenario.car[0]")->getSubmodule("app[0]");
-           VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipReceiverModule);
-
-            //get reputation list of car[0] from the voipreceiver module
-            // MemoryOutputStream stream;
-           TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
-           if(rsuManager == nullptr) {
-               return;
-           }
-           serializeReputationList(stream, rsuManager);
-        }
-        else if(!senderID.compare("car[1]")) {
-            destAddress_ = L3AddressResolver().resolve("car[0]");
-
-            //Note: the app[2] is as configured(VoIPReceiver) in Multiple-RSUs config in omnetpp.ini(simulations/NR/cars)
-//            auto voipreceiverModule = mobilityMap[senderID]->getSubmodule("app[2]");
-            auto voipReceiverModule = this->getParentModule()->getModuleByPath("Highway.car[1].app[0]");
-           VoIPReceiver *voipreceiverModule1 = check_and_cast<VoIPReceiver *>(voipReceiverModule);
-//
-//            //get reputation list of car[1] from the voipreceiver module
-           TrustManager *rsuManager = getRSUTrustManager(voipreceiverModule1->trustListAllVehicles, senderID);
-           if(rsuManager == nullptr) {
-               return;
-           }
-           serializeReputationList(stream, rsuManager);
-        }
+        // Normal cars send correct event location +- sensor error margin which is
+        // a uniformly random distributed variable 
+        auto crng = getEnvir()->getRNG(0);
+        auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
+        Coord curr_loc = this->mobility->getCurrentPosition();
+        Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z);
+        content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
+                    newEvLoc, this->mobility->getCurrentVelocity(), senderID);
     }
     std::vector<uint8_t> serialized_data;
     stream.copyData(serialized_data);
@@ -338,7 +245,15 @@ void VoIPSender::sendVoIPPacket()
     packet->insertAtBack(voip);
     EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_-1 << "] - Sending frame[" << iDframe_ << "]\n";
 
-    socket.sendTo(packet, destAddress_, destPort_);
+    #ifdef ENABLE_SENSOR_RANGE
+    if(this->mobility->getCurrentPosition().getY() >= SENSOR_START && 
+        this->mobility->getCurrentPosition().getY() <= SENSOR_END) {
+        cout << "Sending message" << endl;
+    #endif
+        socket.sendTo(packet, destAddress_, destPort_);
+    #ifdef ENABLE_SENSOR_RANGE
+    }
+    #endif
     --nframesTmp_;
     ++iDframe_;
 

@@ -78,180 +78,264 @@ void VoIPReceiver::initialize(int stage)
     simtime_t startTime = par("startTime");
 
     numRecvd = 0;
-    doingRemoteAttestation = false;
+    // doingRemoteAttestation = false
 
-    std::stringstream ss(rsuID);
-    while (ss.good()) {
-        std::string substr;
-        getline(ss, substr, ',');
-        rsuSet.insert(substr);
-    }
+    trustListAllVehicles = new TrustManager();
+    WATCH_VECTOR(trustListAllVehicles->trustNodes);
 }
 
-inet::Coord estimateEventLocation(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustManager *rsuManager,
-                                    TrustData *msg) {
-    auto itr = rsuManager->head;
-    if(!itr) {
+/**
+ * @brief Weighted averaging(reputations of cars are weights) based event location estimator
+ * 
+ * @param messagesReceived map of already fully trusted cars and the most recent messages sent by them
+ * @param rsuManager       Reputation lists manager at the RSU
+ * @param msg              Currently received message
+ * @return inet::Coord     Estimated event location
+ */
+inet::Coord weightedAveragingestimateEventLocation(std::unordered_map<std::string, TrustData *> &messagesReceived, 
+                                    TrustManager *rsuManager, TrustData *msg) {
+    if(messagesReceived.empty()) {
         return msg->getEventLocation();
     }
 
     inet::Coord num = Coord(0,0,0);
     double deno = 0.0;
-    while(itr != nullptr) {
-        auto message = messagesReceived.find(itr->nodeId);
-        Coord newCoord = message->second->getEventLocation() * itr->directReputation;
-        // num += Coord(itr->directReputation, itr->directReputation, itr->directReputation) * message->second->getEventLocation();
-        num += newCoord;
-        deno += itr->directReputation;
-        itr = itr->next;
+    for(auto message: messagesReceived) {
+        auto trustNode = rsuManager->getTrustNode(message.first);
+        if(trustNode != nullptr) {
+            Coord newCoord = message.second->getEventLocation() * trustNode->reputation;
+            num += newCoord;
+            deno += trustNode->reputation;
+        }
     }
+    // Not possible but just doing to avoid any transient errors in the simulation
+    if(deno == 0) {
+        return msg->getEventLocation();
+    }
+
     return num/deno;
 }
 
-void print_reputations(TrustManager *rsuManager, simtime_t time) {
-    std::string line(time.str());
-    std::string nodesLine(time.str());
-    auto tmp = rsuManager->head;
-    while(tmp != nullptr) {
-        line += (", " + to_string(tmp->lastCalculatedReputation));
-        nodesLine += (", " + tmp->nodeId);
-        tmp = tmp->next;
+/**
+ * @brief Normal averaging based event location estimator
+ * 
+ * @param messagesReceived map of already fully trusted cars and the most recent messages sent by them
+ * @param rsuManager       Reputation lists manager at the RSU
+ * @param msg              Currently received message
+ * @return inet::Coord     Estimated event location
+ */
+inet::Coord averagingBasedEstimateEventLocation(std::unordered_map<std::string, TrustData *> &messagesReceived, 
+                                    TrustManager *rsuManager, TrustData *msg) {
+    if (messagesReceived.empty()) {
+        return msg->getEventLocation();
     }
-    std::cout << "Reputations, " << line << std::endl;
-    std::cout << "Reputations, " << nodesLine << std::endl;
+
+    inet::Coord num = Coord(0,0,0);
+    int deno = 0;
+    for (auto message: messagesReceived) {
+        auto trustNode = rsuManager->getTrustNode(message.first);
+        if(trustNode != nullptr) {
+            Coord newCoord = message.second->getEventLocation();
+            num += newCoord;
+            deno++;
+        }
+    }
+    // Not possible but just doing to avoid any transient errors in the simulation
+    if (deno == 0) {
+        return msg->getEventLocation();
+    }
+
+    return num/deno;
 }
 
-void VoIPReceiver::doRemoteAttestation(bool &doingRemoteAttestation, std::string sender, TrustManager* rsuTrustManager) {
-    auto senderTrustNode = rsuTrustManager->getTrustNode(sender);
+/**
+ * @brief K-means clustering based event location estimator
+ * 
+ * @param messagesReceived map of already fully trusted cars and the most recent messages sent by them
+ * @param rsuManager       Reputation lists manager at the RSU
+ * @param msg              Currently received message
+ * @return inet::Coord     Estimated event location(centroid of the largest cluster)
+ */
+inet::Coord clusteringEventLocationEstimator(std::unordered_map<std::string, TrustData *> &messagesReceived, 
+                                    TrustManager *rsuManager, TrustData *msg) {
+    if(rsuManager->trustNodes.empty()) {
+        return msg->getEventLocation();
+    }
+
+    vector<Point> points;
+    for(auto message: messagesReceived) {
+        Coord c = message.second->getEventLocation();
+        points.push_back(Point(c.x, c.y));
+    }
+    vector<Point> centroids = kMeansClustering(&points, 10, 2);
+    int i = 0;
+    Point majorityCentroid;
+    for(auto centroid: centroids) {
+        cout << "Centroid[" << i++ << "]: "<< centroid.nPoints <<", (" << 
+            centroid.x << ", " << centroid.y << ")" << endl;
+        if(majorityCentroid.nPoints < centroid.nPoints) {
+            majorityCentroid = centroid;
+        }
+    }
+
+    return Coord(majorityCentroid.x, majorityCentroid.y);
+}
+
+/**
+ * @brief Utility function to print reputations at a particular time in the simulation
+ *        for analysis later
+ * 
+ * @param rsuManager    Reputation lists manager at the RSU
+ * @param time          Simulation time at which the reputations have to be printed
+ */
+void print_reputations(TrustManager *rsuManager, simtime_t time) {
+    std::string line(time.str());
+    for(auto trustNode: rsuManager->trustNodes) {
+        line += (", " + trustNode->nodeId + ", " + to_string(trustNode->reputation));
+    }
+    std::cout << "Reputations, " << line << std::endl;
+}
+
+/**
+ * @brief Simulate remote attestation by simply setting a timer to send an event message(`remoteAttestationDoneMsg`)
+ *        to VoIPReceiver indicating remote attestation is done and change the remote attestee's reputation to the 
+ *        appropriate value
+ * 
+ *        Possible bug:
+ *          - Cannot start "remote attestation" of multiple cars simultaneously
+ * 
+ * @param doingRemoteAttestation 
+ * @param sender                    Remote Attestee
+ */
+void VoIPReceiver::doRemoteAttestation(std::string sender) {
+    auto senderTrustNode = this->trustListAllVehicles->getTrustNode(sender);
     RemoteAttestationMsg *remoteAttestationDoneMsg = new RemoteAttestationMsg("remoteAttestationDoneMsg");
     if(!remoteAttestationDoneMsg->isScheduled()) {
-        doingRemoteAttestation=true;
         remoteAttestationDoneMsg->setSender(sender.c_str());
         scheduleAt(simTime() + REMOTE_ATTESTATION_TIME, remoteAttestationDoneMsg);
         std::cout << "Start remote attestation at " << simTime() << std::endl;
     }
 }
 
-bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, std::list<TrustManager *> &trustListAllVehicles,
-                         TrustData *msg, std::string rsuID, VoIPReceiver *recvr_class) {
+/**
+ * @brief Update list of trust cars based on the recently assigned reputation to the car
+ *        based on the description in the document(https://www.overleaf.com/read/nwjssqvbcmtc)
+ * 
+ * @param messagesReceived     Hashmap of messages from fully trusted cars
+ * @param estimateLocation     Estimate event location
+ * @param msgData              New message to be added to the map
+ * @param reputation           Reputation assigned to the sender based on this new message calculated by the trust
+ *                             management function
+ */
+void updateTrustSet(std::unordered_map<std::string, TrustData *> &messagesReceived, inet::Coord estimateLocation,
+                        TrustData *msgData, double reputation) {
+    double dist = msgData->getEventLocation().sqrdist(estimateLocation);
+    if(reputation < TRUST_THRESHOLD || dist >= ERROR_MARGIN) {
+        if(messagesReceived.find(msgData->getSenderID()) != messagesReceived.end()) {
+            messagesReceived.erase(msgData->getSenderID());
+        }
+    }
+    else if(reputation >= TRUST_THRESHOLD && dist < ERROR_MARGIN){
+        //Add message to the latest messages received map
+        auto itr = messagesReceived.find(msgData->getSenderID());
+        if(itr == messagesReceived.end()) {
+            //Message from this sender already in map, just update with new message
+            messagesReceived[msgData->getSenderID()] = msgData;
+        }
+        else {
+            //Message from this sender not in map, add new message
+            auto toBeDeleted = itr->second;
+            itr->second = msgData;
+            delete toBeDeleted;
+        }
+    }
+}
+
+/*
+ * @brief Trust Management function
+ * This function updates the reputation of the car by comparing the estimate location based on the algorithm 
+ * described in the document(https://www.overleaf.com/read/nwjssqvbcmtc)
+ * 
+ * @param messagesReceived  list of latest (fully trusted)message received from cars at RSU  
+ * @param msg               Message based on which trust has to be evaluated
+ * @param rsuID             rsu id
+ * @param recvr_class       class object of VoIPReceiver to be used by remote attestor 
+ * @return a boolean denoting if the sender's message is trusted enough to be forwarded
+ */
+bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *> &messagesReceived, TrustData *msg, 
+                                        std::string rsuID, VoIPReceiver *recvr_class) {
     // simtime_t startTime = simTime();
     string sender(msg->getSenderID());
     bool messageReceivedByRSU = false;
 
-    //Get list of reputations stored at RSU
-    TrustManager *rsuItr = findVehicleInList(trustListAllVehicles, rsuID);
-    if(rsuItr == nullptr) {
-        TrustManager *tmp = new TrustManager(rsuID);
-        trustListAllVehicles.push_back(tmp);
-        rsuItr = findVehicleInList(trustListAllVehicles, rsuID);
-    }
-
     //Drop message if reputation of sender is lower than threshold
     if(sender.compare(rsuID) != 0) {
-        TrustNodeList *nodeTrust = rsuItr->getTrustNode(sender);
-        if(nodeTrust != nullptr && nodeTrust->lastCalculatedReputation < TRUST_THRESHOLD) {
+        TrustNodeList *nodeTrust = this->trustListAllVehicles->getTrustNode(sender);
+        if(nodeTrust != nullptr && nodeTrust->reputation < TRUST_THRESHOLD) {
             return false;
         }
     }
-    
-    auto estimatedEventLocation = estimateEventLocation(messagesReceived, rsuItr, msg);
 
-    //Checks if each coordinate of the event location in the message is within 0.001 error margin
-    //of the estimated event location
-    //and penalizing the node if it isn't
-    if(estimatedEventLocation != msg->getEventLocation()) {
-        //Calculate euclidean distance b/w expected ev location and msg ev location
-        auto msg_ev_loc = msg->getEventLocation();
+    TrustNodeList *trustNode = this->trustListAllVehicles->getTrustNode(sender);
+    auto time = simTime();
+    // auto estimatedEventLocation = averagingBasedEstimateEventLocation(messagesReceived, this->trustListAllVehicles, msg);
+    auto estimatedEventLocation = weightedAveragingestimateEventLocation(messagesReceived, this->trustListAllVehicles, msg);
+    // auto estimatedEventLocation = clusteringEventLocationEstimator(messagesReceived, this->trustListAllVehicles, msg);
+    auto msg_ev_loc = msg->getEventLocation();
 
-        //Distance between estimated event location and msg event location
-        double dist = msg_ev_loc.sqrdist(estimatedEventLocation);
+    cout << "ReceivedEventLocation: " << msg->getSenderID() << ", " << time << ", " << msg_ev_loc << endl;
+    cout << "EstimateLocation: " << time << ", " << estimatedEventLocation << endl;
 
-        TrustNodeList *trustNode = rsuItr->getTrustNode(sender);
+    // Distance between estimated event location and msg event location
+    double dist = msg_ev_loc.sqrdist(estimatedEventLocation);
 
-        //reduce direct reputation proportionately
-        if(trustNode != nullptr) {
+    if (trustNode == nullptr) {
+        this->trustListAllVehicles->addEntryTrustMap(sender, DEFAULT_TRUST);
+    }
+    #ifdef ALGO_3_2
+    else if(messagesReceived.size() >= MIN_NODES_FOR_REPUTATION_UPDATE) {
+    #else
+    else {
+    #endif
+        if(dist > ERROR_MARGIN) {
+            // Checks if each coordinate of the event location in the message is within ERROR_MARGIN
+            // of the estimated event location and penalizing the node if it isn't
             //Only modify if sender(sensor of event) is not RSU
             if(sender.compare(rsuID)) {
-                dist = dist;
-                //higher demotion by squaring and cubing the distance
-                //Update: Does not work since the demotion happens too fast!
-                // dist = dist * dist;
-                // dist = dist * dist * dist;
-                //Dividing distance by a very large number to get a ratio of how much to penalize
-                double reductionFactor = (1.0 - ((double)dist/INT32_MAX));
-                trustNode->directReputation = max(0.0, trustNode->directReputation * reductionFactor);
-                //TODO: Add assertions here to check the direct reputation does not go down for good nodes
+                // Calculate reduction factor 
+                // double reductionFactor = (1.0 - ((double)dist/INT32_MAX));
+                double reductionFactor = (1.0 - ((double)dist/2 * MAP_RANGE));
+                // double reductionFactor = 0.9;
+                trustNode->reputation = max(0.0, trustNode->reputation * reductionFactor);
+                cout << "Penalizing" << endl;
             }
+            #ifdef PROBATION
+            print_reputations(this->trustListAllVehicles, time);
+            return false;
+            #endif
         }
-        else {
-            //Add reputation of rsu in its own list as 1(highest reputation)
-            if(!sender.compare(rsuID)) {
-                rsuItr->addEntryTrustMap(sender, 1, 1);
-            }
-            //Add default reputations for all other nodes
-            else {
-                rsuItr->addEntryTrustMap(sender, DEFAULT_TRUST, INITIAL_TRUST);
-            }
-        }
-    }
-    else {
-        TrustNodeList *trustNode = rsuItr->getTrustNode(sender);
-        //No entry for this sender in list, create new entry with default reputations
-        if(trustNode == nullptr) {
-            //The RSU has highest reputation at all nodes by default
-            if(!sender.compare(rsuID)) {
-                rsuItr->addEntryTrustMap(sender, 1, 1);
-            }
-            else {
-                rsuItr->addEntryTrustMap(sender, DEFAULT_TRUST, INITIAL_TRUST);
-            }
-        }
-        else {
+        else if (dist <= ERROR_MARGIN) {
             //The RSU has highest reputation by default and no need to calculate the reputation of the RSU
             //again
             if(sender.compare(rsuID)) {
                 //modify entry in trust map
                 //Don't let reputation go above 1.0
-                trustNode->directReputation = min(trustNode->directReputation * DIRECT_REPUTATION_REWARD, 1.0);
+                trustNode->reputation = min(trustNode->reputation * DIRECT_REPUTATION_REWARD, 1.0);
             }
         }
     }
 
-    //Just return true if the message was from the rsu itself(of it seeing/directly experiencing the event)
-    //cause recommended reputation calculation not needed for event messages generated by the rsu
-    if(sender.compare(rsuID) == 0) {
-        //Printing to get data for graphs
-        std::cout << sender << ", 1, " << simTime() << ", " << recvr_class->numRecvd << std::endl;
-        return true;
-    }
-
-    double directReputation = getDirectReputation(rsuItr, sender);
-
-    double msgReputation = directReputation;
-
-    TrustNodeList *nodeTrust = rsuItr->getTrustNode(sender);
-
-    //Did not find node in rsu's list, that means we haven't encountered any event corresponding to 
-    //the event alert sent by the sender, assign a default reputation
-    if(nodeTrust == nullptr) {
-        rsuItr->addEntryTrustMap(sender, directReputation, INITIAL_TRUST);
-    }
-    else {
-        nodeTrust->lastCalculatedReputation = nodeTrust->directReputation;
-        nodeTrust->timestamp += 1;
-    }
-
     //Printing to get data for graphs
-    simtime_t time = simTime();
-    std::cout << sender << ", " << msgReputation << ", " << time << ", " << recvr_class->numRecvd << std::endl;
-    print_reputations(rsuItr, time);
-
-    if(msgReputation > TRUST_THRESHOLD) {
+    print_reputations(this->trustListAllVehicles, time);
+    trustNode = this->trustListAllVehicles->getTrustNode(sender);
+    updateTrustSet(messagesReceived, estimatedEventLocation, msg, trustNode->reputation);
+    if(trustNode->reputation > TRUST_THRESHOLD) {
         return true;
     }
     else {
         //Perform remote attestation as and when needed is reputation of node goes down a threshold
-        // doRemoteAttestation(recvr_class->doingRemoteAttestation, sender, rsuManager);
+        // doRemoteAttestation(sender, rsuManager);
+        cout << "KickedOut: " << msg->getSenderID() << ", " << time << endl;
         return false;
     }
 }
@@ -267,15 +351,13 @@ void VoIPReceiver::handleMessage(cMessage *msg)
     std::string selfID = getParentModule()->getFullName();
 
     if (msg->isSelfMessage()) {
+        // Process the remote attestation done message and update the reputation of the remote attestee
         if(!strcmp(msg->getName(), "remoteAttestationDoneMsg")) {
-            doingRemoteAttestation = false;
+            // doingRemoteAttestation = false;
             RemoteAttestationMsg *remoteAttestationMsg = check_and_cast<RemoteAttestationMsg *>(msg);
             std::string sender(remoteAttestationMsg->getSender());
-            auto rsuManager = findVehicleInList(trustListAllVehicles, selfID);
-            auto senderTrustNode = rsuManager->getTrustNode(sender);
-            senderTrustNode->directReputation = INITIAL_TRUST;
-            senderTrustNode->lastCalculatedReputation = 0;
-            senderTrustNode->timestamp += 1;
+            auto senderTrustNode = this->trustListAllVehicles->getTrustNode(sender);
+            senderTrustNode->reputation = DEFAULT_TRUST;
             std::cout << "Remote attestation done at " << simTime()<< std::endl;
             delete remoteAttestationMsg;
         }
@@ -296,49 +378,9 @@ void VoIPReceiver::handleMessage(cMessage *msg)
     auto hdr = voipHeader->dup();
 
 
-    std::cout << "================================================\n";
-    std::cout << "VoIP data received at " << selfID << "\n";
-    std::cout << "================================================\n";
-    const uint8_t *serializedData = (const unsigned char *)(hdr->getSerializedMessage().c_str());
-    MemoryInputStream stream(serializedData, B(hdr->getSerializedMessage().length()));
-
-    //The message wwas not sent by an RSU, but by a normal car
-    //Hence, do normal trust management
-    if(!isRSU(hdr->getSender(), this->rsuSet)) {
-        //Reconstruct msg data from the message
-        TrustData *trustMsgContent = new TrustData();
-        trustMsgContent->deserializeTrustData(stream);
-        //Do trust management
-        if(!doTrustManagement(this->messagesReceived, this->trustListAllVehicles, trustMsgContent, selfID, this)) {
-            trusted = false;
-        }
-        else {
-            //Add message to the latest messages received map
-            auto itr = this->messagesReceived.find(trustMsgContent->getSenderID());
-            if(itr == this->messagesReceived.end()) {
-                //Message from this sender already in map, just update with new message
-                this->messagesReceived[trustMsgContent->getSenderID()] = trustMsgContent;
-            }
-            else {
-                //Message from this sender not in map, add new message
-                auto toBeDeleted = itr->second;
-                itr->second = trustMsgContent;
-                delete toBeDeleted;
-            }
-        }
-    }
-    //The message was sent by the RSU, hence it contains
-    //reputations list to be exchanged, update own reputation
-    //list from the message
-    else {
-        //we are not doing trust management for this message
-        //so we are not going to forward this message to other
-        //cars
+    //Do trust management
+    if(!doTrustManagement(messagesReceived, trustMsgContent, selfID, this)) {
         trusted = false;
-        auto rsuTrustManager = findVehicleInList(trustListAllVehicles, selfID);
-        
-        //TODO: Add last updated time with each entry in the trust list
-        deserializeAndUpdateReputationList(stream, rsuTrustManager);
     }
 
     if (mInit_)
@@ -573,5 +615,73 @@ void VoIPReceiver::finish()
 {
     // last talkspurt playout
     playout(true);
+}
+
+/**
+ * Perform k-means clustering
+ * @param points - pointer to vector of points
+ * @param epochs - number of k means iterations
+ * @param k - the number of initial centroids
+ */
+vector<Point> kMeansClustering(vector<Point>* points, int epochs, int k) {
+    int n = points->size();
+
+    // Randomly initialise centroids
+    // The index of the centroid within the centroids vector
+    // represents the cluster label.
+    vector<Point> centroids;
+    srand(time(0));
+    for (int i = 0; i < k; ++i) {
+        centroids.push_back(points->at(rand() % n));
+    }
+
+    for (int i = 0; i < epochs; ++i) {
+        // For each centroid, compute distance from centroid to each point
+        // and update point's cluster if necessary
+        for (vector<Point>::iterator c = begin(centroids); c != end(centroids);
+             ++c) {
+            int clusterId = c - begin(centroids);
+
+            for (vector<Point>::iterator it = points->begin();
+                 it != points->end(); ++it) {
+                Point p = *it;
+                double dist = c->distance(p);
+                if (dist < p.minDist) {
+                    p.minDist = dist;
+                    p.cluster = clusterId;
+                }
+                *it = p;
+            }
+        }
+
+        // Create vectors to keep track of data needed to compute means
+        vector<int> nPoints;
+        vector<double> sumX, sumY;
+        for (int j = 0; j < k; ++j) {
+            nPoints.push_back(0);
+            sumX.push_back(0.0);
+            sumY.push_back(0.0);
+        }
+
+        // Iterate over points to append data to centroids
+        for (vector<Point>::iterator it = points->begin(); it != points->end();
+             ++it) {
+            int clusterId = it->cluster;
+            nPoints[clusterId] += 1;
+            sumX[clusterId] += it->x;
+            sumY[clusterId] += it->y;
+
+            it->minDist = __DBL_MAX__;  // reset distance
+        }
+        // Compute the new centroids
+        for (vector<Point>::iterator c = begin(centroids); c != end(centroids);
+             ++c) {
+            int clusterId = c - begin(centroids);
+            c->x = sumX[clusterId] / nPoints[clusterId];
+            c->y = sumY[clusterId] / nPoints[clusterId];
+            c->nPoints = nPoints[clusterId];
+        }
+    }
+    return centroids;
 }
 
