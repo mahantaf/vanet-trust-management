@@ -98,7 +98,6 @@ class VoIPReceiver : public omnetpp::cSimpleModule
     RemoteAttestationMsg *remoteAttestationDoneMsg_;
     omnetpp::simsignal_t alertSendMsgSignal_;
     TrustManager* trustListAllVehicles;
-    std::unordered_map<std::string, TrustData *> messagesReceived;
 
     //Adding statistics
 
@@ -114,7 +113,7 @@ class VoIPReceiver : public omnetpp::cSimpleModule
 
   //Trust management
   public:
-    std::list<TrustManager *> trustListAllVehicles;
+    // std::list<TrustManager *> trustListAllVehicles;
     std::unordered_map<std::string, TrustData *> messagesReceived;
 
     std::unordered_set<std::string> rsuSet;

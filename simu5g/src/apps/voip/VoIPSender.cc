@@ -13,7 +13,6 @@
 #include <inet/common/TimeTag_m.h>
 #include "apps/voip/VoIPSender.h"
 #include "apps/voip/VoIPReceiver.h"
-#include "apps/voip/ReputationListSerializer.h"
 
 #include "common/TrustData.h"
 
@@ -186,23 +185,12 @@ void VoIPSender::selectPeriodTime()
 
 void VoIPSender::sendVoIPPacket()
 {
-    cModule *tmp = getParentModule()->getSubmodule("mobility");
-    veins::VeinsInetMobility *mobilityT = check_and_cast<veins::VeinsInetMobility *>(tmp);
-    auto availableCars = mobilityT->getManager()->getManagedHosts();
-    for(auto it = availableCars.begin(); it != availableCars.end(); it++) {
-        std::string carId = it->second->getFullName();
-        if(this->mobilityMap.find(carId) == this->mobilityMap.end()) {
-            auto carMobility = check_and_cast<veins::VeinsInetMobility *>(it->second->getSubmodule("mobility"));
-            this->mobilityMap[carId] = carMobility;
-        }
-    }
-
     if (destAddress_.isUnspecified())
         destAddress_ = L3AddressResolver().resolve(par("destAddress"));
 
     std::string senderID = this->ue->getFullName();
-    omnetpp::cpp_string pktContent;
-    MemoryOutputStream stream;
+    // omnetpp::cpp_string pktContent;
+    // MemoryOutputStream stream;
 
     TrustData content;
 
@@ -223,14 +211,14 @@ void VoIPSender::sendVoIPPacket()
         content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
                     newEvLoc, this->mobility->getCurrentVelocity(), senderID);
     }
+    MemoryOutputStream stream;
+    content.serializeTrustData(stream);
+    omnetpp::cpp_string pktContent;
     std::vector<uint8_t> serialized_data;
     stream.copyData(serialized_data);
     for(size_t i = 0; i < serialized_data.size(); i++) {
         pktContent += serialized_data[i];
     }
-
-    omnetpp::cpp_string sender;
-    sender += senderID;
 
     Packet* packet = new inet::Packet("VoIP");
     auto voip = makeShared<VoipPacket>();
@@ -239,7 +227,6 @@ void VoIPSender::sendVoIPPacket()
     voip->setIDframe(iDframe_);
     voip->setPayloadTimestamp(simTime());
     voip->setChunkLength(B(size_));
-    voip->setSender(sender);
     voip->setSerializedMessage(pktContent);
     voip->addTag<CreationTimeTag>()->setCreationTime(simTime());
     packet->insertAtBack(voip);

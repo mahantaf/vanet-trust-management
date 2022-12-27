@@ -14,7 +14,6 @@
 #include <unordered_set>
 
 #include "inet/common/geometry/common/Coord.h"
-#include "ReputationListSerializer.h"
 
 std::string rsuID = "car[0],car[1]";
 
@@ -374,6 +373,12 @@ void VoIPReceiver::handleMessage(cMessage *msg)
     auto voipHeader = pPacket->popAtFront<VoipPacket>();
 
     auto hdr = voipHeader->dup();
+
+    //Reconstruct msg data from the message
+    TrustData *trustMsgContent = new TrustData();
+    const uint8_t *serializedTrustData = (const unsigned char *)(hdr->getSerializedMessage().c_str());
+    MemoryInputStream stream(serializedTrustData, B(hdr->getSerializedMessage().length()));
+    trustMsgContent->deserializeTrustData(stream);
 
 
     //Do trust management
