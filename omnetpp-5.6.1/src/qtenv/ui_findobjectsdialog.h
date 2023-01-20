@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'findobjectsdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -207,14 +207,14 @@ public:
 
     void retranslateUi(QDialog *FindObjectsDialog)
     {
-        FindObjectsDialog->setWindowTitle(QApplication::translate("FindObjectsDialog", "Find Objects", Q_NULLPTR));
-        searchLabel->setText(QApplication::translate("FindObjectsDialog", "Search inside:", Q_NULLPTR));
-        groupBox->setTitle(QApplication::translate("FindObjectsDialog", "Search by class and object name:", Q_NULLPTR));
+        FindObjectsDialog->setWindowTitle(QApplication::translate("FindObjectsDialog", "Find Objects", 0));
+        searchLabel->setText(QApplication::translate("FindObjectsDialog", "Search inside:", 0));
+        groupBox->setTitle(QApplication::translate("FindObjectsDialog", "Search by class and object name:", 0));
 #ifndef QT_NO_TOOLTIP
         comboLabel->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        comboLabel->setText(QApplication::translate("FindObjectsDialog", "Class filter expression:", Q_NULLPTR));
-        fullPathLabel->setText(QApplication::translate("FindObjectsDialog", "Object full path filter, e.g. \"*.queue AND not length(0)\":", Q_NULLPTR));
+        comboLabel->setText(QApplication::translate("FindObjectsDialog", "Class filter expression:", 0));
+        fullPathLabel->setText(QApplication::translate("FindObjectsDialog", "Object full path filter, e.g. \"*.queue AND not length(0)\":", 0));
 #ifndef QT_NO_TOOLTIP
         fullPathEdit->setToolTip(QApplication::translate("FindObjectsDialog", "Generic filter expression which matches the object full path by default.\n"
 "\n"
@@ -256,7 +256,7 @@ public:
 "            quotation marks needed when pattern is a reserved word or contains\n"
 "            parentheses. (Note: *.msg(ACK) without parens would be interpreted\n"
 " "
-                        "           as some object having a \"*.msg\" attribute with the value \"ACK\"!)", Q_NULLPTR));
+                        "           as some object having a \"*.msg\" attribute with the value \"ACK\"!)", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         comboBox->setToolTip(QApplication::translate("FindObjectsDialog", "Generic filter expression which matches class name by default.\n"
@@ -271,20 +271,20 @@ public:
 "            matches objects whose class name begins with TCP or IP,\n"
 "            excluding IPDatagrams\n"
 "  cMessage and kind(3)\n"
-"            matches objects of class cMessage and message kind 3.", Q_NULLPTR));
+"            matches objects of class cMessage and message kind 3.", 0));
 #endif // QT_NO_TOOLTIP
-        groupBox_2->setTitle(QApplication::translate("FindObjectsDialog", "Object categories:", Q_NULLPTR));
-        modulesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Modules", Q_NULLPTR));
-        messagesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Messages", Q_NULLPTR));
-        queuesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Queues", Q_NULLPTR));
-        paramsCheckBox->setText(QApplication::translate("FindObjectsDialog", "Parameters", Q_NULLPTR));
-        statisticsCheckBox->setText(QApplication::translate("FindObjectsDialog", "Statistics", Q_NULLPTR));
-        gatesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Gates, channels", Q_NULLPTR));
-        watchesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Watches, FSMs", Q_NULLPTR));
-        otherCheckBox->setText(QApplication::translate("FindObjectsDialog", "Other", Q_NULLPTR));
-        figuresCheckBox->setText(QApplication::translate("FindObjectsDialog", "Canvases, figures", Q_NULLPTR));
-        label->setText(QApplication::translate("FindObjectsDialog", "Press Refresh to execute search", Q_NULLPTR));
-        refresh->setText(QApplication::translate("FindObjectsDialog", "Refresh", Q_NULLPTR));
+        groupBox_2->setTitle(QApplication::translate("FindObjectsDialog", "Object categories:", 0));
+        modulesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Modules", 0));
+        messagesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Messages", 0));
+        queuesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Queues", 0));
+        paramsCheckBox->setText(QApplication::translate("FindObjectsDialog", "Parameters", 0));
+        statisticsCheckBox->setText(QApplication::translate("FindObjectsDialog", "Statistics", 0));
+        gatesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Gates, channels", 0));
+        watchesCheckBox->setText(QApplication::translate("FindObjectsDialog", "Watches, FSMs", 0));
+        otherCheckBox->setText(QApplication::translate("FindObjectsDialog", "Other", 0));
+        figuresCheckBox->setText(QApplication::translate("FindObjectsDialog", "Canvases, figures", 0));
+        label->setText(QApplication::translate("FindObjectsDialog", "Press Refresh to execute search", 0));
+        refresh->setText(QApplication::translate("FindObjectsDialog", "Refresh", 0));
     } // retranslateUi
 
 };

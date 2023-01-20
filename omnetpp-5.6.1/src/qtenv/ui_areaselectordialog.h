@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'areaselectordialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -110,12 +110,12 @@ public:
 
     void retranslateUi(QDialog *AreaSelectorDialog)
     {
-        AreaSelectorDialog->setWindowTitle(QApplication::translate("AreaSelectorDialog", "Select Area", Q_NULLPTR));
-        areaGroup->setTitle(QApplication::translate("AreaSelectorDialog", "Area:", Q_NULLPTR));
-        boundingBox->setText(QApplication::translate("AreaSelectorDialog", "All graphical elements", Q_NULLPTR));
-        moduleRectangle->setText(QApplication::translate("AreaSelectorDialog", "Module rectangle", Q_NULLPTR));
-        viewport->setText(QApplication::translate("AreaSelectorDialog", "Viewport", Q_NULLPTR));
-        marginLabel->setText(QApplication::translate("AreaSelectorDialog", "Margin (px):", Q_NULLPTR));
+        AreaSelectorDialog->setWindowTitle(QApplication::translate("AreaSelectorDialog", "Select Area", 0));
+        areaGroup->setTitle(QApplication::translate("AreaSelectorDialog", "Area:", 0));
+        boundingBox->setText(QApplication::translate("AreaSelectorDialog", "All graphical elements", 0));
+        moduleRectangle->setText(QApplication::translate("AreaSelectorDialog", "Module rectangle", 0));
+        viewport->setText(QApplication::translate("AreaSelectorDialog", "Viewport", 0));
+        marginLabel->setText(QApplication::translate("AreaSelectorDialog", "Margin (px):", 0));
     } // retranslateUi
 
 };

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'histograminspectorconfigdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -152,30 +152,30 @@ public:
 
     void retranslateUi(QDialog *HistogramInspectorConfigDialog)
     {
-        HistogramInspectorConfigDialog->setWindowTitle(QApplication::translate("HistogramInspectorConfigDialog", "Histogram Options", Q_NULLPTR));
-        styleLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "Style", Q_NULLPTR));
+        HistogramInspectorConfigDialog->setWindowTitle(QApplication::translate("HistogramInspectorConfigDialog", "Histogram Options", 0));
+        styleLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "Style", 0));
         styleComboBox->clear();
         styleComboBox->insertItems(0, QStringList()
-         << QApplication::translate("HistogramInspectorConfigDialog", "Filled Rectangles", Q_NULLPTR)
-         << QApplication::translate("HistogramInspectorConfigDialog", "Empy Rectangles", Q_NULLPTR)
+         << QApplication::translate("HistogramInspectorConfigDialog", "Filled Rectangles", 0)
+         << QApplication::translate("HistogramInspectorConfigDialog", "Empy Rectangles", 0)
         );
 #ifndef QT_NO_TOOLTIP
-        yMinLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        yMinLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        yMaxLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        yMaxLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
-        minLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "min", Q_NULLPTR));
-        xLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "x", Q_NULLPTR));
+        minLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "min", 0));
+        xLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "x", 0));
 #ifndef QT_NO_TOOLTIP
-        xMaxLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        xMaxLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
-        maxLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "max", Q_NULLPTR));
+        maxLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "max", 0));
 #ifndef QT_NO_TOOLTIP
-        xMinLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        xMinLineEdit->setToolTip(QApplication::translate("HistogramInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
-        yLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "y", Q_NULLPTR));
-        rangeLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "Range", Q_NULLPTR));
+        yLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "y", 0));
+        rangeLabel->setText(QApplication::translate("HistogramInspectorConfigDialog", "Range", 0));
     } // retranslateUi
 
 };

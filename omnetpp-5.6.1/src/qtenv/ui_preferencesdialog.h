@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'preferencesdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -770,25 +770,25 @@ public:
 
     void retranslateUi(QDialog *PreferencesDialog)
     {
-        PreferencesDialog->setWindowTitle(QApplication::translate("PreferencesDialog", "Preferences", Q_NULLPTR));
-        userInterface->setTitle(QApplication::translate("PreferencesDialog", "User Interface", Q_NULLPTR));
-        confirmExit->setText(QApplication::translate("PreferencesDialog", "Confirm exit when simulation is in progress", Q_NULLPTR));
-        hideNamespaceText->setText(QApplication::translate("PreferencesDialog", "Hide namespaces from C++ class names:", Q_NULLPTR));
+        PreferencesDialog->setWindowTitle(QApplication::translate("PreferencesDialog", "Preferences", 0));
+        userInterface->setTitle(QApplication::translate("PreferencesDialog", "User Interface", 0));
+        confirmExit->setText(QApplication::translate("PreferencesDialog", "Confirm exit when simulation is in progress", 0));
+        hideNamespaceText->setText(QApplication::translate("PreferencesDialog", "Hide namespaces from C++ class names:", 0));
         hideNameSpace->clear();
         hideNameSpace->insertItems(0, QStringList()
-         << QApplication::translate("PreferencesDialog", "none", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "omnetpp", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "all", Q_NULLPTR)
+         << QApplication::translate("PreferencesDialog", "none", 0)
+         << QApplication::translate("PreferencesDialog", "omnetpp", 0)
+         << QApplication::translate("PreferencesDialog", "all", 0)
         );
-        simulationExecution->setTitle(QApplication::translate("PreferencesDialog", "Simulation Execution", Q_NULLPTR));
-        expressText->setText(QApplication::translate("PreferencesDialog", "Display update frequency for Express Run (ms):", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(general), QApplication::translate("PreferencesDialog", "General", Q_NULLPTR));
-        logs->setTitle(QApplication::translate("PreferencesDialog", "Logs", Q_NULLPTR));
-        initBanners->setText(QApplication::translate("PreferencesDialog", "Print initialization banners", Q_NULLPTR));
-        eventBanners->setText(QApplication::translate("PreferencesDialog", "Print event banners", Q_NULLPTR));
-        shortBanners->setText(QApplication::translate("PreferencesDialog", "Short event banners", Q_NULLPTR));
-        noLoggingRefreshDisplay->setText(QApplication::translate("PreferencesDialog", "Suppress logging in refreshDisplay()", Q_NULLPTR));
-        logPrefixText->setText(QApplication::translate("PreferencesDialog", "Log prefix format:", Q_NULLPTR));
+        simulationExecution->setTitle(QApplication::translate("PreferencesDialog", "Simulation Execution", 0));
+        expressText->setText(QApplication::translate("PreferencesDialog", "Display update frequency for Express Run (ms):", 0));
+        tabWidget->setTabText(tabWidget->indexOf(general), QApplication::translate("PreferencesDialog", "General", 0));
+        logs->setTitle(QApplication::translate("PreferencesDialog", "Logs", 0));
+        initBanners->setText(QApplication::translate("PreferencesDialog", "Print initialization banners", 0));
+        eventBanners->setText(QApplication::translate("PreferencesDialog", "Print event banners", 0));
+        shortBanners->setText(QApplication::translate("PreferencesDialog", "Short event banners", 0));
+        noLoggingRefreshDisplay->setText(QApplication::translate("PreferencesDialog", "Suppress logging in refreshDisplay()", 0));
+        logPrefixText->setText(QApplication::translate("PreferencesDialog", "Log prefix format:", 0));
 #ifndef QT_NO_TOOLTIP
         logPrefix->setToolTip(QApplication::translate("PreferencesDialog", "Here are some of the format characters that you can use in the log prefix.\n"
 "See the manual or the LogFormatter class for the complete list.\n"
@@ -810,69 +810,69 @@ public:
 "  - %[0-9]+ add spaces until specified column\n"
 "  - %| adaptive tabstop: add padding until longest prefix seen so far\n"
 "  - %> function call depth times 2-space indentation (see Enter_M"
-                        "ethod, Enter_Method_Silent)", Q_NULLPTR));
+                        "ethod, Enter_Method_Silent)", 0));
 #endif // QT_NO_TOOLTIP
-        logLevelText->setText(QApplication::translate("PreferencesDialog", "Log level:", Q_NULLPTR));
+        logLevelText->setText(QApplication::translate("PreferencesDialog", "Log level:", 0));
         logLevel->clear();
         logLevel->insertItems(0, QStringList()
-         << QApplication::translate("PreferencesDialog", "FATAL", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "ERROR", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "WARN", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "INFO", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "DETAIL", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "DEBUG", Q_NULLPTR)
-         << QApplication::translate("PreferencesDialog", "TRACE", Q_NULLPTR)
+         << QApplication::translate("PreferencesDialog", "FATAL", 0)
+         << QApplication::translate("PreferencesDialog", "ERROR", 0)
+         << QApplication::translate("PreferencesDialog", "WARN", 0)
+         << QApplication::translate("PreferencesDialog", "INFO", 0)
+         << QApplication::translate("PreferencesDialog", "DETAIL", 0)
+         << QApplication::translate("PreferencesDialog", "DEBUG", 0)
+         << QApplication::translate("PreferencesDialog", "TRACE", 0)
         );
-        settings->setText(QApplication::translate("PreferencesDialog", "The above settings apply to subsequent simulation events. Hover mouse to get help on log prefix syntax.", Q_NULLPTR));
-        overallText->setText(QApplication::translate("PreferencesDialog", "Overall history size (in events):", Q_NULLPTR));
-        applies->setText(QApplication::translate("PreferencesDialog", "Log is not stored in Express mode. Filtered views (e.g. those belonging to submodules) naturally contain fewer events.", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(logsPage), QApplication::translate("PreferencesDialog", "Logs", Q_NULLPTR));
-        layoutingBox->setTitle(QApplication::translate("PreferencesDialog", "Layouting", Q_NULLPTR));
-        layoutingText->setText(QApplication::translate("PreferencesDialog", "Layouting algorithm:", Q_NULLPTR));
-        fastRadio->setText(QApplication::translate("PreferencesDialog", "Fast", Q_NULLPTR));
-        advancedRadio->setText(QApplication::translate("PreferencesDialog", "Advanced", Q_NULLPTR));
-        adaptiveRadio->setText(QApplication::translate("PreferencesDialog", "Adaptive (Fast for large networks, Advanced for smaller ones)", Q_NULLPTR));
-        showLayouting->setText(QApplication::translate("PreferencesDialog", "Show layouting process", Q_NULLPTR));
-        display->setTitle(QApplication::translate("PreferencesDialog", "Display", Q_NULLPTR));
-        arrange->setText(QApplication::translate("PreferencesDialog", "Arrange connections on vector gates parallel to each other", Q_NULLPTR));
-        allowZoom->setText(QApplication::translate("PreferencesDialog", "Zoom out if necessary to fit network into window", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(layouting), QApplication::translate("PreferencesDialog", "Layouting", Q_NULLPTR));
-        animGeneral->setTitle(QApplication::translate("PreferencesDialog", "General", Q_NULLPTR));
-        animMsg->setText(QApplication::translate("PreferencesDialog", "Animate messages", Q_NULLPTR));
+        settings->setText(QApplication::translate("PreferencesDialog", "The above settings apply to subsequent simulation events. Hover mouse to get help on log prefix syntax.", 0));
+        overallText->setText(QApplication::translate("PreferencesDialog", "Overall history size (in events):", 0));
+        applies->setText(QApplication::translate("PreferencesDialog", "Log is not stored in Express mode. Filtered views (e.g. those belonging to submodules) naturally contain fewer events.", 0));
+        tabWidget->setTabText(tabWidget->indexOf(logsPage), QApplication::translate("PreferencesDialog", "Logs", 0));
+        layoutingBox->setTitle(QApplication::translate("PreferencesDialog", "Layouting", 0));
+        layoutingText->setText(QApplication::translate("PreferencesDialog", "Layouting algorithm:", 0));
+        fastRadio->setText(QApplication::translate("PreferencesDialog", "Fast", 0));
+        advancedRadio->setText(QApplication::translate("PreferencesDialog", "Advanced", 0));
+        adaptiveRadio->setText(QApplication::translate("PreferencesDialog", "Adaptive (Fast for large networks, Advanced for smaller ones)", 0));
+        showLayouting->setText(QApplication::translate("PreferencesDialog", "Show layouting process", 0));
+        display->setTitle(QApplication::translate("PreferencesDialog", "Display", 0));
+        arrange->setText(QApplication::translate("PreferencesDialog", "Arrange connections on vector gates parallel to each other", 0));
+        allowZoom->setText(QApplication::translate("PreferencesDialog", "Zoom out if necessary to fit network into window", 0));
+        tabWidget->setTabText(tabWidget->indexOf(layouting), QApplication::translate("PreferencesDialog", "Layouting", 0));
+        animGeneral->setTitle(QApplication::translate("PreferencesDialog", "General", 0));
+        animMsg->setText(QApplication::translate("PreferencesDialog", "Animate messages", 0));
 #ifndef QT_NO_TOOLTIP
-        animBroadcast->setToolTip(QApplication::translate("PreferencesDialog", "Animates send/sendDirect calls concurrently, after processing each event (i.e. out of sequence)", Q_NULLPTR));
+        animBroadcast->setToolTip(QApplication::translate("PreferencesDialog", "Animates send/sendDirect calls concurrently, after processing each event (i.e. out of sequence)", 0));
 #endif // QT_NO_TOOLTIP
-        animBroadcast->setText(QApplication::translate("PreferencesDialog", "Broadcast animation", Q_NULLPTR));
-        showArrows->setText(QApplication::translate("PreferencesDialog", "Show arrows for sendDirect animation", Q_NULLPTR));
-        animCalls->setText(QApplication::translate("PreferencesDialog", "Animate method calls", Q_NULLPTR));
-        delayText->setText(QApplication::translate("PreferencesDialog", "Method call duration (ms):", Q_NULLPTR));
-        showMarker->setText(QApplication::translate("PreferencesDialog", "Show next event markers", Q_NULLPTR));
-        showBubbles->setText(QApplication::translate("PreferencesDialog", "Show bubbles (bubble() calls)", Q_NULLPTR));
-        messages->setTitle(QApplication::translate("PreferencesDialog", "Messages", Q_NULLPTR));
-        dispName->setText(QApplication::translate("PreferencesDialog", "Display message names during animation", Q_NULLPTR));
-        dispClass->setText(QApplication::translate("PreferencesDialog", "Display message class during animation", Q_NULLPTR));
+        animBroadcast->setText(QApplication::translate("PreferencesDialog", "Broadcast animation", 0));
+        showArrows->setText(QApplication::translate("PreferencesDialog", "Show arrows for sendDirect animation", 0));
+        animCalls->setText(QApplication::translate("PreferencesDialog", "Animate method calls", 0));
+        delayText->setText(QApplication::translate("PreferencesDialog", "Method call duration (ms):", 0));
+        showMarker->setText(QApplication::translate("PreferencesDialog", "Show next event markers", 0));
+        showBubbles->setText(QApplication::translate("PreferencesDialog", "Show bubbles (bubble() calls)", 0));
+        messages->setTitle(QApplication::translate("PreferencesDialog", "Messages", 0));
+        dispName->setText(QApplication::translate("PreferencesDialog", "Display message names during animation", 0));
+        dispClass->setText(QApplication::translate("PreferencesDialog", "Display message class during animation", 0));
 #ifndef QT_NO_TOOLTIP
-        colorMsg->setToolTip(QApplication::translate("PreferencesDialog", "Color code (message kind modulo 8): 0=red 1=green 2=blue 3=white 4=yellow 5=cyan 6=magenta 7=black", Q_NULLPTR));
+        colorMsg->setToolTip(QApplication::translate("PreferencesDialog", "Color code (message kind modulo 8): 0=red 1=green 2=blue 3=white 4=yellow 5=cyan 6=magenta 7=black", 0));
 #endif // QT_NO_TOOLTIP
-        colorMsg->setText(QApplication::translate("PreferencesDialog", "Color messages by message kind", Q_NULLPTR));
-        penguinMode->setText(QApplication::translate("PreferencesDialog", "Penguin mode", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(animation), QApplication::translate("PreferencesDialog", "Animation", Q_NULLPTR));
-        timeLine->setTitle(QApplication::translate("PreferencesDialog", "Timeline", Q_NULLPTR));
-        selfMsg->setText(QApplication::translate("PreferencesDialog", "Show self-messages", Q_NULLPTR));
-        nonSelfMsg->setText(QApplication::translate("PreferencesDialog", "Show non-self messages", Q_NULLPTR));
-        silentMsg->setText(QApplication::translate("PreferencesDialog", "Show silent (non-animated) messages, see below", Q_NULLPTR));
-        animationBox->setTitle(QApplication::translate("PreferencesDialog", "Animation", Q_NULLPTR));
-        excludeMsgText->setText(QApplication::translate("PreferencesDialog", "Messages to exclude from animation:", Q_NULLPTR));
-        details->setText(QApplication::translate("PreferencesDialog", "One expression per line. Wildcards, AND, OR, NOT, numeric ranges ({5..10}), field matchers (className(..), kind(..), byteLength(..), etc.) are accepted.", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(filtering), QApplication::translate("PreferencesDialog", "Filtering", Q_NULLPTR));
-        fontsBox->setTitle(QApplication::translate("PreferencesDialog", "Fonts", Q_NULLPTR));
-        userInterfaceText->setText(QApplication::translate("PreferencesDialog", "User interface:", Q_NULLPTR));
-        timeLineText->setText(QApplication::translate("PreferencesDialog", "Timeline:", Q_NULLPTR));
-        canvasText->setText(QApplication::translate("PreferencesDialog", "Canvas:", Q_NULLPTR));
-        logText->setText(QApplication::translate("PreferencesDialog", "Log windows:", Q_NULLPTR));
-        timeText->setText(QApplication::translate("PreferencesDialog", "Time:", Q_NULLPTR));
-        restoreButton->setText(QApplication::translate("PreferencesDialog", "Restore Defaults", Q_NULLPTR));
-        tabWidget->setTabText(tabWidget->indexOf(fonts), QApplication::translate("PreferencesDialog", "Fonts", Q_NULLPTR));
+        colorMsg->setText(QApplication::translate("PreferencesDialog", "Color messages by message kind", 0));
+        penguinMode->setText(QApplication::translate("PreferencesDialog", "Penguin mode", 0));
+        tabWidget->setTabText(tabWidget->indexOf(animation), QApplication::translate("PreferencesDialog", "Animation", 0));
+        timeLine->setTitle(QApplication::translate("PreferencesDialog", "Timeline", 0));
+        selfMsg->setText(QApplication::translate("PreferencesDialog", "Show self-messages", 0));
+        nonSelfMsg->setText(QApplication::translate("PreferencesDialog", "Show non-self messages", 0));
+        silentMsg->setText(QApplication::translate("PreferencesDialog", "Show silent (non-animated) messages, see below", 0));
+        animationBox->setTitle(QApplication::translate("PreferencesDialog", "Animation", 0));
+        excludeMsgText->setText(QApplication::translate("PreferencesDialog", "Messages to exclude from animation:", 0));
+        details->setText(QApplication::translate("PreferencesDialog", "One expression per line. Wildcards, AND, OR, NOT, numeric ranges ({5..10}), field matchers (className(..), kind(..), byteLength(..), etc.) are accepted.", 0));
+        tabWidget->setTabText(tabWidget->indexOf(filtering), QApplication::translate("PreferencesDialog", "Filtering", 0));
+        fontsBox->setTitle(QApplication::translate("PreferencesDialog", "Fonts", 0));
+        userInterfaceText->setText(QApplication::translate("PreferencesDialog", "User interface:", 0));
+        timeLineText->setText(QApplication::translate("PreferencesDialog", "Timeline:", 0));
+        canvasText->setText(QApplication::translate("PreferencesDialog", "Canvas:", 0));
+        logText->setText(QApplication::translate("PreferencesDialog", "Log windows:", 0));
+        timeText->setText(QApplication::translate("PreferencesDialog", "Time:", 0));
+        restoreButton->setText(QApplication::translate("PreferencesDialog", "Restore Defaults", 0));
+        tabWidget->setTabText(tabWidget->indexOf(fonts), QApplication::translate("PreferencesDialog", "Fonts", 0));
     } // retranslateUi
 
 };

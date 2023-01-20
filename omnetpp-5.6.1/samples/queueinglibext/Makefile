@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for $(LIB_PREFIX)queueinglibext
 #
 # This file was generated with the command:
-#  opp_makemake --make-so -f -KQUEUEINGLIB_PROJ=../queueinglib -DQUEUEING_IMPORT -I$$\(QUEUEINGLIB_PROJ\) -L$$\(QUEUEINGLIB_PROJ\) -lqueueinglib$$\(D\)
+#  opp_makemake -f --make-so -I../queueinglib -L../queueinglib -lqueueinglib$(D) -KQUEUEINGLIB_PROJ=../queueinglib
 #
 
 # Name of target to be created (-o option)
@@ -10,13 +10,13 @@ TARGET = $(LIB_PREFIX)queueinglibext$(D)$(SHARED_LIB_SUFFIX)
 TARGET_DIR = .
 
 # C++ include paths (with -I)
-INCLUDE_PATH = -I$(QUEUEINGLIB_PROJ)
+INCLUDE_PATH = -I../queueinglib
 
 # Additional object and library files to link with
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = $(LDFLAG_LIBPATH)$(QUEUEINGLIB_PROJ)  -lqueueinglib$(D)
+LIBS = $(LDFLAG_LIBPATH)../queueinglib  -lqueueinglib$(D)
 
 # Output directory
 PROJECT_OUTPUT_DIR = out
@@ -58,10 +58,10 @@ include $(CONFIGFILE)
 # Simulation kernel and user interface libraries
 OMNETPP_LIBS = -loppenvir$D $(KERNEL_LIBS) $(SYS_LIBS)
 ifneq ($(TOOLCHAIN_NAME),clangc2)
-LIBS += -Wl,-rpath,$(abspath $(QUEUEINGLIB_PROJ))
+LIBS += -Wl,-rpath,$(abspath ../queueinglib)
 endif
 
-COPTS = $(CFLAGS) $(IMPORT_DEFINES) -DQUEUEING_IMPORT $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
+COPTS = $(CFLAGS) $(IMPORT_DEFINES)  $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
 MSGCOPTS = $(INCLUDE_PATH)
 SMCOPTS =
 

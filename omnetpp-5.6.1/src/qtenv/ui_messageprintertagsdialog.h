@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'messageprintertagsdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -68,8 +68,8 @@ public:
 
     void retranslateUi(QDialog *messageprintertagsdialog)
     {
-        messageprintertagsdialog->setWindowTitle(QApplication::translate("messageprintertagsdialog", "Message Display Configuration", Q_NULLPTR));
-        label->setText(QApplication::translate("messageprintertagsdialog", "Message display options:", Q_NULLPTR));
+        messageprintertagsdialog->setWindowTitle(QApplication::translate("messageprintertagsdialog", "Message Display Configuration", 0));
+        label->setText(QApplication::translate("messageprintertagsdialog", "Message display options:", 0));
     } // retranslateUi
 
 };

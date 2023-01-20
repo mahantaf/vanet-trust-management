@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'comboselectiondialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -87,10 +87,10 @@ public:
 
     void retranslateUi(QDialog *ComboSelectionDialog)
     {
-        ComboSelectionDialog->setWindowTitle(QApplication::translate("ComboSelectionDialog", "Set Up Network", Q_NULLPTR));
+        ComboSelectionDialog->setWindowTitle(QApplication::translate("ComboSelectionDialog", "Set Up Network", 0));
         label->setText(QApplication::translate("ComboSelectionDialog", "Set up a network. The network will use parameter values defined in the \n"
-"[General] section of the ini file.", Q_NULLPTR));
-        label_2->setText(QApplication::translate("ComboSelectionDialog", "Select network:", Q_NULLPTR));
+"[General] section of the ini file.", 0));
+        label_2->setText(QApplication::translate("ComboSelectionDialog", "Select network:", 0));
     } // retranslateUi
 
 };

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'outputvectorinspectorconfigdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -125,30 +125,30 @@ public:
 
     void retranslateUi(QDialog *OutputVectorInspectorConfigDialog)
     {
-        OutputVectorInspectorConfigDialog->setWindowTitle(QApplication::translate("OutputVectorInspectorConfigDialog", "Plotting Options", Q_NULLPTR));
-        manualAxisSettingsGroupBox->setTitle(QApplication::translate("OutputVectorInspectorConfigDialog", "Axis settings:", Q_NULLPTR));
-        timeScaleLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Time span (sec):", Q_NULLPTR));
-        yMinLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Y min:", Q_NULLPTR));
-        yMaxLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Y max:", Q_NULLPTR));
+        OutputVectorInspectorConfigDialog->setWindowTitle(QApplication::translate("OutputVectorInspectorConfigDialog", "Plotting Options", 0));
+        manualAxisSettingsGroupBox->setTitle(QApplication::translate("OutputVectorInspectorConfigDialog", "Axis settings:", 0));
+        timeScaleLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Time span (sec):", 0));
+        yMinLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Y min:", 0));
+        yMaxLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Y max:", 0));
 #ifndef QT_NO_TOOLTIP
-        timeScaleLineEdit->setToolTip(QApplication::translate("OutputVectorInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        timeScaleLineEdit->setToolTip(QApplication::translate("OutputVectorInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        yMinLineEdit->setToolTip(QApplication::translate("OutputVectorInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        yMinLineEdit->setToolTip(QApplication::translate("OutputVectorInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        yMaxLineEdit->setToolTip(QApplication::translate("OutputVectorInspectorConfigDialog", "Leave empty for default", Q_NULLPTR));
+        yMaxLineEdit->setToolTip(QApplication::translate("OutputVectorInspectorConfigDialog", "Leave empty for default", 0));
 #endif // QT_NO_TOOLTIP
-        styleLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Plotting mode:", Q_NULLPTR));
+        styleLabel->setText(QApplication::translate("OutputVectorInspectorConfigDialog", "Plotting mode:", 0));
         styleComboBox->clear();
         styleComboBox->insertItems(0, QStringList()
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Dots", Q_NULLPTR)
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Points", Q_NULLPTR)
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Pins", Q_NULLPTR)
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Bars", Q_NULLPTR)
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Sample-hold", Q_NULLPTR)
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Backward Sample-hold", Q_NULLPTR)
-         << QApplication::translate("OutputVectorInspectorConfigDialog", "Linear", Q_NULLPTR)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Dots", 0)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Points", 0)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Pins", 0)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Bars", 0)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Sample-hold", 0)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Backward Sample-hold", 0)
+         << QApplication::translate("OutputVectorInspectorConfigDialog", "Linear", 0)
         );
     } // retranslateUi
 

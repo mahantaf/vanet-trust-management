@@ -83,9 +83,9 @@ class SIM_API cClassDescriptor : public cNoncopyableOwnedObject
     static std::string oppstring2string(const char *s) {return s?s:"";}
     static std::string oppstring2string(const opp_string& s) {return s.c_str();}
     static std::string oppstring2string(const std::string& s)  {return s;}
-    static std::string cppstring2string(const cpp_string& s) {return s;}
     static void string2oppstring(const char *s, opp_string& str) {str = s?s:"";}
     static void string2oppstring(const char *s, std::string& str) {str = s?s:"";}
+    static std::string cppstring2string(const cpp_string& s) {return s;}
     static const char **mergeLists(const char **list1, const char **list2);
 
   public:

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'videorecordingdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -188,23 +188,23 @@ public:
 
     void retranslateUi(QDialog *VideoRecordingDialog)
     {
-        VideoRecordingDialog->setWindowTitle(QApplication::translate("VideoRecordingDialog", "Video Recording", Q_NULLPTR));
-        containerFormatGroup->setTitle(QApplication::translate("VideoRecordingDialog", "Container Format", Q_NULLPTR));
-        mp4->setText(QApplication::translate("VideoRecordingDialog", "MP4", Q_NULLPTR));
-        mkv->setText(QApplication::translate("VideoRecordingDialog", "MKV", Q_NULLPTR));
-        recordingAreaGroup->setTitle(QApplication::translate("VideoRecordingDialog", "Crop Area", Q_NULLPTR));
-        window->setText(QApplication::translate("VideoRecordingDialog", "Whole main window", Q_NULLPTR));
-        network->setText(QApplication::translate("VideoRecordingDialog", "Network (module) area", Q_NULLPTR));
-        border->setText(QApplication::translate("VideoRecordingDialog", "Network area with border", Q_NULLPTR));
-        padding->setText(QApplication::translate("VideoRecordingDialog", "Network area plus padding", Q_NULLPTR));
-        topLabel->setText(QApplication::translate("VideoRecordingDialog", "Video recording is performed by exporting a series of numbered PNG images of full window screenshots, starting with 'frames/${BASE}0000.png'. Screenshots can be assembled to videos using ffmpeg.", Q_NULLPTR));
-        bottomLabel->setText(QApplication::translate("VideoRecordingDialog", "Before continuing, make sure there is ample disk space available, because the raw frame output can grow quite large.<br/><br/>While recording, the size of the main Qtenv window will be adjusted to have its width and height both divisible by 2, to ensure compatibility with more video codec options.", Q_NULLPTR));
-        pixelFormatGroup->setTitle(QApplication::translate("VideoRecordingDialog", "Pixel Format", Q_NULLPTR));
-        compatible->setText(QApplication::translate("VideoRecordingDialog", "More compatible (yuv420p)", Q_NULLPTR));
-        sharper->setText(QApplication::translate("VideoRecordingDialog", "Sharper image (yuv444p)", Q_NULLPTR));
-        copyButton->setText(QApplication::translate("VideoRecordingDialog", "Copy to clipboard", Q_NULLPTR));
-        middleLabel->setText(QApplication::translate("VideoRecordingDialog", "Command line to encode captured frames into a video file (make sure that ffmpeg and x264 are installed on your system):", Q_NULLPTR));
-        commandLabel->setText(QApplication::translate("VideoRecordingDialog", "<html><head/><body><p><span style=\" font-family:'monospace'; font-weight:600;\">ffmpeg -r FPS -f image2 -i \"frames/CONFIGURATION#RUN_%04d.png\" -filter:v \"crop=WIDTH:HEIGHT:X:Y\" -vcodec libx264 -pix_fmt yuv420p CONFIGURATION#RUN.mp4</span></p></body></html>", Q_NULLPTR));
+        VideoRecordingDialog->setWindowTitle(QApplication::translate("VideoRecordingDialog", "Video Recording", 0));
+        containerFormatGroup->setTitle(QApplication::translate("VideoRecordingDialog", "Container Format", 0));
+        mp4->setText(QApplication::translate("VideoRecordingDialog", "MP4", 0));
+        mkv->setText(QApplication::translate("VideoRecordingDialog", "MKV", 0));
+        recordingAreaGroup->setTitle(QApplication::translate("VideoRecordingDialog", "Crop Area", 0));
+        window->setText(QApplication::translate("VideoRecordingDialog", "Whole main window", 0));
+        network->setText(QApplication::translate("VideoRecordingDialog", "Network (module) area", 0));
+        border->setText(QApplication::translate("VideoRecordingDialog", "Network area with border", 0));
+        padding->setText(QApplication::translate("VideoRecordingDialog", "Network area plus padding", 0));
+        topLabel->setText(QApplication::translate("VideoRecordingDialog", "Video recording is performed by exporting a series of numbered PNG images of full window screenshots, starting with 'frames/${BASE}0000.png'. Screenshots can be assembled to videos using ffmpeg.", 0));
+        bottomLabel->setText(QApplication::translate("VideoRecordingDialog", "Before continuing, make sure there is ample disk space available, because the raw frame output can grow quite large.<br/><br/>While recording, the size of the main Qtenv window will be adjusted to have its width and height both divisible by 2, to ensure compatibility with more video codec options.", 0));
+        pixelFormatGroup->setTitle(QApplication::translate("VideoRecordingDialog", "Pixel Format", 0));
+        compatible->setText(QApplication::translate("VideoRecordingDialog", "More compatible (yuv420p)", 0));
+        sharper->setText(QApplication::translate("VideoRecordingDialog", "Sharper image (yuv444p)", 0));
+        copyButton->setText(QApplication::translate("VideoRecordingDialog", "Copy to clipboard", 0));
+        middleLabel->setText(QApplication::translate("VideoRecordingDialog", "Command line to encode captured frames into a video file (make sure that ffmpeg and x264 are installed on your system):", 0));
+        commandLabel->setText(QApplication::translate("VideoRecordingDialog", "<html><head/><body><p><span style=\" font-family:'monospace'; font-weight:600;\">ffmpeg -r FPS -f image2 -i \"frames/CONFIGURATION#RUN_%04d.png\" -filter:v \"crop=WIDTH:HEIGHT:X:Y\" -vcodec libx264 -pix_fmt yuv420p CONFIGURATION#RUN.mp4</span></p></body></html>", 0));
     } // retranslateUi
 
 };

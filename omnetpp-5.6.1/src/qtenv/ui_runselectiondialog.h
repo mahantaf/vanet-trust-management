@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'runselectiondialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -131,10 +131,10 @@ public:
 
     void retranslateUi(QDialog *RunSelectionDialog)
     {
-        RunSelectionDialog->setWindowTitle(QApplication::translate("RunSelectionDialog", "Set Up Inifile Configuration", Q_NULLPTR));
-        label->setText(QApplication::translate("RunSelectionDialog", "Set up one of the configurations defined in ...", Q_NULLPTR));
-        label_2->setText(QApplication::translate("RunSelectionDialog", "Config name:", Q_NULLPTR));
-        label_3->setText(QApplication::translate("RunSelectionDialog", "Run number:", Q_NULLPTR));
+        RunSelectionDialog->setWindowTitle(QApplication::translate("RunSelectionDialog", "Set Up Inifile Configuration", 0));
+        label->setText(QApplication::translate("RunSelectionDialog", "Set up one of the configurations defined in ...", 0));
+        label_2->setText(QApplication::translate("RunSelectionDialog", "Config name:", 0));
+        label_3->setText(QApplication::translate("RunSelectionDialog", "Run number:", 0));
     } // retranslateUi
 
 };

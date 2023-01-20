@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'rununtildialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -135,18 +135,18 @@ public:
 
     void retranslateUi(QDialog *RunUntilDialog)
     {
-        RunUntilDialog->setWindowTitle(QApplication::translate("RunUntilDialog", "Run Until", Q_NULLPTR));
-        timeLabel->setText(QApplication::translate("RunUntilDialog", "Simulation time to stop at:", Q_NULLPTR));
-        eventLabel->setText(QApplication::translate("RunUntilDialog", "Event number to stop at:", Q_NULLPTR));
-        msgLabel->setText(QApplication::translate("RunUntilDialog", "Message to stop at:", Q_NULLPTR));
+        RunUntilDialog->setWindowTitle(QApplication::translate("RunUntilDialog", "Run Until", 0));
+        timeLabel->setText(QApplication::translate("RunUntilDialog", "Simulation time to stop at:", 0));
+        eventLabel->setText(QApplication::translate("RunUntilDialog", "Event number to stop at:", 0));
+        msgLabel->setText(QApplication::translate("RunUntilDialog", "Message to stop at:", 0));
         empty->setText(QString());
-        modeLabel->setText(QApplication::translate("RunUntilDialog", "Running mode:", Q_NULLPTR));
-        stopCheckbox->setText(QApplication::translate("RunUntilDialog", "Stop when message is cancelled", Q_NULLPTR));
+        modeLabel->setText(QApplication::translate("RunUntilDialog", "Running mode:", 0));
+        stopCheckbox->setText(QApplication::translate("RunUntilDialog", "Stop when message is cancelled", 0));
         modeComboBox->clear();
         modeComboBox->insertItems(0, QStringList()
-         << QApplication::translate("RunUntilDialog", "Normal", Q_NULLPTR)
-         << QApplication::translate("RunUntilDialog", "Fast (rare updates)", Q_NULLPTR)
-         << QApplication::translate("RunUntilDialog", "Express (tracing off)", Q_NULLPTR)
+         << QApplication::translate("RunUntilDialog", "Normal", 0)
+         << QApplication::translate("RunUntilDialog", "Fast (rare updates)", 0)
+         << QApplication::translate("RunUntilDialog", "Express (tracing off)", 0)
         );
     } // retranslateUi
 

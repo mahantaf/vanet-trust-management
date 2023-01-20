@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for canvas
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -O out
+#  opp_makemake -f --deep
 #
 
 # Name of target to be created (-o option)

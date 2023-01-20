@@ -3,8 +3,8 @@
 	<section name="org.omnetpp.cdt.ui.MakemakeOptionsDialog">
 		<item key="DIALOG_X_ORIGIN" value="-264"/>
 		<item key="DIALOG_Y_ORIGIN" value="0"/>
-		<item key="DIALOG_WIDTH" value="1239"/>
-		<item key="DIALOG_HEIGHT" value="791"/>
-		<item key="DIALOG_FONT_NAME" value="1|Ubuntu|11.0|0|GTK|1|"/>
+		<item key="DIALOG_WIDTH" value="1190"/>
+		<item key="DIALOG_HEIGHT" value="649"/>
+		<item key="DIALOG_FONT_NAME" value="1|Sans|10.0|0|GTK|1|"/>
 	</section>
 </section>

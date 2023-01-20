@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'stopdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -75,10 +75,10 @@ public:
 
     void retranslateUi(QDialog *StopDialog)
     {
-        StopDialog->setWindowTitle(QApplication::translate("StopDialog", "Running...", Q_NULLPTR));
-        stopButton->setText(QApplication::translate("StopDialog", "STOP!", Q_NULLPTR));
-        checkBox->setText(QApplication::translate("StopDialog", "auto-update inspectors", Q_NULLPTR));
-        updateButton->setText(QApplication::translate("StopDialog", "Update now", Q_NULLPTR));
+        StopDialog->setWindowTitle(QApplication::translate("StopDialog", "Running...", 0));
+        stopButton->setText(QApplication::translate("StopDialog", "STOP!", 0));
+        checkBox->setText(QApplication::translate("StopDialog", "auto-update inspectors", 0));
+        updateButton->setText(QApplication::translate("StopDialog", "Update now", 0));
     } // retranslateUi
 
 };

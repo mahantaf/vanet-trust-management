@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'animationcontrollerdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -238,36 +238,36 @@ public:
 
     void retranslateUi(QDialog *AnimationControllerDialog)
     {
-        AnimationControllerDialog->setWindowTitle(QApplication::translate("AnimationControllerDialog", "Animation Parameters", Q_NULLPTR));
-        controlGroupBox->setTitle(QApplication::translate("AnimationControllerDialog", "Control", Q_NULLPTR));
+        AnimationControllerDialog->setWindowTitle(QApplication::translate("AnimationControllerDialog", "Animation Parameters", 0));
+        controlGroupBox->setTitle(QApplication::translate("AnimationControllerDialog", "Control", 0));
 #ifndef QT_NO_TOOLTIP
-        minSpeedSpinBox->setToolTip(QApplication::translate("AnimationControllerDialog", "Enforce minimum animation speed: overrides speed requested by the model.", Q_NULLPTR));
+        minSpeedSpinBox->setToolTip(QApplication::translate("AnimationControllerDialog", "Enforce minimum animation speed: overrides speed requested by the model.", 0));
 #endif // QT_NO_TOOLTIP
-        minSpeedSpinBox->setSpecialValueText(QApplication::translate("AnimationControllerDialog", "none", Q_NULLPTR));
-        minSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Min animation speed:", Q_NULLPTR));
-        playbackSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Playback speed:", Q_NULLPTR));
-        maxSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Max animation speed:", Q_NULLPTR));
+        minSpeedSpinBox->setSpecialValueText(QApplication::translate("AnimationControllerDialog", "none", 0));
+        minSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Min animation speed:", 0));
+        playbackSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Playback speed:", 0));
+        maxSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Max animation speed:", 0));
 #ifndef QT_NO_TOOLTIP
-        playbackSpeedSpinBox->setToolTip(QApplication::translate("AnimationControllerDialog", "Corresponds to speed slider on the toolbar.", Q_NULLPTR));
+        playbackSpeedSpinBox->setToolTip(QApplication::translate("AnimationControllerDialog", "Corresponds to speed slider on the toolbar.", 0));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
-        maxSpeedSpinBox->setToolTip(QApplication::translate("AnimationControllerDialog", "Enforce maximum animation speed: overrides speed requested by the model.", Q_NULLPTR));
+        maxSpeedSpinBox->setToolTip(QApplication::translate("AnimationControllerDialog", "Enforce maximum animation speed: overrides speed requested by the model.", 0));
 #endif // QT_NO_TOOLTIP
-        maxSpeedSpinBox->setSpecialValueText(QApplication::translate("AnimationControllerDialog", "none", Q_NULLPTR));
-        profileLabel->setText(QApplication::translate("AnimationControllerDialog", "Profile:", Q_NULLPTR));
-        noteLabel->setText(QApplication::translate("AnimationControllerDialog", "Note: Animation speed maps simulation time to animation time. Playback speed maps animation time to real time.", Q_NULLPTR));
-        readingsGroupBox->setTitle(QApplication::translate("AnimationControllerDialog", "Current Readings", Q_NULLPTR));
+        maxSpeedSpinBox->setSpecialValueText(QApplication::translate("AnimationControllerDialog", "none", 0));
+        profileLabel->setText(QApplication::translate("AnimationControllerDialog", "Profile:", 0));
+        noteLabel->setText(QApplication::translate("AnimationControllerDialog", "Note: Animation speed maps simulation time to animation time. Playback speed maps animation time to real time.", 0));
+        readingsGroupBox->setTitle(QApplication::translate("AnimationControllerDialog", "Current Readings", 0));
         refreshDisplayCountValueLabel->setText(QString());
         animationTimeValueLabel->setText(QString());
         animationSpeedValueLabel->setText(QString());
-        animationSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Animation speed:", Q_NULLPTR));
-        simulationSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Simulation speed:", Q_NULLPTR));
-        refreshDisplayCountLabel->setText(QApplication::translate("AnimationControllerDialog", "Num. refreshDisplay() calls:", Q_NULLPTR));
-        currentFpsLabel->setText(QApplication::translate("AnimationControllerDialog", "Frames per sec:", Q_NULLPTR));
+        animationSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Animation speed:", 0));
+        simulationSpeedLabel->setText(QApplication::translate("AnimationControllerDialog", "Simulation speed:", 0));
+        refreshDisplayCountLabel->setText(QApplication::translate("AnimationControllerDialog", "Num. refreshDisplay() calls:", 0));
+        currentFpsLabel->setText(QApplication::translate("AnimationControllerDialog", "Frames per sec:", 0));
         currentFpsValueLabel->setText(QString());
         simulationSpeedValueLabel->setText(QString());
-        animationTimeLabel->setText(QApplication::translate("AnimationControllerDialog", "Animation time:", Q_NULLPTR));
-        holdTimeLabel->setText(QApplication::translate("AnimationControllerDialog", "Hold time:", Q_NULLPTR));
+        animationTimeLabel->setText(QApplication::translate("AnimationControllerDialog", "Animation time:", 0));
+        holdTimeLabel->setText(QApplication::translate("AnimationControllerDialog", "Hold time:", 0));
         holdTimeValueLabel->setText(QString());
     } // retranslateUi
 

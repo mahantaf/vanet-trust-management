@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for osg-earth
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -DWITH_OSG -DWITH_OSGEARTH
+#  opp_makemake -f --deep
 #
 
 # Name of target to be created (-o option)
@@ -67,7 +67,7 @@ include $(CONFIGFILE)
 # Simulation kernel and user interface libraries
 OMNETPP_LIBS = $(OPPMAIN_LIB) $(USERIF_LIBS) $(KERNEL_LIBS) $(SYS_LIBS)
 
-COPTS = $(CFLAGS) $(IMPORT_DEFINES) -DWITH_OSG -DWITH_OSGEARTH $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
+COPTS = $(CFLAGS) $(IMPORT_DEFINES)  $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
 MSGCOPTS = $(INCLUDE_PATH)
 SMCOPTS =
 

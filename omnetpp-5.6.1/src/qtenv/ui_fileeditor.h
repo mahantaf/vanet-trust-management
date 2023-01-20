@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'fileeditor.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -47,7 +47,7 @@ public:
 
     void retranslateUi(QDialog *fileEditor)
     {
-        fileEditor->setWindowTitle(QApplication::translate("fileEditor", "Dialog", Q_NULLPTR));
+        fileEditor->setWindowTitle(QApplication::translate("fileEditor", "Dialog", 0));
     } // retranslateUi
 
 };

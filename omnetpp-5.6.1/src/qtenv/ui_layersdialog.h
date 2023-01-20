@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'layersdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -118,11 +118,11 @@ public:
 
     void retranslateUi(QDialog *LayersDialog)
     {
-        LayersDialog->setWindowTitle(QApplication::translate("LayersDialog", "Select Layers", Q_NULLPTR));
-        intro->setText(QApplication::translate("LayersDialog", "Select which figures to display, based on the list of tags each figure contains.", Q_NULLPTR));
-        showFigures->setText(QApplication::translate("LayersDialog", "Show figures having any of the tags:", Q_NULLPTR));
-        hideFigures->setText(QApplication::translate("LayersDialog", "But hide those that also contain:", Q_NULLPTR));
-        note->setText(QApplication::translate("LayersDialog", "Note: Untagged figures are always shown.", Q_NULLPTR));
+        LayersDialog->setWindowTitle(QApplication::translate("LayersDialog", "Select Layers", 0));
+        intro->setText(QApplication::translate("LayersDialog", "Select which figures to display, based on the list of tags each figure contains.", 0));
+        showFigures->setText(QApplication::translate("LayersDialog", "Show figures having any of the tags:", 0));
+        hideFigures->setText(QApplication::translate("LayersDialog", "But hide those that also contain:", 0));
+        note->setText(QApplication::translate("LayersDialog", "Note: Untagged figures are always shown.", 0));
     } // retranslateUi
 
 };

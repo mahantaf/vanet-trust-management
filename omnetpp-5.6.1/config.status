@@ -427,7 +427,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/nishchay/research/omnetpp-5.6.1'
+ac_pwd='/home/nagrawal63/legendary-simu5g-broccoli/omnetpp-5.6.1'
 srcdir='.'
 test -n "$AWK" || AWK=awk
 # The default lists apply if the user does not specify any file.
@@ -688,7 +688,7 @@ S["OBJEXT"]="o"
 S["EXEEXT"]=""
 S["ac_ct_CC"]="gcc"
 S["CPPFLAGS"]=""
-S["LDFLAGS"]=" -Wl,-rpath,$(OMNETPP_LIB_DIR) -Wl,-rpath,$(OMNETPP_TOOLS_DIR)/lib -Wl,-rpath,.  -Wl,--export-dynamic $(LDFLAG_LIBPATH)$(OMNETPP_LIB_DIR)"
+S["LDFLAGS"]=" -Wl,-rpath,$(OMNETPP_LIB_DIR) -Wl,-rpath,$(OMNETPP_TOOLS_DIR)/lib -Wl,-rpath,.  $(LDFLAG_LIBPATH)$(OMNETPP_LIB_DIR)"
 S["CFLAGS"]=" -MMD -MP -MF $@.d  -fPIC  -fno-omit-frame-pointer $(DEFINES)"
 S["CC"]="gcc"
 S["host_os"]="linux-gnu"

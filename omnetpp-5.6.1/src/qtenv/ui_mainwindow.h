@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -516,179 +516,149 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "OMNeT++ Qtenv", Q_NULLPTR));
-        actionQuit->setText(QApplication::translate("MainWindow", "E&xit", Q_NULLPTR));
-#ifndef QT_NO_SHORTCUT
-        actionQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionOneStep->setText(QApplication::translate("MainWindow", "One &Step", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "OMNeT++ Qtenv", 0));
+        actionQuit->setText(QApplication::translate("MainWindow", "E&xit", 0));
+        actionQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", 0));
+        actionOneStep->setText(QApplication::translate("MainWindow", "One &Step", 0));
 #ifndef QT_NO_TOOLTIP
-        actionOneStep->setToolTip(QApplication::translate("MainWindow", "Execute one event (F4)", Q_NULLPTR));
+        actionOneStep->setToolTip(QApplication::translate("MainWindow", "Execute one event (F4)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionOneStep->setShortcut(QApplication::translate("MainWindow", "F4", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionRun->setText(QApplication::translate("MainWindow", "&Run", Q_NULLPTR));
+        actionOneStep->setShortcut(QApplication::translate("MainWindow", "F4", 0));
+        actionRun->setText(QApplication::translate("MainWindow", "&Run", 0));
 #ifndef QT_NO_TOOLTIP
-        actionRun->setToolTip(QApplication::translate("MainWindow", "Run with full animation (F5)", Q_NULLPTR));
+        actionRun->setToolTip(QApplication::translate("MainWindow", "Run with full animation (F5)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionRun->setShortcut(QApplication::translate("MainWindow", "F5", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionSetUpConfiguration->setText(QApplication::translate("MainWindow", "&Set Up a Configuration...", Q_NULLPTR));
+        actionRun->setShortcut(QApplication::translate("MainWindow", "F5", 0));
+        actionSetUpConfiguration->setText(QApplication::translate("MainWindow", "&Set Up a Configuration...", 0));
 #ifndef QT_NO_TOOLTIP
-        actionSetUpConfiguration->setToolTip(QApplication::translate("MainWindow", "Set up an inifile configuration", Q_NULLPTR));
+        actionSetUpConfiguration->setToolTip(QApplication::translate("MainWindow", "Set up an inifile configuration", 0));
 #endif // QT_NO_TOOLTIP
-        actionStop->setText(QApplication::translate("MainWindow", "S&top Execution", Q_NULLPTR));
+        actionStop->setText(QApplication::translate("MainWindow", "S&top Execution", 0));
 #ifndef QT_NO_TOOLTIP
-        actionStop->setToolTip(QApplication::translate("MainWindow", "Stop running simulation (F8)", Q_NULLPTR));
+        actionStop->setToolTip(QApplication::translate("MainWindow", "Stop running simulation (F8)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionStop->setShortcut(QApplication::translate("MainWindow", "F8", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionFastRun->setText(QApplication::translate("MainWindow", "&Fast Run (rare display updates)", Q_NULLPTR));
+        actionStop->setShortcut(QApplication::translate("MainWindow", "F8", 0));
+        actionFastRun->setText(QApplication::translate("MainWindow", "&Fast Run (rare display updates)", 0));
 #ifndef QT_NO_TOOLTIP
-        actionFastRun->setToolTip(QApplication::translate("MainWindow", "Run faster: no animation and rare inspector updates (F6)", Q_NULLPTR));
+        actionFastRun->setToolTip(QApplication::translate("MainWindow", "Run faster: no animation and rare inspector updates (F6)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionFastRun->setShortcut(QApplication::translate("MainWindow", "F6", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionExpressRun->setText(QApplication::translate("MainWindow", "E&xpress Run (tracing off)", Q_NULLPTR));
+        actionFastRun->setShortcut(QApplication::translate("MainWindow", "F6", 0));
+        actionExpressRun->setText(QApplication::translate("MainWindow", "E&xpress Run (tracing off)", 0));
 #ifndef QT_NO_TOOLTIP
-        actionExpressRun->setToolTip(QApplication::translate("MainWindow", "Run at full speed: no text output, animation or inspector updates (F7)", Q_NULLPTR));
+        actionExpressRun->setToolTip(QApplication::translate("MainWindow", "Run at full speed: no text output, animation or inspector updates (F7)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionExpressRun->setShortcut(QApplication::translate("MainWindow", "F7", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionRunUntil->setText(QApplication::translate("MainWindow", "Run &Until...", Q_NULLPTR));
+        actionExpressRun->setShortcut(QApplication::translate("MainWindow", "F7", 0));
+        actionRunUntil->setText(QApplication::translate("MainWindow", "Run &Until...", 0));
 #ifndef QT_NO_TOOLTIP
-        actionRunUntil->setToolTip(QApplication::translate("MainWindow", "Run until time or event number (Ctrl+F5)", Q_NULLPTR));
+        actionRunUntil->setToolTip(QApplication::translate("MainWindow", "Run until time or event number (Ctrl+F5)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionRunUntil->setShortcut(QApplication::translate("MainWindow", "Ctrl+F5", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionLoadNedFile->setText(QApplication::translate("MainWindow", "&Load NED File...", Q_NULLPTR));
+        actionRunUntil->setShortcut(QApplication::translate("MainWindow", "Ctrl+F5", 0));
+        actionLoadNedFile->setText(QApplication::translate("MainWindow", "&Load NED File...", 0));
 #ifndef QT_NO_TOOLTIP
-        actionLoadNedFile->setToolTip(QApplication::translate("MainWindow", "Load NED file for compound module definitions", Q_NULLPTR));
+        actionLoadNedFile->setToolTip(QApplication::translate("MainWindow", "Load NED file for compound module definitions", 0));
 #endif // QT_NO_TOOLTIP
-        actionConcludeSimulation->setText(QApplication::translate("MainWindow", "&Conclude Simulation", Q_NULLPTR));
+        actionConcludeSimulation->setText(QApplication::translate("MainWindow", "&Conclude Simulation", 0));
 #ifndef QT_NO_TOOLTIP
-        actionConcludeSimulation->setToolTip(QApplication::translate("MainWindow", "Conclude simulation", Q_NULLPTR));
+        actionConcludeSimulation->setToolTip(QApplication::translate("MainWindow", "Conclude simulation", 0));
 #endif // QT_NO_TOOLTIP
-        actionEventlogRecording->setText(QApplication::translate("MainWindow", "&Eventlog Recording", Q_NULLPTR));
+        actionEventlogRecording->setText(QApplication::translate("MainWindow", "&Eventlog Recording", 0));
 #ifndef QT_NO_TOOLTIP
-        actionEventlogRecording->setToolTip(QApplication::translate("MainWindow", "Eventlog recording on/off (Ctrl+G)", Q_NULLPTR));
+        actionEventlogRecording->setToolTip(QApplication::translate("MainWindow", "Eventlog recording on/off (Ctrl+G)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionEventlogRecording->setShortcut(QApplication::translate("MainWindow", "Ctrl+G", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionFindInspectObjects->setText(QApplication::translate("MainWindow", "&Find/Inspect Objects...", Q_NULLPTR));
+        actionEventlogRecording->setShortcut(QApplication::translate("MainWindow", "Ctrl+G", 0));
+        actionFindInspectObjects->setText(QApplication::translate("MainWindow", "&Find/Inspect Objects...", 0));
 #ifndef QT_NO_TOOLTIP
-        actionFindInspectObjects->setToolTip(QApplication::translate("MainWindow", "Find and inspect modules, messages, queues and other objects (Ctrl+S)", Q_NULLPTR));
+        actionFindInspectObjects->setToolTip(QApplication::translate("MainWindow", "Find and inspect modules, messages, queues and other objects (Ctrl+S)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionFindInspectObjects->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionVerticalLayout->setText(QApplication::translate("MainWindow", "Vertical Main Window Layout", Q_NULLPTR));
+        actionFindInspectObjects->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", 0));
+        actionVerticalLayout->setText(QApplication::translate("MainWindow", "Vertical Main Window Layout", 0));
 #ifndef QT_NO_TOOLTIP
-        actionVerticalLayout->setToolTip(QApplication::translate("MainWindow", "Vertical main window layout", Q_NULLPTR));
+        actionVerticalLayout->setToolTip(QApplication::translate("MainWindow", "Vertical main window layout", 0));
 #endif // QT_NO_TOOLTIP
-        actionHorizontalLayout->setText(QApplication::translate("MainWindow", "Horizontal Main Window Layout", Q_NULLPTR));
-        actionTimeline->setText(QApplication::translate("MainWindow", "&Timeline", Q_NULLPTR));
+        actionHorizontalLayout->setText(QApplication::translate("MainWindow", "Horizontal Main Window Layout", 0));
+        actionTimeline->setText(QApplication::translate("MainWindow", "&Timeline", 0));
 #ifndef QT_NO_TOOLTIP
-        actionTimeline->setToolTip(QApplication::translate("MainWindow", "Show/hide timeline (Ctrl+T)", Q_NULLPTR));
+        actionTimeline->setToolTip(QApplication::translate("MainWindow", "Show/hide timeline (Ctrl+T)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionTimeline->setShortcut(QApplication::translate("MainWindow", "Ctrl+T", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionPreferences->setText(QApplication::translate("MainWindow", "&Preferences...", Q_NULLPTR));
-        actionSetUpUnconfiguredNetwork->setText(QApplication::translate("MainWindow", "Set Up an &Unconfigured Network...", Q_NULLPTR));
-        actionOpenPrimaryIniFile->setText(QApplication::translate("MainWindow", "Open Primary &Ini File", Q_NULLPTR));
-        actionCreate_Snapshot->setText(QApplication::translate("MainWindow", "&Create Snapshot...", Q_NULLPTR));
-        actionDebugNextEvent->setText(QApplication::translate("MainWindow", "&Debug Next Event", Q_NULLPTR));
-#ifndef QT_NO_SHORTCUT
-        actionDebugNextEvent->setShortcut(QApplication::translate("MainWindow", "Ctrl+F9", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionRebuildNetwork->setText(QApplication::translate("MainWindow", "Re&build Network", Q_NULLPTR));
+        actionTimeline->setShortcut(QApplication::translate("MainWindow", "Ctrl+T", 0));
+        actionPreferences->setText(QApplication::translate("MainWindow", "&Preferences...", 0));
+        actionSetUpUnconfiguredNetwork->setText(QApplication::translate("MainWindow", "Set Up an &Unconfigured Network...", 0));
+        actionOpenPrimaryIniFile->setText(QApplication::translate("MainWindow", "Open Primary &Ini File", 0));
+        actionCreate_Snapshot->setText(QApplication::translate("MainWindow", "&Create Snapshot...", 0));
+        actionDebugNextEvent->setText(QApplication::translate("MainWindow", "&Debug Next Event", 0));
+        actionDebugNextEvent->setShortcut(QApplication::translate("MainWindow", "Ctrl+F9", 0));
+        actionRebuildNetwork->setText(QApplication::translate("MainWindow", "Re&build Network", 0));
 #ifndef QT_NO_TOOLTIP
-        actionRebuildNetwork->setToolTip(QApplication::translate("MainWindow", "Rebuild network", Q_NULLPTR));
+        actionRebuildNetwork->setToolTip(QApplication::translate("MainWindow", "Rebuild network", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionRebuildNetwork->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+R", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionNetwork->setText(QApplication::translate("MainWindow", "&Network", Q_NULLPTR));
-        actionScheduledEvents->setText(QApplication::translate("MainWindow", "Scheduled &Events (FES)", Q_NULLPTR));
-        actionSimulation->setText(QApplication::translate("MainWindow", "&Simulation", Q_NULLPTR));
-        actionNedComponentTypes->setText(QApplication::translate("MainWindow", "NED Component &Types", Q_NULLPTR));
-        actionRegisteredClasses->setText(QApplication::translate("MainWindow", "Registered &Classes", Q_NULLPTR));
-        actionNED_Functions->setText(QApplication::translate("MainWindow", "NED &Functions", Q_NULLPTR));
-        actionRegistered_Enums->setText(QApplication::translate("MainWindow", "Registered &Enums", Q_NULLPTR));
-        actionSupportedConfigurationOption->setText(QApplication::translate("MainWindow", "Supported Configuration &Options", Q_NULLPTR));
-        actionInspectByPointer->setText(QApplication::translate("MainWindow", "Inspect by &Pointer...", Q_NULLPTR));
-        actionStatusDetails->setText(QApplication::translate("MainWindow", "&Status Details", Q_NULLPTR));
-#ifndef QT_NO_SHORTCUT
-        actionStatusDetails->setShortcut(QApplication::translate("MainWindow", "Ctrl+D", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionFlipWindowLayout->setText(QApplication::translate("MainWindow", "&Flip Window Layout", Q_NULLPTR));
-        actionAbout_OMNeT_Qtenv->setText(QApplication::translate("MainWindow", "&About OMNeT++/Qtenv", Q_NULLPTR));
-        actionRecordVideo->setText(QApplication::translate("MainWindow", "&Video Recording", Q_NULLPTR));
+        actionRebuildNetwork->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+R", 0));
+        actionNetwork->setText(QApplication::translate("MainWindow", "&Network", 0));
+        actionScheduledEvents->setText(QApplication::translate("MainWindow", "Scheduled &Events (FES)", 0));
+        actionSimulation->setText(QApplication::translate("MainWindow", "&Simulation", 0));
+        actionNedComponentTypes->setText(QApplication::translate("MainWindow", "NED Component &Types", 0));
+        actionRegisteredClasses->setText(QApplication::translate("MainWindow", "Registered &Classes", 0));
+        actionNED_Functions->setText(QApplication::translate("MainWindow", "NED &Functions", 0));
+        actionRegistered_Enums->setText(QApplication::translate("MainWindow", "Registered &Enums", 0));
+        actionSupportedConfigurationOption->setText(QApplication::translate("MainWindow", "Supported Configuration &Options", 0));
+        actionInspectByPointer->setText(QApplication::translate("MainWindow", "Inspect by &Pointer...", 0));
+        actionStatusDetails->setText(QApplication::translate("MainWindow", "&Status Details", 0));
+        actionStatusDetails->setShortcut(QApplication::translate("MainWindow", "Ctrl+D", 0));
+        actionFlipWindowLayout->setText(QApplication::translate("MainWindow", "&Flip Window Layout", 0));
+        actionAbout_OMNeT_Qtenv->setText(QApplication::translate("MainWindow", "&About OMNeT++/Qtenv", 0));
+        actionRecordVideo->setText(QApplication::translate("MainWindow", "&Video Recording", 0));
 #ifndef QT_NO_TOOLTIP
-        actionRecordVideo->setToolTip(QApplication::translate("MainWindow", "Record Video (Ctrl+M)", Q_NULLPTR));
+        actionRecordVideo->setToolTip(QApplication::translate("MainWindow", "Record Video (Ctrl+M)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionRecordVideo->setShortcut(QApplication::translate("MainWindow", "Ctrl+M", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionShowAnimationParams->setText(QApplication::translate("MainWindow", "Animation Parameters", Q_NULLPTR));
+        actionRecordVideo->setShortcut(QApplication::translate("MainWindow", "Ctrl+M", 0));
+        actionShowAnimationParams->setText(QApplication::translate("MainWindow", "Animation Parameters", 0));
 #ifndef QT_NO_TOOLTIP
-        actionShowAnimationParams->setToolTip(QApplication::translate("MainWindow", "Show Animation Parameters (Ctrl+N)", Q_NULLPTR));
+        actionShowAnimationParams->setToolTip(QApplication::translate("MainWindow", "Show Animation Parameters (Ctrl+N)", 0));
 #endif // QT_NO_TOOLTIP
-#ifndef QT_NO_SHORTCUT
-        actionShowAnimationParams->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", Q_NULLPTR));
-#endif // QT_NO_SHORTCUT
-        actionDebugOnErrors->setText(QApplication::translate("MainWindow", "Debug On Errors", Q_NULLPTR));
+        actionShowAnimationParams->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", 0));
+        actionDebugOnErrors->setText(QApplication::translate("MainWindow", "Debug On Errors", 0));
 #ifndef QT_NO_TOOLTIP
-        actionDebugOnErrors->setToolTip(QApplication::translate("MainWindow", "Break into the debugger upon runtime errors", Q_NULLPTR));
+        actionDebugOnErrors->setToolTip(QApplication::translate("MainWindow", "Break into the debugger upon runtime errors", 0));
 #endif // QT_NO_TOOLTIP
-        actionClassDescriptors->setText(QApplication::translate("MainWindow", "Class &Descriptors", Q_NULLPTR));
+        actionClassDescriptors->setText(QApplication::translate("MainWindow", "Class &Descriptors", 0));
 #ifndef QT_NO_TOOLTIP
-        actionClassDescriptors->setToolTip(QApplication::translate("MainWindow", "Class Descriptors", Q_NULLPTR));
+        actionClassDescriptors->setToolTip(QApplication::translate("MainWindow", "Class Descriptors", 0));
 #endif // QT_NO_TOOLTIP
-        actionResultFilters->setText(QApplication::translate("MainWindow", "Result Fi&lters", Q_NULLPTR));
+        actionResultFilters->setText(QApplication::translate("MainWindow", "Result Fi&lters", 0));
 #ifndef QT_NO_TOOLTIP
-        actionResultFilters->setToolTip(QApplication::translate("MainWindow", "Result Filters", Q_NULLPTR));
+        actionResultFilters->setToolTip(QApplication::translate("MainWindow", "Result Filters", 0));
 #endif // QT_NO_TOOLTIP
-        actionResultRecorders->setText(QApplication::translate("MainWindow", "Result &Recorders", Q_NULLPTR));
+        actionResultRecorders->setText(QApplication::translate("MainWindow", "Result &Recorders", 0));
 #ifndef QT_NO_TOOLTIP
-        actionResultRecorders->setToolTip(QApplication::translate("MainWindow", "Result Recorders", Q_NULLPTR));
+        actionResultRecorders->setToolTip(QApplication::translate("MainWindow", "Result Recorders", 0));
 #endif // QT_NO_TOOLTIP
-        actionMessagePrinters->setText(QApplication::translate("MainWindow", "Message &Printers", Q_NULLPTR));
+        actionMessagePrinters->setText(QApplication::translate("MainWindow", "Message &Printers", 0));
 #ifndef QT_NO_TOOLTIP
-        actionMessagePrinters->setToolTip(QApplication::translate("MainWindow", "Message Printers", Q_NULLPTR));
+        actionMessagePrinters->setToolTip(QApplication::translate("MainWindow", "Message Printers", 0));
 #endif // QT_NO_TOOLTIP
-        actionDebugNow->setText(QApplication::translate("MainWindow", "Debug Now", Q_NULLPTR));
+        actionDebugNow->setText(QApplication::translate("MainWindow", "Debug Now", 0));
 #ifndef QT_NO_WHATSTHIS
-        toolBarArea->setWhatsThis(QApplication::translate("MainWindow", "The mainToolBar will be moved into this widget at runtime, along with a layout containing the animation speed slider and the event labels.", Q_NULLPTR));
+        toolBarArea->setWhatsThis(QApplication::translate("MainWindow", "The mainToolBar will be moved into this widget at runtime, along with a layout containing the animation speed slider and the event labels.", 0));
 #endif // QT_NO_WHATSTHIS
-        nextEventLabel->setText(QApplication::translate("MainWindow", "Next: n/a", Q_NULLPTR));
-        nextModuleLabel->setText(QApplication::translate("MainWindow", "In: n/a", Q_NULLPTR));
-        nextTimeLabel->setText(QApplication::translate("MainWindow", "At: n/a", Q_NULLPTR));
+        nextEventLabel->setText(QApplication::translate("MainWindow", "Next: n/a", 0));
+        nextModuleLabel->setText(QApplication::translate("MainWindow", "In: n/a", 0));
+        nextTimeLabel->setText(QApplication::translate("MainWindow", "At: n/a", 0));
 #ifndef QT_NO_TOOLTIP
-        labelConfigName->setToolTip(QApplication::translate("MainWindow", "Current inifile configuration, run number, network name, and potential scheduler information", Q_NULLPTR));
+        labelConfigName->setToolTip(QApplication::translate("MainWindow", "Current inifile configuration, run number, network name, and potential scheduler information", 0));
 #endif // QT_NO_TOOLTIP
-        labelConfigName->setText(QApplication::translate("MainWindow", "(No network set up)", Q_NULLPTR));
+        labelConfigName->setText(QApplication::translate("MainWindow", "(No network set up)", 0));
 #ifndef QT_NO_TOOLTIP
         labelMessageStats->setToolTip(QApplication::translate("MainWindow", "Number of events (messages) currently scheduled /\n"
 "Number of existing message objects, including scheduled ones /\n"
-"Total number of messages created since start of the simulation", Q_NULLPTR));
+"Total number of messages created since start of the simulation", 0));
 #endif // QT_NO_TOOLTIP
-        labelMessageStats->setText(QApplication::translate("MainWindow", "Msg stats: 0 scheduled / 0 existing / 0 created", Q_NULLPTR));
-        menuFile->setTitle(QApplication::translate("MainWindow", "&File", Q_NULLPTR));
-        menuSimulate->setTitle(QApplication::translate("MainWindow", "&Simulate", Q_NULLPTR));
-        menuInspect->setTitle(QApplication::translate("MainWindow", "&Inspect", Q_NULLPTR));
-        menuAvailable_Components->setTitle(QApplication::translate("MainWindow", "Available &Components", Q_NULLPTR));
-        menuView->setTitle(QApplication::translate("MainWindow", "&View", Q_NULLPTR));
-        menuHelp->setTitle(QApplication::translate("MainWindow", "&Help", Q_NULLPTR));
-        mainToolBar->setWindowTitle(QApplication::translate("MainWindow", "Qtenv toolbar", Q_NULLPTR));
+        labelMessageStats->setText(QApplication::translate("MainWindow", "Msg stats: 0 scheduled / 0 existing / 0 created", 0));
+        menuFile->setTitle(QApplication::translate("MainWindow", "&File", 0));
+        menuSimulate->setTitle(QApplication::translate("MainWindow", "&Simulate", 0));
+        menuInspect->setTitle(QApplication::translate("MainWindow", "&Inspect", 0));
+        menuAvailable_Components->setTitle(QApplication::translate("MainWindow", "Available &Components", 0));
+        menuView->setTitle(QApplication::translate("MainWindow", "&View", 0));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "&Help", 0));
+        mainToolBar->setWindowTitle(QApplication::translate("MainWindow", "Qtenv toolbar", 0));
     } // retranslateUi
 
 };

@@ -2,27 +2,11 @@
 # OMNeT++/OMNEST Makefile for embedding2
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep
+#  opp_makemake -f --deep --nolink
 #
-
-# Name of target to be created (-o option)
-TARGET = embedding2$(D)$(EXE_SUFFIX)
-TARGET_DIR = .
-
-# User interface (uncomment one) (-u option)
-USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(QTENV_LIBS) $(CMDENV_LIBS)
-#USERIF_LIBS = $(CMDENV_LIBS)
-#USERIF_LIBS = $(TKENV_LIBS)
-#USERIF_LIBS = $(QTENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH =
-
-# Additional object and library files to link with
-EXTRA_OBJS =
-
-# Additional libraries (-L, -l options)
-LIBS =
 
 # Output directory
 PROJECT_OUTPUT_DIR = out
@@ -57,9 +41,6 @@ $(error Config file '$(CONFIGFILE)' does not exist -- add the OMNeT++ bin direct
 endif
 
 include $(CONFIGFILE)
-
-# Simulation kernel and user interface libraries
-OMNETPP_LIBS = $(OPPMAIN_LIB) $(USERIF_LIBS) $(KERNEL_LIBS) $(SYS_LIBS)
 
 COPTS = $(CFLAGS) $(IMPORT_DEFINES)  $(INCLUDE_PATH) -I$(OMNETPP_INCL_DIR)
 MSGCOPTS = $(INCLUDE_PATH)
@@ -107,7 +88,6 @@ clean-local:
 #------------------------------------------------------------------------------
 
 # Main target
-all: $(TARGET_DIR)/$(TARGET)
 
 $(TARGET_DIR)/% :: $O/%
 	@mkdir -p $(TARGET_DIR)
@@ -116,10 +96,8 @@ ifeq ($(TOOLCHAIN_NAME),clangc2)
 	$(Q)-$(LN) $(<:%.dll=%.lib) $(@:%.dll=%.lib)
 endif
 
-$O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile $(CONFIGFILE)
-	@$(MKPATH) $O
-	@echo Creating executable: $@
-	$(Q)$(CXX) $(LDFLAGS) -o $O/$(TARGET) $(OBJS) $(EXTRA_OBJS) $(AS_NEEDED_OFF) $(WHOLE_ARCHIVE_ON) $(LIBS) $(WHOLE_ARCHIVE_OFF) $(OMNETPP_LIBS)
+all: $(OBJS)  Makefile $(CONFIGFILE)
+	@# Do nothing
 
 .PHONY: all clean cleanall depend msgheaders smheaders
 
@@ -145,8 +123,6 @@ smheaders: $(SMFILES:.sm=_sm.h)
 clean:
 	$(qecho) Cleaning $(TARGET)
 	$(Q)-rm -rf $O
-	$(Q)-rm -f $(TARGET_DIR)/$(TARGET)
-	$(Q)-rm -f $(TARGET_DIR)/$(TARGET:%.dll=%.lib)
 	$(Q)-rm -f $(call opp_rwildcard, . , *_m.cc *_m.h *_sm.cc *_sm.h)
 
 cleanall:

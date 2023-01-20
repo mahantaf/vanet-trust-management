@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'logfilterdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -72,8 +72,8 @@ public:
 
     void retranslateUi(QDialog *logfilterdialog)
     {
-        logfilterdialog->setWindowTitle(QApplication::translate("logfilterdialog", "Filter Window Contents", Q_NULLPTR));
-        label->setText(QApplication::translate("logfilterdialog", "Select modules to show log messages for:", Q_NULLPTR));
+        logfilterdialog->setWindowTitle(QApplication::translate("logfilterdialog", "Filter Window Contents", 0));
+        label->setText(QApplication::translate("logfilterdialog", "Select modules to show log messages for:", 0));
     } // retranslateUi
 
 };

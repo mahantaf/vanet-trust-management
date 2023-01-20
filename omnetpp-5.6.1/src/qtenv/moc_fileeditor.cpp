@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'fileeditor.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.5)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.5.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,14 +12,12 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'fileeditor.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.9.5. It"
+#error "This file was generated using the moc from 5.5.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-QT_WARNING_PUSH
-QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_omnetpp__qtenv__FileEditor_t {
     QByteArrayData data[8];
     char stringdata0[90];
@@ -95,7 +93,7 @@ void omnetpp::qtenv::FileEditor::qt_static_metacall(QObject *_o, QMetaObject::Ca
 
 const QMetaObject omnetpp::qtenv::FileEditor::staticMetaObject = {
     { &QDialog::staticMetaObject, qt_meta_stringdata_omnetpp__qtenv__FileEditor.data,
-      qt_meta_data_omnetpp__qtenv__FileEditor,  qt_static_metacall, nullptr, nullptr}
+      qt_meta_data_omnetpp__qtenv__FileEditor,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -106,9 +104,9 @@ const QMetaObject *omnetpp::qtenv::FileEditor::metaObject() const
 
 void *omnetpp::qtenv::FileEditor::qt_metacast(const char *_clname)
 {
-    if (!_clname) return nullptr;
+    if (!_clname) return Q_NULLPTR;
     if (!strcmp(_clname, qt_meta_stringdata_omnetpp__qtenv__FileEditor.stringdata0))
-        return static_cast<void*>(this);
+        return static_cast<void*>(const_cast< FileEditor*>(this));
     return QDialog::qt_metacast(_clname);
 }
 
@@ -128,5 +126,4 @@ int omnetpp::qtenv::FileEditor::qt_metacall(QMetaObject::Call _c, int _id, void 
     }
     return _id;
 }
-QT_WARNING_POP
 QT_END_MOC_NAMESPACE

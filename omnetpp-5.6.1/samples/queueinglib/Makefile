@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for $(LIB_PREFIX)queueinglib
 #
 # This file was generated with the command:
-#  opp_makemake --make-so -f -pQUEUEING -S -I.
+#  opp_makemake -f --make-so -pQUEUEING -I.
 #
 
 # Name of target to be created (-o option)

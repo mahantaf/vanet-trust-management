@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'logfinddialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.5
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -113,12 +113,12 @@ public:
 
     void retranslateUi(QDialog *LogFindDialog)
     {
-        LogFindDialog->setWindowTitle(QApplication::translate("LogFindDialog", "Find", Q_NULLPTR));
-        label->setText(QApplication::translate("LogFindDialog", "Find string:", Q_NULLPTR));
-        wholeWordsCheckBox->setText(QApplication::translate("LogFindDialog", "&Whole words only", Q_NULLPTR));
-        regexpCheckBox->setText(QApplication::translate("LogFindDialog", "&Regular expression", Q_NULLPTR));
-        caseCheckBox->setText(QApplication::translate("LogFindDialog", "Case &sensitive", Q_NULLPTR));
-        backwardsCheckBox->setText(QApplication::translate("LogFindDialog", "Search &backwards", Q_NULLPTR));
+        LogFindDialog->setWindowTitle(QApplication::translate("LogFindDialog", "Find", 0));
+        label->setText(QApplication::translate("LogFindDialog", "Find string:", 0));
+        wholeWordsCheckBox->setText(QApplication::translate("LogFindDialog", "&Whole words only", 0));
+        regexpCheckBox->setText(QApplication::translate("LogFindDialog", "&Regular expression", 0));
+        caseCheckBox->setText(QApplication::translate("LogFindDialog", "Case &sensitive", 0));
+        backwardsCheckBox->setText(QApplication::translate("LogFindDialog", "Search &backwards", 0));
     } // retranslateUi
 
 };
