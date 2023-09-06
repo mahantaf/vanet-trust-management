@@ -182,7 +182,7 @@ module eNodeB
             parameters:
                 @display("p=750,446;b=1000,5,,,,1");
         }
-                
+
         //# 
         //# Modules for connecting to the core network and X2
         //# 
@@ -231,8 +231,13 @@ module eNodeB
         nl.in++ <-- gtpUser.pppGate;
         trafficFlowFilter.gtpUserGateOut --> gtpUser.trafficFlowFilterGate;
         trafficFlowFilter.internetFilterGateIn <-- nl.out++;
-        gtpUser.socketOut --> at.in++;
-        gtpUser.socketIn <-- at.out++;
+
+        //# TODO: Uncomment this code when you are done experimenting
+        // gtpUser.socketOut --> at.in++;
+        // gtpUser.socketIn <-- at.out++;
+
+        gtpUser.socketOut --> tn.in++;
+        gtpUser.socketIn <-- tn.out++;
 
 	    //# GTPUserX2 connections
         gtpUserX2.lteStackOut --> cellularNic.x2$i++;

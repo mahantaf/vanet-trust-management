@@ -13,6 +13,7 @@
 #include <inet/common/TimeTag_m.h>
 #include "apps/voip/VoIPSender.h"
 #include "apps/voip/VoIPReceiver.h"
+#include "inet/networklayer/common/L3AddressResolver.h"
 
 #include "common/TrustData.h"
 
@@ -24,26 +25,23 @@ Define_Module(VoIPSender);
 using namespace std;
 using namespace inet;
 
-VoIPSender::VoIPSender()
-{
+VoIPSender::VoIPSender() {
     selfSource_ = nullptr;
     selfSender_ = nullptr;
 }
 
-VoIPSender::~VoIPSender()
-{
+VoIPSender::~VoIPSender() {
     cancelAndDelete(selfSource_);
     cancelAndDelete(selfSender_);
 }
 
-void VoIPSender::initialize(int stage)
-{
+void VoIPSender::initialize(int stage) {
     EV << "VoIP Sender initialize: stage " << stage << endl;
 
     cSimpleModule::initialize(stage);
 
     // avoid multiple initializations
-    if (stage!=inet::INITSTAGE_APPLICATION_LAYER)
+    if (stage != inet::INITSTAGE_APPLICATION_LAYER)
         return;
 
     durTalk_ = 0;
@@ -76,12 +74,14 @@ void VoIPSender::initialize(int stage)
     //Mobility information initialization
     ue = this->getParentModule();
     cModule *temp = getParentModule()->getSubmodule("mobility");
-    if(temp != NULL){
+    if (temp != NULL) {
         mobility = check_and_cast<veins::VeinsInetMobility*>(temp);
-    }
-    else {
-        EV << "UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!" << endl;
-        throw cRuntimeError("UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!");
+    } else {
+        EV
+                  << "UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!"
+                  << endl;
+        throw cRuntimeError(
+                "UEWarningAlertApp::initialize - \tWARNING: Mobility module NOT FOUND!");
     }
     eventLocationGenerator = ConstantEventLocationGenerator(evilVehicleID);
 
@@ -89,35 +89,31 @@ void VoIPSender::initialize(int stage)
     firstMessage = true;
 }
 
-void VoIPSender::handleMessage(cMessage *msg)
-{
-    if (msg->isSelfMessage())
-    {
+void VoIPSender::handleMessage(cMessage *msg) {
+    if (msg->isSelfMessage()) {
         if (!strcmp(msg->getName(), "selfSender")) {
             sendVoIPPacket();
-        }
-        else if (!strcmp(msg->getName(), "selfSource"))
+        } else if (!strcmp(msg->getName(), "selfSource"))
             selectPeriodTime();
         else
             initTraffic();
     }
 }
 
-void VoIPSender::initTraffic()
-{
+void VoIPSender::initTraffic() {
     std::string destAddress = par("destAddress").stringValue();
-    cModule* destModule = getModuleByPath(par("destAddress").stringValue());
-    if (destModule == nullptr)
-    {
+    cModule *destModule = getModuleByPath(par("destAddress").stringValue());
+    if (destModule == nullptr) {
         // this might happen when users are created dynamically
-        EV << simTime() << "VoIPSender::initTraffic - destination " << destAddress << " not found" << endl;
+        EV << simTime() << "VoIPSender::initTraffic - destination "
+                  << destAddress << " not found" << endl;
 
         simtime_t offset = 0.01; // TODO check value
-        scheduleAt(simTime()+offset, initTraffic_);
-        EV << simTime() << "VoIPSender::initTraffic - the node will retry to initialize traffic in " << offset << " seconds " << endl;
-    }
-    else
-    {
+        scheduleAt(simTime() + offset, initTraffic_);
+        EV << simTime()
+                  << "VoIPSender::initTraffic - the node will retry to initialize traffic in "
+                  << offset << " seconds " << endl;
+    } else {
         delete initTraffic_;
 
         socket.setOutputGate(gate("socketOut"));
@@ -127,18 +123,20 @@ void VoIPSender::initTraffic()
         if (tos != -1)
             socket.setTos(tos);
 
-        EV << simTime() << "VoIPSender::initialize - binding to port: local:" << localPort_ << " , dest: " << destAddress_.str() << ":" << destPort_ << endl;
+        EV << simTime() << "VoIPSender::initialize - binding to port: local:"
+                  << localPort_ << " , dest: " << destAddress_.str() << ":"
+                  << destPort_ << endl;
 
         // calculating traffic starting time
         simtime_t startTime = par("startTime");
 
-        scheduleAt(simTime()+startTime, selfSource_);
+        scheduleAt(simTime() + startTime, selfSource_);
         EV << "\t starting traffic in " << startTime << " seconds " << endl;
     }
 }
 
-void VoIPSender::talkspurt(simtime_t dur)
-{
+void VoIPSender::talkspurt(simtime_t dur) {
+    std::string senderID = this->ue->getFullName();
     iDtalk_++;
     nframes_ = (ceil(dur / sampling_time));
 
@@ -146,45 +144,42 @@ void VoIPSender::talkspurt(simtime_t dur)
     if (nframes_ == 0)
         nframes_ = 1;
 
-    EV << "VoIPSender::talkspurt - TALKSPURT[" << iDtalk_-1 << "] - Will be created[" << nframes_ << "] frames\n\n";
-
+    EV << "VoIPSender::talkspurt - TALKSPURT[" << iDtalk_ - 1
+              << "] - Will be created[" << nframes_ << "] frames\n\n";
     iDframe_ = 0;
     nframesTmp_ = nframes_;
     scheduleAt(simTime(), selfSender_);
 }
 
-void VoIPSender::selectPeriodTime()
-{
-    if (!isTalk_)
-    {
+void VoIPSender::selectPeriodTime() {
+    std::string senderID = this->ue->getFullName();
+    if (!isTalk_) {
         double durSil2;
-        if(silences_)
-        {
+        if (silences_) {
             durSil_ = weibull(scaleSil_, shapeSil_);
             durSil2 = round(SIMTIME_DBL(durSil_)*1000) / 1000;
-        }
-        else
-        {
+        } else {
             durSil_ = durSil2 = 0;
         }
 
-        EV << "VoIPSender::selectPeriodTime - Silence Period: " << "Duration[" << durSil_ << "/" << durSil2 << "] seconds\n";
+        EV << "VoIPSender::selectPeriodTime - Silence Period: " << "Duration["
+                  << durSil_ << "/" << durSil2 << "] seconds\n";
         scheduleAt(simTime() + durSil_, selfSource_);
         isTalk_ = true;
-    }
-    else
-    {
+    } else {
+
         durTalk_ = weibull(scaleTalk_, shapeTalk_);
         double durTalk2 = round(SIMTIME_DBL(durTalk_)*1000) / 1000;
-        EV << "VoIPSender::selectPeriodTime - Talkspurt[" << iDtalk_ << "] - Duration[" << durTalk_ << "/" << durTalk2 << "] seconds\n";
+        EV << "VoIPSender::selectPeriodTime - Talkspurt[" << iDtalk_
+                  << "] - Duration[" << durTalk_ << "/" << durTalk2
+                  << "] seconds\n";
         talkspurt(durTalk_);
         scheduleAt(simTime() + durTalk_, selfSource_);
         isTalk_ = false;
     }
 }
 
-void VoIPSender::sendVoIPPacket()
-{
+void VoIPSender::sendVoIPPacket() {
     if (destAddress_.isUnspecified())
         destAddress_ = L3AddressResolver().resolve(par("destAddress"));
 
@@ -192,65 +187,126 @@ void VoIPSender::sendVoIPPacket()
     // omnetpp::cpp_string pktContent;
     // MemoryOutputStream stream;
 
-    TrustData content;
+//    TrustData content;
+//    //simulate malicious vehicle advertising incorrect current velocity
+//    if(eventLocationGenerator.isEvilVehicle(senderID)) {
+//        if (this->firstMessage) {
+//
+//        } else {
+//
+//        }
+//        Coord evilVehicleLoc = eventLocationGenerator.getEventLocation(senderID);
+//        content = TrustData(simTime(), this->mobility->getCurrentPosition(),
+//                    evilVehicleLoc, Coord(230, 250, 0), senderID);
+//    }
+//    //If I am RSU, send reputation lists, for now hardcoded to send to a specific receiving RSU
+//    else {
+//        // Normal cars send correct event location +- sensor error margin which is
+//        // a uniformly random distributed variable
+//        auto crng = getEnvir()->getRNG(0);
+//        auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
+//        Coord curr_loc = Coord(380, 310, 0);
+//        Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z);
+//        content = TrustData(simTime(), this->mobility->getCurrentPosition(),
+//                    newEvLoc, this->mobility->getCurrentVelocity(), senderID);
+//    }
+//    MemoryOutputStream stream;
+//    content.serializeTrustData(stream);
+//    omnetpp::cpp_string pktContent;
+//    std::vector<uint8_t> serialized_data;
+//    stream.copyData(serialized_data);
+//    for(size_t i = 0; i < serialized_data.size(); i++) {
+//        pktContent += serialized_data[i];
+//    }
+//
+//    Packet* packet = new inet::Packet("VoIP");
+//    auto voip = makeShared<VoipPacket>();
+//    voip->setIDtalk(iDtalk_ - 1);
+//    voip->setNframes(nframes_);
+//    voip->setIDframe(iDframe_);
+//    voip->setPayloadTimestamp(simTime());
+//    voip->setChunkLength(B(size_));
+//    voip->setSerializedMessage(pktContent);
+//    voip->addTag<CreationTimeTag>()->setCreationTime(simTime());
+//    packet->insertAtBack(voip);
 
-    //simulate malicious vehicle advertising incorrect current velocity
-    if(eventLocationGenerator.isEvilVehicle(senderID)) {
-        Coord evilVehicleLoc = eventLocationGenerator.getEventLocation(senderID);
-        content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
-                    evilVehicleLoc, Coord(230, 250, 0), senderID);
-    }
-    //If I am RSU, send reputation lists, for now hardcoded to send to a specific receiving RSU
-    else {
-        // Normal cars send correct event location +- sensor error margin which is
-        // a uniformly random distributed variable 
-        auto crng = getEnvir()->getRNG(0);
-        auto uniformDistVar = (int)omnetpp::uniform(crng, -10, 10);
-        Coord curr_loc = this->mobility->getCurrentPosition();
-        Coord newEvLoc(curr_loc.x + uniformDistVar, curr_loc.y + uniformDistVar, curr_loc.z);
-        content = TrustData(simTime(), this->mobility->getCurrentPosition(), 
+    EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_ - 1
+              << "] - Sending frame[" << iDframe_ << "]\n";
+
+#ifdef ENABLE_SENSOR_RANGE
+    if (this->mobility->getCurrentPosition().getY() >= SENSOR_START_Y
+            && this->mobility->getCurrentPosition().getY() <= SENSOR_END_Y
+            && this->mobility->getCurrentPosition().getX() >= SENSOR_START_X
+            && this->mobility->getCurrentPosition().getX() <= SENSOR_END_X) {
+
+        TrustData content;
+        //simulate malicious vehicle advertising incorrect current velocity
+        if (eventLocationGenerator.isEvilVehicle(senderID)) {
+            if (this->firstMessage) {
+                this->firstMessage = false;
+                Coord evilVehicleLoc = eventLocationGenerator.getEventLocation(
+                                    senderID);
+                            content = TrustData(simTime(), this->mobility->getCurrentPosition(),
+                                    evilVehicleLoc, Coord(230, 250, 0), senderID);
+
+            } else {
+                auto crng = getEnvir()->getRNG(0);
+                            auto uniformDistVar = (int) omnetpp::uniform(crng, -10, 10);
+                            Coord curr_loc = Coord(380, 310, 0);
+                            Coord newEvLoc(curr_loc.x + uniformDistVar,
+                                    curr_loc.y + uniformDistVar, curr_loc.z);
+                            content = TrustData(simTime(), this->mobility->getCurrentPosition(),
+                                    newEvLoc, this->mobility->getCurrentVelocity(), senderID);
+            }
+        }
+        //If I am RSU, send reputation lists, for now hardcoded to send to a specific receiving RSU
+        else {
+            // Normal cars send correct event location +- sensor error margin which is
+            // a uniformly random distributed variable
+            auto crng = getEnvir()->getRNG(0);
+            auto uniformDistVar = (int) omnetpp::uniform(crng, -10, 10);
+            Coord curr_loc = Coord(380, 310, 0);
+            Coord newEvLoc(curr_loc.x + uniformDistVar,
+                    curr_loc.y + uniformDistVar, curr_loc.z);
+            content = TrustData(simTime(), this->mobility->getCurrentPosition(),
                     newEvLoc, this->mobility->getCurrentVelocity(), senderID);
-    }
-    MemoryOutputStream stream;
-    content.serializeTrustData(stream);
-    omnetpp::cpp_string pktContent;
-    std::vector<uint8_t> serialized_data;
-    stream.copyData(serialized_data);
-    for(size_t i = 0; i < serialized_data.size(); i++) {
-        pktContent += serialized_data[i];
-    }
+        }
+        MemoryOutputStream stream;
+        content.serializeTrustData(stream);
+        omnetpp::cpp_string pktContent;
+        std::vector<uint8_t> serialized_data;
+        stream.copyData(serialized_data);
+        for (size_t i = 0; i < serialized_data.size(); i++) {
+            pktContent += serialized_data[i];
+        }
 
-    Packet* packet = new inet::Packet("VoIP");
-    auto voip = makeShared<VoipPacket>();
-    voip->setIDtalk(iDtalk_ - 1);
-    voip->setNframes(nframes_);
-    voip->setIDframe(iDframe_);
-    voip->setPayloadTimestamp(simTime());
-    voip->setChunkLength(B(size_));
-    voip->setSerializedMessage(pktContent);
-    voip->addTag<CreationTimeTag>()->setCreationTime(simTime());
-    packet->insertAtBack(voip);
-    EV << "VoIPSender::sendVoIPPacket - Talkspurt[" << iDtalk_-1 << "] - Sending frame[" << iDframe_ << "]\n";
+        Packet *packet = new inet::Packet("VoIP");
+        auto voip = makeShared<VoipPacket>();
+        voip->setIDtalk(iDtalk_ - 1);
+        voip->setNframes(nframes_);
+        voip->setIDframe(iDframe_);
+        voip->setPayloadTimestamp(simTime());
+        voip->setChunkLength(B(size_));
+        voip->setSerializedMessage(pktContent);
+        voip->addTag<CreationTimeTag>()->setCreationTime(simTime());
+        packet->insertAtBack(voip);
 
-    #ifdef ENABLE_SENSOR_RANGE
-    if(this->mobility->getCurrentPosition().getY() >= SENSOR_START && 
-        this->mobility->getCurrentPosition().getY() <= SENSOR_END) {
-        cout << "Sending message" << endl;
-    #endif
+        L3Address addr = L3AddressResolver().addressOf(getParentModule());
+//        cout << senderID << ": event location - " << content.getEventLocation() << ", " << "car location - " << content.getGeneratorLocation() << endl;
+#endif
         socket.sendTo(packet, destAddress_, destPort_);
-    #ifdef ENABLE_SENSOR_RANGE
-    }
-    #endif
+#ifdef ENABLE_SENSOR_RANGE
+    } else { this->firstMessage = true; }
+#endif
     --nframesTmp_;
     ++iDframe_;
 
     // emit throughput sample
     totalSentBytes_ += size_;
     double interval = SIMTIME_DBL(simTime() - warmUpPer_);
-    if (interval > 0.0)
-    {
-        double tputSample = (double)totalSentBytes_ / interval;
-        emit(voIPGeneratedThroughtput_, tputSample );
+    if (interval > 0.0) {
+        double tputSample = (double) totalSentBytes_ / interval;
+        emit(voIPGeneratedThroughtput_, tputSample);
     }
 
     if (nframesTmp_ > 0)

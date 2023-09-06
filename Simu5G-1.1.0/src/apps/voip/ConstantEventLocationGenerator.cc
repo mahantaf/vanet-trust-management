@@ -9,6 +9,9 @@ ConstantEventLocationGenerator::ConstantEventLocationGenerator(std::string evilC
         getline(ss, substr, ',');
         evilCars.insert(substr);
     }
+
+//    this->dynamicLocation = isDynamic;
+//    this->eventLocation = eventLocation;
 }
 
 bool ConstantEventLocationGenerator::isEvilVehicle(std::string carID)

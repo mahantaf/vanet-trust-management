@@ -12,8 +12,9 @@
 #include "apps/voip/VoIPReceiver.h"
 #include <string>
 #include <unordered_set>
-
 #include "inet/common/geometry/common/Coord.h"
+#include "inet/networklayer/common/L3AddressResolver.h"
+#include "inet/networklayer/contract/ipv4/Ipv4Address.h"
 
 std::string rsuID = "car[0],car[1]";
 
@@ -53,7 +54,12 @@ void VoIPReceiver::initialize(int stage)
 
     mInit_ = true;
 
+    L3Address addr = L3AddressResolver().addressOf(getParentModule());
     int port = par("localPort");
+
+    cout << "[TRUST_MANAGEMENT] VoIPReceiver::initialize - binding to address/port:" << addr.str() << ":" <<
+            port << " Running on: " << getParentModule()->getFullName() << endl;
+
     EV << "VoIPReceiver::initialize - binding to port: local:" << port << endl;
     if (port != -1)
     {
@@ -77,6 +83,7 @@ void VoIPReceiver::initialize(int stage)
     simtime_t startTime = par("startTime");
 
     numRecvd = 0;
+    WATCH(numRecvd);
     // doingRemoteAttestation = false
 
     trustListAllVehicles = new TrustManager();
@@ -229,12 +236,36 @@ void VoIPReceiver::doRemoteAttestation(std::string sender) {
 void updateTrustSet(std::unordered_map<std::string, TrustData *> &messagesReceived, inet::Coord estimateLocation,
                         TrustData *msgData, double reputation) {
     double dist = msgData->getEventLocation().sqrdist(estimateLocation);
-    if(reputation < TRUST_THRESHOLD || dist >= ERROR_MARGIN) {
-        if(messagesReceived.find(msgData->getSenderID()) != messagesReceived.end()) {
-            messagesReceived.erase(msgData->getSenderID());
+    if(messagesReceived.size() >= MIN_NODES_FOR_REPUTATION_UPDATE) {
+//        if(reputation < TRUST_THRESHOLD || dist >= ERROR_MARGIN) {
+        if(reputation < TRUST_THRESHOLD) {
+
+
+
+        //  std::cout << "====================" << std::endl;
+        //  std::cout << "Faulty "<< msgData->getSenderID() <<" => Removing its messages" << std::endl;
+            if(messagesReceived.find(msgData->getSenderID()) != messagesReceived.end()) {
+        //      std::cout << "Found some previous message for this faulty car" << std::endl;
+                messagesReceived.erase(msgData->getSenderID());
+            }
+        //  std::cout << "====================" << std::endl;
+        } else {
+            auto itr = messagesReceived.find(msgData->getSenderID());
+            if(itr == messagesReceived.end()) {
+                //Message from this sender already in map, just update with new message
+                messagesReceived[msgData->getSenderID()] = msgData;
+            }
+            else {
+                //Message from this sender not in map, add new message
+                auto toBeDeleted = itr->second;
+                itr->second = msgData;
+                delete toBeDeleted;
+            }
+
         }
     }
-    else if(reputation >= TRUST_THRESHOLD && dist < ERROR_MARGIN){
+//    else if(reputation >= TRUST_THRESHOLD && dist < ERROR_MARGIN) {
+    else {
         //Add message to the latest messages received map
         auto itr = messagesReceived.find(msgData->getSenderID());
         if(itr == messagesReceived.end()) {
@@ -265,6 +296,7 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
                                         std::string rsuID, VoIPReceiver *recvr_class) {
     // simtime_t startTime = simTime();
     string sender(msg->getSenderID());
+    // cout << "[TRUST_MANAGEMENT_INFO] Sender is: " << sender << endl;
     bool messageReceivedByRSU = false;
 
     //Drop message if reputation of sender is lower than threshold
@@ -282,11 +314,16 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
     // auto estimatedEventLocation = clusteringEventLocationEstimator(messagesReceived, this->trustListAllVehicles, msg);
     auto msg_ev_loc = msg->getEventLocation();
 
-    cout << "ReceivedEventLocation: " << msg->getSenderID() << ", " << time << ", " << msg_ev_loc << endl;
-    cout << "EstimateLocation: " << time << ", " << estimatedEventLocation << endl;
+    // cout << "ReceivedEventLocation: " << msg->getSenderID() << ", " << time << ", " << msg_ev_loc << endl;
+    // cout << "EstimateLocation: " << time << ", " << estimatedEventLocation << endl;
 
     // Distance between estimated event location and msg event location
+    // cout << msg->getSenderID() << ": Estimated Location - " << estimatedEventLocation << endl;
     double dist = msg_ev_loc.sqrdist(estimatedEventLocation);
+
+//    std::cout << "Message Location: " << msg_ev_loc.str() << std::endl;
+//    std::cout << "Estimated Location: " << estimatedEventLocation.str() << std::endl;
+//    std::cout << "Distance: " << dist << std::endl;
 
     if (trustNode == nullptr) {
         this->trustListAllVehicles->addEntryTrustMap(sender, DEFAULT_TRUST);
@@ -297,6 +334,12 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
     else {
     #endif
         if(dist > ERROR_MARGIN) {
+//            std::cout << "-----------------------------------" << std::endl;
+//            std::cout << "Sender " << sender << " reputation is below the threshold:" << std::endl;
+//            std::cout << "Message Location: " << msg_ev_loc.str() << std::endl;
+//            std::cout << "Estimated Location: " << estimatedEventLocation.str() << std::endl;
+//            std::cout << "Distance: " << dist << std::endl;
+
             // Checks if each coordinate of the event location in the message is within ERROR_MARGIN
             // of the estimated event location and penalizing the node if it isn't
             //Only modify if sender(sensor of event) is not RSU
@@ -304,9 +347,11 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
                 // Calculate reduction factor 
                 // double reductionFactor = (1.0 - ((double)dist/INT32_MAX));
                 // double reductionFactor = 0.9;
-                double reductionFactor = (1.0 - ((double)dist/2 * MAP_RANGE));
+                double reductionFactor = (1.0 - ((double)dist/(2 * MAP_RANGE)));
+//                std::cout << "Previous rept: " << trustNode->reputation << " Reduction factor: " << reductionFactor << " Next rept: " << max(0.0, trustNode->reputation * reductionFactor) << std::endl;
                 trustNode->reputation = max(0.0, trustNode->reputation * reductionFactor);
             }
+//            std::cout << "-----------------------------------" << std::endl;
             #ifdef PROBATION
             print_reputations(this->trustListAllVehicles, time);
             return false;
@@ -326,13 +371,21 @@ bool VoIPReceiver::doTrustManagement(std::unordered_map<std::string, TrustData *
     print_reputations(this->trustListAllVehicles, time);
     trustNode = this->trustListAllVehicles->getTrustNode(sender);
     updateTrustSet(messagesReceived, estimatedEventLocation, msg, trustNode->reputation);
+
+//    std::cout << "_________________________" << std::endl;
+//    std::cout << "New Trust List Members" << std::endl;
+//    for (auto const& pair : messagesReceived) {
+//            std::cout << pair.first << ' ';
+//    }
+//    std::cout << std::endl;
+//    std::cout << "_________________________" << std::endl;
     if(trustNode->reputation > TRUST_THRESHOLD) {
         return true;
     }
     else {
         //Perform remote attestation as and when needed is reputation of node goes down a threshold
         // doRemoteAttestation(sender, rsuManager);
-        cout << "KickedOut: " << msg->getSenderID() << ", " << time << endl;
+//        cout << "KickedOut: " << msg->getSenderID() << ", " << time << endl;
         return false;
     }
 }
@@ -346,6 +399,8 @@ void VoIPReceiver::handleMessage(cMessage *msg)
     bool trusted = true;
     //Using the name of the vehicle as the identifier instead of the IP
     std::string selfID = getParentModule()->getFullName();
+    // cout << "[TRUST_MANAGEMENT] Got a packet" << endl;
+
 
     if (msg->isSelfMessage()) {
         // Process the remote attestation done message and update the reputation of the remote attestee

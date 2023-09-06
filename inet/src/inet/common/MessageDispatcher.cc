@@ -19,6 +19,7 @@
 #include "inet/common/MessageDispatcher.h"
 #include "inet/common/ProtocolTag_m.h"
 #include "inet/linklayer/common/InterfaceTag_m.h"
+#include <string.h>
 
 namespace inet {
 
@@ -45,8 +46,13 @@ void MessageDispatcher::arrived(cMessage *message, cGate *inGate SENDOPTIONS_ARG
 
 cGate *MessageDispatcher::handlePacket(Packet *packet, cGate *inGate)
 {
+    std::string parentName = getParentModule()->getFullName();
+    // if (!parentName.compare("gNodeB1"))
+        // std::cout << "[MESSAGE_DISPATCHER][" << this->getFullName() << "]" << " Handling Packet: " << packet->str() << std::endl;
     auto socketInd = packet->findTag<SocketInd>();
     if (socketInd != nullptr) {
+        // if (!parentName.compare("gNodeB1"))
+            // std::cout << "[MESSAGE_DISPATCHER] socketInd is not null" << std::endl;
         int socketId = socketInd->getSocketId();
         auto it = socketIdToGateIndex.find(socketId);
         if (it != socketIdToGateIndex.end())
@@ -56,6 +62,8 @@ cGate *MessageDispatcher::handlePacket(Packet *packet, cGate *inGate)
     }
     auto dispatchProtocolReq = packet->findTag<DispatchProtocolReq>();;
     if (dispatchProtocolReq != nullptr) {
+        // if (!parentName.compare("gNodeB1"))
+            // std::cout << "[MESSAGE_DISPATCHER] dispatchProtocolReq is not null" << std::endl;
         auto packetProtocolTag = packet->findTag<PacketProtocolTag>();;
         auto servicePrimitive = dispatchProtocolReq->getServicePrimitive();
         // TODO: KLUDGE: eliminate this by adding ServicePrimitive to every DispatchProtocolReq
@@ -67,6 +75,11 @@ cGate *MessageDispatcher::handlePacket(Packet *packet, cGate *inGate)
         }
         auto protocol = dispatchProtocolReq->getProtocol();
         auto it = serviceToGateIndex.find(Key(protocol->getId(), servicePrimitive));
+//        if (!parentName.compare("gNodeB1")) {
+//            std::cout << "[MESSAGE_DISPATCHER] Protocol Name: " << protocol->getName() << "\n";
+//            std::cout << "[MESSAGE_DISPATCHER] Service Primitive: " << servicePrimitive << "\n";
+//            std::cout << "[MESSAGE_DISPATCHER] Out Gate: " << it->second << "\n\n";
+//        }
         if (it != serviceToGateIndex.end())
             return gate("out", it->second);
         else
@@ -74,6 +87,8 @@ cGate *MessageDispatcher::handlePacket(Packet *packet, cGate *inGate)
     }
     auto interfaceReq = packet->findTag<InterfaceReq>();
     if (interfaceReq != nullptr) {
+//        if (!parentName.compare("gNodeB1"))
+//            std::cout << "[MESSAGE_DISPATCHER] interfaceReq is not null" << std::endl;
         int interfaceId = interfaceReq->getInterfaceId();
         auto it = interfaceIdToGateIndex.find(interfaceId);
         if (it != interfaceIdToGateIndex.end())
@@ -132,6 +147,9 @@ cGate *MessageDispatcher::handleMessage(Message *message, cGate *inGate)
 void MessageDispatcher::handleRegisterService(const Protocol& protocol, cGate *out, ServicePrimitive servicePrimitive)
 {
     Enter_Method("handleRegisterService");
+    std::string parentName = getParentModule()->getFullName();
+//    if (!parentName.compare("gNodeB1"))
+//        std::cout << "[ServiceGateRegistration] Register Protocol: (" << protocol.getName() << ", " << servicePrimitive << ")" << " to gate: " << out->str() << std::endl;
     auto key = Key(protocol.getId(), servicePrimitive);
     if (serviceToGateIndex.find(key) != serviceToGateIndex.end())
         throw cRuntimeError("handleRegisterService(): service is already registered: %s", protocol.str().c_str());

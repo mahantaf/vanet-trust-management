@@ -5,8 +5,8 @@
 
 #include <unordered_set>
 
-#define EVIL_LOCATION_X 230
-#define EVIL_LOCATION_Y 250 
+#define EVIL_LOCATION_X 420
+#define EVIL_LOCATION_Y 270
 
 class ConstantEventLocationGenerator
 {   
@@ -23,9 +23,12 @@ class ConstantEventLocationGenerator
         {
 
         }
-
         bool isEvilVehicle(std::string carID);
         inet::Coord getEventLocation(std::string carID);
+
+        // Added by Mahan
+        bool dynamicLocation;
+        inet::Coord eventLocation;
 
 };
 

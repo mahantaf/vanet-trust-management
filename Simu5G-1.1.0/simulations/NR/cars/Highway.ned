@@ -10,6 +10,7 @@
 //
 package simu5g.simulations.NR.cars;
 
+import inet.visualizer.linklayer.InterfaceTableVisualizer;
 import inet.networklayer.configurator.ipv4.Ipv4NetworkConfigurator;
 import inet.networklayer.ipv4.RoutingTableRecorder;
 import inet.node.inet.AdhocHost;
@@ -23,6 +24,7 @@ import simu5g.nodes.Upf;
 import simu5g.common.binder.Binder;
 import simu5g.nodes.NR.gNodeB;
 import simu5g.nodes.cars.Car;
+import simu5g.nodes.NR.NRUe;
 
 import org.car2x.veins.subprojects.veins_inet.VeinsInetManager;
 
@@ -35,7 +37,9 @@ network Highway
         @display("bgb=732,483");
 
     submodules:
-
+        //        visualizer: InterfaceTableVisualizer {
+        //            @display("p=50,303;is=s");
+        //        }
         routingRecorder: RoutingTableRecorder {
             @display("p=50,75;is=s");
         }
@@ -73,6 +77,9 @@ network Highway
         }
         gNodeB2: gNodeB {
             @display("p=391,313;is=vl");
+        }
+        rsu: NRUe {
+            @display("p=339,196");
         }
 
     connections allowunconnected:

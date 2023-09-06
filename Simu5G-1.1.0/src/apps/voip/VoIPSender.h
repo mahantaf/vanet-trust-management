@@ -33,11 +33,12 @@
  *       to the list
  * =========================================================
  */
-#define evilVehicleID "car[2]"
+#define evilVehicleID "car[0],car[1],car[2],car[3]"
 #define ENABLE_SENSOR_RANGE 1
-#define SENSOR_START 125
-#define SENSOR_END 175
-
+#define SENSOR_START_Y 191
+#define SENSOR_END_Y 310
+#define SENSOR_START_X 380
+#define SENSOR_END_X 490
 
 class VoIPSender : public omnetpp::cSimpleModule
 {
