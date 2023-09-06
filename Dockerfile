@@ -9,7 +9,7 @@ SHELL ["/bin/bash", "-c"]
 
 #ENV SUMO_VERSION 0.31.0
 ENV OMNETPP_VERSION 5.6.1
-ENV USER nagrawal63
+ENV USER mahantp
 ENV HOME /home/$USER
 ENV CMAKE_VERSION 3.22
 ENV CMAKE_BUILD 2
@@ -38,8 +38,11 @@ RUN mkdir /root/.ssh/ &&\
     ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 # Clone code from github    
-RUN --mount=type=ssh \
-    git clone --progress --verbose git@github.com:nagrawal63/legendary-simu5g-broccoli.git $HOME/${GITHUB_REPO}
+RUN git clone --progress --verbose https://github.com/mahantaf/vanet-trust-management.git $HOME/${GITHUB_REPO}
+
+#Checkout to the Mahan-build branch
+RUN  cd $HOME/$GITHUB_REPO && \
+     git checkout mahan-build
 
 # Download and extract source code
 RUN  cd $HOME/$GITHUB_REPO && \
@@ -55,11 +58,11 @@ RUN cd $HOME/$GITHUB_REPO/sumo && \
     make install
 
 # Download omnetpp
-RUN rm -rf $HOME/${GITHUB_REPO}/omnetpp-${OMNETPP_VERSION} && \
-    cd $HOME/$GITHUB_REPO/ && \
-    wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
-    tar xzf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
-    rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
+# RUN rm -rf $HOME/${GITHUB_REPO}/omnetpp-${OMNETPP_VERSION} && \
+#    cd $HOME/$GITHUB_REPO/ && \
+#    wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
+#    tar xzf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
+#    rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
 
 #Install omnetpp dependencies
 RUN apt-get -y install build-essential gcc bison flex perl \

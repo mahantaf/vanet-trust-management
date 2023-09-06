@@ -1,6 +1,0 @@
-<launch>
-  <copy file="la.net.xml"/>
-  <copy file="la_routes.rou.xml"/>
-  <copy file="la_cfg.sumocfg" type="config"/>
-  <copy file="gui-settings.xml"/>
-</launch>
