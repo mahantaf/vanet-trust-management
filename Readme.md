@@ -180,4 +180,22 @@ Here are the steps to replicate the simulation.
 
 1. Start the container and run the omnetpp
 2. Select the repository directory as the workspace directory
-3. 
+3. From the menu choose "File" >> "Open Projects from File System"
+4. Specify repository directory as directory for searching existing projects
+5. After the search is complete select the following projects from the list
+   6. inet
+   7. veins
+   8. veins_inet
+   9. Simu5G-1.1.0
+10. For each of the projects do the following
+    11. From the menu choose "Project" >> "Properties"
+    12. On the left menu select "OMNeT++" >> "Makemake"
+    13. In the Makemake window select "src:makemake" from the list and click "options" on the right
+    14. In the new window choose tab "Custom"
+    15. In the text box put the following code and save the option:
+    ```
+    MSGC:=$(MSGC) --msg6
+    ```
+9. From the menu choose "Project" >> "Build All"
+10. After building successfully you can the simulation which is location at:
+`./Simu5G-1.1.0/simulations/NR/cars/omnetpp.ini`

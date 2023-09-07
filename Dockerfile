@@ -58,11 +58,11 @@ RUN cd $HOME/$GITHUB_REPO/sumo && \
     make install
 
 # Download omnetpp
-# RUN rm -rf $HOME/${GITHUB_REPO}/omnetpp-${OMNETPP_VERSION} && \
-#    cd $HOME/$GITHUB_REPO/ && \
-#    wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
-#    tar xzf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
-#    rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
+ RUN rm -rf $HOME/${GITHUB_REPO}/omnetpp-${OMNETPP_VERSION} && \
+    cd $HOME/$GITHUB_REPO/ && \
+    wget https://github.com/omnetpp/omnetpp/releases/download/omnetpp-${OMNETPP_VERSION}/omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
+    tar xzf omnetpp-${OMNETPP_VERSION}-src-linux.tgz && \
+    rm omnetpp-${OMNETPP_VERSION}-src-linux.tgz
 
 #Install omnetpp dependencies
 RUN apt-get -y install build-essential gcc bison flex perl \
