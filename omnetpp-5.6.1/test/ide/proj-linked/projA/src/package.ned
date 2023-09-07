@@ -1,3 +1,0 @@
-package proja;
-
-@license(custom);

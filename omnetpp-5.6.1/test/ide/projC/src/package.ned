@@ -1,3 +1,0 @@
-package projc;
-
-@license(custom);
