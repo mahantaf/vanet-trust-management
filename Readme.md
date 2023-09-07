@@ -179,4 +179,5 @@ After successfully run the omnetpp you can add the simulation as a project in om
 Here are the steps to replicate the simulation.
 
 1. Start the container and run the omnetpp
-2. 
+2. Select the repository directory as the workspace directory
+3. 

@@ -69,8 +69,6 @@ RUN apt-get -y install build-essential gcc bison flex perl \
  python qt5-default libqt5opengl5-dev tcl-dev tk-dev \
  libxml2-dev zlib1g-dev default-jre doxygen graphviz libwebkitgtk-3.0-0 libpcap-dev
 
-#Copy two files needed for building simu5g
-
 #Install omnetpp and export path to environment variable
 RUN cd $HOME/$GITHUB_REPO/omnetpp-${OMNETPP_VERSION} &&\
     source setenv -f &&\
@@ -78,7 +76,7 @@ RUN cd $HOME/$GITHUB_REPO/omnetpp-${OMNETPP_VERSION} &&\
     sed -i 's/WITH_OSG=yes/WITH_OSG=no/g' configure.user && \
     ./configure && \
     make -j$(nproc) &&\
-    export PATH="${HOME}/${GITHUB_REPO}/omnetpp-/${OMNETPP_VERSION}/bin:$PATH"
+    export PATH="${HOME}/${GITHUB_REPO}/omnetpp-${OMNETPP_VERSION}/bin:$PATH"
 
 #Instantiate Xauth
 RUN cd $HOME/ &&\
