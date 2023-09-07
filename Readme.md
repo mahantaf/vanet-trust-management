@@ -197,5 +197,5 @@ Here are the steps to replicate the simulation.
     MSGC:=$(MSGC) --msg6
     ```
 9. From the menu choose "Project" >> "Build All"
-10. After building successfully you can the simulation which is location at:
+10. After building successfully you can run the simulation which is location at:
 `./Simu5G-1.1.0/simulations/NR/cars/omnetpp.ini`
