@@ -1,0 +1,7 @@
+<launch>
+  <copy file="circle.net.xml"/>
+  <copy file="circle.rou.xml"/>
+  <copy file="circle.add.xml"/>
+  <copy file="circle.sumocfg" type="config"/>
+  <copy file="gui-settings.xml"/>
+</launch>

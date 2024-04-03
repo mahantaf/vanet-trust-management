@@ -360,6 +360,18 @@ class INET_API Coord
             return Coord(x, y, z);
         }
     }
+
+    //TODO: Resolve potential bug of buffer overflow security vulnerability
+        static Coord convertStrToCoord(const char *text) {
+            double x, y,z;
+            // char *endptr;
+            // x = strtod(text, &endptr);
+            // y = strtod(text, &endptr);
+            // z = strtod(text, &endptr);
+            sscanf(text, "(%lf, %lf, %lf) m", &x, &y, &z);
+
+            return Coord(x, y, z);
+        }
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Coord& coord)

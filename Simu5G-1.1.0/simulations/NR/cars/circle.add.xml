@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on Fri 17 Feb 2023 12:05:39 AM UTC by Eclipse SUMO netedit Version 1.8.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <output>
+        <output-file value="circle.net.xml"/>
+    </output>
+
+    <processing>
+        <offset.disable-normalization value="true"/>
+    </processing>
+
+    <junctions>
+        <no-turnarounds value="true"/>
+    </junctions>
+
+    <netedit>
+        <additional-files value="circle.add.xml"/>
+        <route-files value="circle.rou.xml"/>
+    </netedit>
+
+    <report>
+        <aggregate-warnings value="5"/>
+    </report>
+
+</configuration>
+-->
+
+<additionals>
+    <rerouter id="rerouter_0" edges="edge1">
+        <interval end="1e9">
+           <destProbReroute id="edge2"/>
+        </interval>
+    </rerouter>
+    <rerouter id="rerouter_1" edges="edge2">
+        <interval end="1e9">
+           <destProbReroute id="edge1"/>
+        </interval>
+    </rerouter>
+</additionals>

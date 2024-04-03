@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="/home/nishchay/research/veins-veins-5.2/src"/>
+	<section name="CResourceRenameRefactoringInputPage">
+		<item key="updateReferences" value="true"/>
+	</section>
+	<section name="completion_proposal_size">
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
+	</section>
+	<section name="PDOMSearchPage">
+		<item key="caseSensitive" value="false"/>
+		<item key="searchFlags" value="227191"/>
+		<list key="previousPatterns">
+			<item value="ENDUEMAINLOOP"/>
+			<item value="scheduler"/>
+		</list>
+	</section>
+	<section name="org.eclipse.cdt.ui.OPEN_ACTION_SELECTION_DIALOG_SECTION">
+		<item key="DIALOG_X_ORIGIN" value="734"/>
+		<item key="DIALOG_Y_ORIGIN" value="240"/>
+		<item key="DIALOG_WIDTH" value="444"/>
+		<item key="DIALOG_HEIGHT" value="431"/>
+		<item key="DIALOG_FONT_NAME" value="1|Sans|10.0|0|GTK|1|"/>
+	</section>
 </section>

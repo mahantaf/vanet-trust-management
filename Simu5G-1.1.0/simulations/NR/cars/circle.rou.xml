@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on Fri 17 Feb 2023 12:03:00 AM UTC by Eclipse SUMO netedit Version 1.8.0
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <output>
+        <output-file value="circle.net.xml"/>
+    </output>
+
+    <processing>
+        <offset.disable-normalization value="true"/>
+    </processing>
+
+    <junctions>
+        <no-turnarounds value="true"/>
+    </junctions>
+
+    <netedit>
+        <route-files value="circle.rou.xml"/>
+    </netedit>
+
+    <report>
+        <aggregate-warnings value="5"/>
+    </report>
+
+</configuration>
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <route edges="edge1 edge2 gneE4 gneE5 gneE6 gneE7 gneE0 gneE1" color="yellow" id="route_0"/>
+    <vehicle id="vehicle_0" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_1" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_10" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_11" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_12" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_13" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_14" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_15" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_16" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_17" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_18" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_19" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_2" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_3" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_4" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_5" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_6" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_7" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_8" depart="0.00" route="route_0"/>
+    <vehicle id="vehicle_9" depart="0.00" route="route_0"/>
+</routes>
